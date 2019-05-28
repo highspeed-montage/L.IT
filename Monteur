@@ -1,0 +1,8 @@
+private abstract class Monteur{
+    private boolean verfuegbar;
+    private Auftrag auftraege;
+    
+    public void rechnerTesten(int pSeriennr)
+    {
+    }
+}
