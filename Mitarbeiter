@@ -1,0 +1,8 @@
+public abstract class Mitarbeiter{
+    private int personalnr;
+    private String name;
+    private String vorname;
+    private double urlaubstage;
+    private int krankheitstage;
+    
+}
