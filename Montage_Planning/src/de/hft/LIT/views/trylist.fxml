@@ -14,7 +14,7 @@
          <center>
             <TabPane prefHeight="460.0" prefWidth="444.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
               <tabs>
-                <Tab fx:id="tabWoche">
+                <Tab>
                      <content>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0">
                            <children>
@@ -25,19 +25,26 @@
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../../../Material/icons/calendar.png" />
+                              <Image url="@../../../calendar.png" />
                            </image>
                         </ImageView>
                      </graphic>
                 </Tab>
-                <Tab fx:id="tabListe">
+                <Tab>
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
                               <ScrollPane prefHeight="460.0" prefWidth="751.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
-                                </content>
+                                 <content>
+                                    <TableView fx:id="rechnerList" prefHeight="437.0" prefWidth="550.0">
+                                      <columns>
+                                        <TableColumn fx:id="colSerienNr" prefWidth="84.0" text="Seriennr." />
+                                        <TableColumn fx:id="colStatus" prefWidth="83.0" text="Status" />
+                                          <TableColumn fx:id="colBearbeitungsname" prefWidth="129.0" text="Bearbeitungsdatum" />
+                                          <TableColumn fx:id="colLieferdatum" minWidth="4.0" prefWidth="111.0" text="Lieferdatum" />
+                                      </columns>
+                                    </TableView>
+                                 </content>
                               </ScrollPane>
                            </children>
                         </AnchorPane>
@@ -45,7 +52,7 @@
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../../../Material/icons/liste.png" />
+                              <Image url="@../../../liste.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -56,11 +63,11 @@
          <top>
             <HBox prefHeight="31.0" prefWidth="780.0" spacing="5.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="btnLogout" mnemonicParsing="false" prefHeight="35.0" prefWidth="48.0">
+                  <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="48.0">
                      <graphic>
                         <ImageView fitHeight="18.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../../../Material/icons/logout.png" />
+                              <Image url="@../../../logout.png" />
                            </image>
                         </ImageView>
                      </graphic>
