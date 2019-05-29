@@ -1,4 +1,4 @@
-package grundgeruest;
+package de.hft.LIT.models;
 
 public class FA_Rechner {
 	private static final double arbeitsaufwand = 4;

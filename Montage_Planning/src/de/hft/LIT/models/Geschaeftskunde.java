@@ -1,4 +1,4 @@
-package grundgeruest;
+package de.hft.LIT.models;
 
 public class Geschaeftskunde extends Kunde{
 	private String firmenname;

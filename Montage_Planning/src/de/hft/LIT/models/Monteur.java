@@ -1,4 +1,4 @@
-package grundgeruest;
+package de.hft.LIT.models;
 
 public abstract class Monteur extends Mitarbeiter{
 	private boolean verfuegbar;

@@ -1,4 +1,4 @@
-package grundgeruest;
+package de.hft.LIT.models;
 
 public abstract class Mitarbeiter {
 	private int personalnr;
