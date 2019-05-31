@@ -1,4 +1,4 @@
-package grundgeruest;
+package models;
 
 public class Abteilungsleiter {
 
