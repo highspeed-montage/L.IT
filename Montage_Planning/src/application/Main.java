@@ -25,10 +25,18 @@ public class Main extends Application
 
 	public static void main(String[] args) {
 		launch(args);
+<<<<<<< Updated upstream
 
 		//Datenbank db = new Datenbank();
 		//db.openConnection();
 
+=======
+		
+		
+//		Datenbank db = new Datenbank();
+//		db.closeConnection();
+		
+>>>>>>> Stashed changes
 	}
 	
 	
