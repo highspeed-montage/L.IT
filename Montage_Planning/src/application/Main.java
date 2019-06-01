@@ -1,9 +1,4 @@
 package application;
-	
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import com.mysql.cj.xdevapi.Statement;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -11,39 +6,29 @@ import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-
-public class Main extends Application {
+public class Main extends Application 
+{
 
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 
-			Parent root = FXMLLoader.load(getClass().getResource("/views/login.fxml"));
-//			Parent root = FXMLLoader.load(getClass().getResource("/views/rechneransicht.fxml"));
-			Scene scene = new Scene(root,400,400);
+			Parent root = FXMLLoader.load(getClass().getResource("Login.fxml"));
+			Scene scene = new Scene(root, 400, 400);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
-		
-		
-		Datenbank db = new Datenbank();
-		
-		db.openConnection();
-		try {
-			db.listKunde();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		db.closeConnection();
-		
+
+		//Datenbank db = new Datenbank();
+		//db.openConnection();
+
 	}
 	
 	

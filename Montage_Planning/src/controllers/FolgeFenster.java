@@ -10,9 +10,9 @@ import javafx.stage.Stage;
 public class FolgeFenster extends Stage {
 	Stage stage;
 
-	public FolgeFenster() throws IOException {
+	public FolgeFenster(String dateipfad) throws IOException {
 	      try {
-	          FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/Auftragsansicht.fxml"));
+	          FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(dateipfad));
 	                  Parent root1 = (Parent) fxmlLoader.load();
 	                  Stage stage = new Stage();
 	                  stage.setScene(new Scene(root1));  

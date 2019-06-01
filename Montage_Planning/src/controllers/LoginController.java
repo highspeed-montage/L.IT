@@ -2,6 +2,9 @@ package controllers;
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.sql.SQLException;
+
+import application.Datenbank;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.application.Application;
@@ -19,12 +22,9 @@ import javafx.stage.Stage;
 public class LoginController implements EventHandler  {
  @FXML
  private Label lblMontage;
-<<<<<<< HEAD
- 
-=======
+
  @FXML
  private Label lblStatus;
->>>>>>> e60795f99c6e5ffff464e0f37304d962b10ff7be
  @FXML
  private TextField txtUsername;
  
@@ -33,41 +33,22 @@ public class LoginController implements EventHandler  {
  @FXML
  private Button btnAnmelden;
  
- public void Login (Event event) throws IOException {
+// public static Datenbank db = new Datenbank();
+ public void Login (Event event) throws IOException{
 	 
-	//if(txtUsername.getText().equals("u") && txtPassword.getText().equals("p")) {
+	//if(txtUsername.getText().equals(db.Usernameabfrage()) && txtPassword.getText().equals(db.Passwortabfrage())) {
+	 if(txtUsername.getText().equals("") && txtPassword.getText().equals("")) {
 		lblStatus.setText("Great Success");
-		btnAnmelden.setText("Wird durchgef�hrt");
-		new FolgeFenster();
+		btnAnmelden.setText("Wird durchgefuehrt");
+		new FolgeFenster("/application/Auftragsansicht.fxml");
 
-	//} else {
-	//	lblStatus.setText("RIP");
-	//	btnAnmelden.setText("hier geht gar nix");
-	//}
+	} else {
+		lblStatus.setText("RIP");
+		btnAnmelden.setText("hier geht gar nix");
+	}
  }
 
 @Override
 public void handle(Event event) {
-	
-//	if(txtUsername.getText().equals("u") && txtPassword.getText().equals("p")) {
-//		lblStatus.setText("Great Success");
-//		btnAnmelden.setText("Wird durchgef�hrt");
-//		Stage primaryStage = new Stage();
-//		Parent root = null;
-//		try {
-//			root = FXMLLoader.load(getClass().getResource("/application/Wochenansicht.fxml"));
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		Scene scene = new Scene(root,400,400);
-//		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-//		primaryStage.setScene(scene);
-//		primaryStage.show();
-//	} else {
-//		lblStatus.setText("RIP");
-//		btnAnmelden.setText("hier geht gar nix");
-//	}
-	
 }
 }
