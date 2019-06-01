@@ -1,4 +1,4 @@
-package controllers;
+package de.hft.LIT.controllers;
 
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
@@ -14,7 +14,12 @@ import javafx.stage.Stage;
 public class LoginController {
  @FXML
  private Label lblMontage;
+<<<<<<< HEAD
  
+=======
+ @FXML
+ private Label lblStatus;
+>>>>>>> e60795f99c6e5ffff464e0f37304d962b10ff7be
  @FXML
  private TextField txtUsername;
  
@@ -23,6 +28,7 @@ public class LoginController {
  
  public void Login (ActionEvent event) throws IOException {
 	 
+<<<<<<< HEAD
 	//if(txtUsername.getText().equals("u") && txtPassword.getText().equals("p")) {
 		
 	//	Stage primaryStage = new Stage();
@@ -32,5 +38,18 @@ public class LoginController {
 	//	primaryStage.setScene(scene);
 	//	primaryStage.show();
 	//} 
+=======
+	if(txtUsername.getText().equals("u") && txtPassword.getText().equals("p")) {
+		lblStatus.setText("Success");
+		Stage primaryStage = new Stage();
+		Parent root = FXMLLoader.load(getClass().getResource("/application/Wochenansicht.fxml"));
+		Scene scene = new Scene(root,400,400);
+		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		primaryStage.setScene(scene);
+		primaryStage.show();
+	} else {
+		lblStatus.setText("RIP");
+	}
+>>>>>>> e60795f99c6e5ffff464e0f37304d962b10ff7be
  }
 }
