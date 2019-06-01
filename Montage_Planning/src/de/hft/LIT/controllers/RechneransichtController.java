@@ -1,12 +1,10 @@
 package controllers;
 
-
+import java.awt.Button;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 
@@ -14,8 +12,8 @@ public class RechneransichtController {
 
 //Grundfunktionen
 @FXML private Button btnLogout;
-@FXML private Tab tabWoche;
-@FXML private Tab tabListe;
+@FXML private Button tabWoche;
+@FXML private Button tabListe;
 @FXML private Label lblName;
 
 	

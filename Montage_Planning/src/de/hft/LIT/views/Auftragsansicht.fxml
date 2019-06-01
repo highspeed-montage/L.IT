@@ -16,9 +16,9 @@
               <tabs>
                 <Tab fx:id="tabWoche">
                      <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="comboBox_AW_Wochenansicht" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../../JavaFX/Bilder/Symbole/calendar.png" />
+                              <Image url="@../../../../../L.IT/Material/icons/calendar.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -63,7 +63,7 @@
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../../JavaFX/Bilder/Symbole/liste.png" />
+                              <Image url="@../../../../../L.IT/Material/icons/liste.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -117,7 +117,7 @@
                      <graphic>
                         <ImageView fitHeight="18.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../../JavaFX/Bilder/Symbole/logout.png" />
+                              <Image url="@../../../../../L.IT/Material/icons/logout.png" />
                            </image>
                         </ImageView>
                      </graphic>
