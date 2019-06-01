@@ -101,5 +101,8 @@ public class Datenbank {
 		}
 		return rechnerSeriennr;
 	}
-
 }
+	
+	
+	
+	

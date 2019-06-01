@@ -54,15 +54,14 @@ public class RechneransichtController {
 //FUnktionen: Listenansicht
 private ObservableList<List<String>> inhaltColSeriennr = FXCollections.observableArrayList();
 
+//Wenn MA = Monteur, dann Laden aller Rechenr in Liste
 public void initialize () throws SQLException {
-	Datenbank db = new Datenbank();
-	inhaltColSeriennr.add(db.listRechnerBySeriennr());
-	col_RL_serienNr.setText(inhaltColSeriennr.toString());;
-}
-
-
-
-
+		Datenbank db = new Datenbank();
+		
+		inhaltColSeriennr.add(db.listRechnerBySeriennr());
+		col_RL_serienNr.setText(inhaltColSeriennr.toString());
+		db.closeConnection();
+	}
 }
 
 
