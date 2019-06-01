@@ -1,4 +1,4 @@
-package Datenbank;
+package application;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,10 +10,10 @@ public class Datenbank {
 	private static final String DB_USER = "aj9s-montage";
 	private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
 
-	private Connection connection;
+	private  Connection connection;
 
 	// Datenbankverbindung herstellen
-	private Connection getConnection() {
+	private  Connection getConnection() {
 		Connection dbConnection = null;
 		try {
 			// Treiber laden
@@ -28,12 +28,12 @@ public class Datenbank {
 	}
 
 	// Datenbankverbindung oeffnen
-	public void openConnection() {
+	public  void openConnection() {
 		this.connection = getConnection();
 	}
 
 	// Datenbankverbindung trennen
-	public void closeConnection() {
+	public  void closeConnection() {
 		try {
 			if (connection != null) {
 				connection.close();
