@@ -5,7 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+import java.util.ArrayList;
+import java.util.List;
 
 public class Datenbank {
 
@@ -13,10 +14,10 @@ public class Datenbank {
 	private static final String DB_USER = "aj9s-montage";
 	private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
 
-	private  Connection connection;
+	private Connection connection;
 
 	// Datenbankverbindung herstellen
-	private  Connection getConnection() {
+	private Connection getConnection() {
 		Connection dbConnection = null;
 		try {
 			// Treiber laden
@@ -31,12 +32,12 @@ public class Datenbank {
 	}
 
 	// Datenbankverbindung oeffnen
-	public  void openConnection() {
+	public void openConnection() {
 		this.connection = getConnection();
 	}
 
 	// Datenbankverbindung trennen
-	public  void closeConnection() {
+	public void closeConnection() {
 		try {
 			if (connection != null) {
 				connection.close();
@@ -45,16 +46,25 @@ public class Datenbank {
 			System.out.println("Fehler beim Schließen der Datenbankverbindung.");
 		}
 	}
+
 	public void listKunde() throws SQLException {
-		Statement stmt= connection.createStatement();
+		Statement stmt = connection.createStatement();
 		ResultSet rs = stmt.executeQuery("SELECT Name FROM Kunde");
-		
-		
-		while(rs.next()) {
-			
+		while (rs.next()) {
 			System.out.println(rs.getString("name"));
-			
 		}
+	}
+	
+	// 
+	public List<String> listRechnerBySeriennr () throws SQLException {
+		Statement stmt = connection.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT Rechner_seriennummer FROM Auftragsverteilung");
+		List<String> rechnerSeriennr = new ArrayList<>();
+		while(rs.next()) {
+			System.out.println(rs.getString("Rechner_seriennummer"));
+			rechnerSeriennr.add(rs.getString("Rechner_seriennummer"));
+		}
+		return rechnerSeriennr;
 	}
 
 }
