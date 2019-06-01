@@ -2,7 +2,10 @@ package application;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+
 
 public class Datenbank {
 
@@ -40,6 +43,17 @@ public class Datenbank {
 			}
 		} catch (SQLException e) {
 			System.out.println("Fehler beim Schließen der Datenbankverbindung.");
+		}
+	}
+	public void listKunde() throws SQLException {
+		Statement stmt= connection.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT Name FROM Kunde");
+		
+		
+		while(rs.next()) {
+			
+			System.out.println(rs.getString("name"));
+			
 		}
 	}
 

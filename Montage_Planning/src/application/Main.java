@@ -1,5 +1,10 @@
 package application;
 	
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.mysql.cj.xdevapi.Statement;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -12,8 +17,12 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+<<<<<<< Updated upstream
 
 			Parent root = FXMLLoader.load(getClass().getResource("/views/login.fxml"));
+=======
+			Parent root = FXMLLoader.load(getClass().getResource("/views/rechneransicht.fxml"));
+>>>>>>> Stashed changes
 			Scene scene = new Scene(root,400,400);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
@@ -30,7 +39,15 @@ public class Main extends Application {
 		Datenbank db = new Datenbank();
 		
 		db.openConnection();
-		
+		try {
+			db.listKunde();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		db.closeConnection();
 		
 	}
+	
+	
 }
