@@ -1,4 +1,4 @@
-package grundgeruest;
+package de.hft.LIT.models;
 
 public abstract class Auftrag {
 	private int auftragsnr;
