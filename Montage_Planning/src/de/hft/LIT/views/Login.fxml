@@ -16,8 +16,8 @@
          </font>
       </Label>
    </top>
-   <center>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+   <bottom>
+      <VBox alignment="CENTER" prefHeight="421.0" prefWidth="400.0" BorderPane.alignment="CENTER">
          <children>
             <HBox alignment="CENTER" prefHeight="58.0" prefWidth="600.0">
                <children>
@@ -37,12 +37,17 @@
                   </PasswordField>
                </children>
             </HBox>
-            <Button mnemonicParsing="false" text="Anmelden">
+            <Button fx:id="btnAnmelden" mnemonicParsing="false" onAction="#Login" text="Anmelden">
                <font>
                   <Font size="14.0" />
                </font>
             </Button>
+            <Label fx:id="lblStatus" text="Status">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Label>
          </children>
       </VBox>
-   </center>
+   </bottom>
 </BorderPane>
