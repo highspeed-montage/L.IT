@@ -5,7 +5,7 @@ import java.util.Deque;
 
 public abstract class Monteur extends Mitarbeiter{
 	private boolean verfuegbar;
-	private Deque<Rechner> queue = new LinkedList<Rechner>();
+	private Deque<Rechner> rechner = new LinkedList<Rechner>();
 	
 	public Monteur(int pPersonalnr, String pName, String pVorname, double pUrlaubstage, int pKrankheitstage)
 	{
