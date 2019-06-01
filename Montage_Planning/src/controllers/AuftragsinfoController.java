@@ -1,4 +1,4 @@
-package de.hft.LIT.controllers;
+package controllers;
 
 
 

@@ -1,4 +1,4 @@
-package de.hft.LIT.controllers;
+package controllers;
 
 
 
@@ -35,6 +35,12 @@ public class AuftragsansichtController {
 	@FXML private TableColumn col_AL_Anzahl;
 	@FXML private TableColumn col_AL_Lieferdatum;
 	
+	@FXML
+	public void filter() {
+		//Liste mit Filtern (erstellen oder laden)
+		//Liste mit Filtern als String in ComboBox laden
+		//Wird eins angeklickt, dann entsprechends filtern
+	}
 
 	
 }

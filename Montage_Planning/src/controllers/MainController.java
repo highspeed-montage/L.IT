@@ -1,4 +1,4 @@
-package de.hft.LIT.controllers;
+package controllers;
 
 import java.awt.TextField;
 import java.awt.event.ActionEvent;

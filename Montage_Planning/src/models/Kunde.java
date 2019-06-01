@@ -1,4 +1,4 @@
-package de.hft.LIT.models;
+package models;
 
 public abstract class Kunde {
 	private String eMail;

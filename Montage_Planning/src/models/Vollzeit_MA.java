@@ -1,4 +1,4 @@
-package de.hft.LIT.models;
+package models;
 
 public class Vollzeit_MA extends Monteur{
 	private static final int arbeitszeit = 8;

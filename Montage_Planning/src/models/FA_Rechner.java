@@ -1,4 +1,4 @@
-package de.hft.LIT.models;
+package models;
 
 public class FA_Rechner {
 	private static final double arbeitsaufwand = 4;

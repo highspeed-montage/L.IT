@@ -1,4 +1,4 @@
-package de.hft.LIT.controllers;
+package controllers;
 
 
 
@@ -28,6 +28,12 @@ public class RechneransichtController {
 @FXML private TableColumn col_RL_lieferdatum;
 
 //WOchenansicht
-
+@FXML private ComboBox<String> comboBox_RW_Wochenansicht;
+@FXML private TableColumn col_RW_Mitarbeit;
+@FXML private TableColumn col_RW_Montag;
+@FXML private TableColumn col_RW_Dienstag;
+@FXML private TableColumn col_RW_Mittwoch;
+@FXML private TableColumn col_RW_Donnerstag;
+@FXML private TableColumn col_RW_Freitag;
 
 }

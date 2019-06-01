@@ -1,4 +1,4 @@
-package de.hft.LIT.models;
+package models;
 
 public abstract class Auftrag {
 	private int auftragsnr;
