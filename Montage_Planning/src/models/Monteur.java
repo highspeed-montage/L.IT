@@ -2,7 +2,7 @@ package models;
 
 public abstract class Monteur extends Mitarbeiter{
 	private boolean verfuegbar;
-	private Auftrag auftraege;
+	private Rechner rechner;
 	
 	public Monteur(int pPersonalnr, String pName, String pVorname, double pUrlaubstage, int pKrankheitstage)
 	{
