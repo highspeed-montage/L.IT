@@ -1,4 +1,4 @@
-package de.hft.LIT.models;
+package models;
 
 public class SA_Rechner {
 	private double arbeitsaufwand;

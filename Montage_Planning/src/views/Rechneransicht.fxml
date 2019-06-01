@@ -15,20 +15,49 @@
             <TabPane prefHeight="460.0" prefWidth="444.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
               <tabs>
                 <Tab fx:id="tabWoche">
-                     <content>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                           <children>
-                              <ScrollPane prefHeight="460.0" prefWidth="751.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                           </children>
-                        </AnchorPane>
-                     </content>
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../../../Material/icons/calendar.png" />
+                              <Image url="@../../../../../JavaFX/Bilder/Symbole/calendar.png" />
                            </image>
                         </ImageView>
                      </graphic>
+                     <content>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                           <top>
+                              <HBox prefHeight="47.0" prefWidth="751.0" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <ComboBox fx:id="comboBox_RW_Wochenansicht" prefHeight="42.0" prefWidth="122.0" promptText="Wochenauswahl">
+                                       <HBox.margin>
+                                          <Insets bottom="10.0" left="10.0" right="5.0" top="10.0" />
+                                       </HBox.margin>
+                                    </ComboBox>
+                                 </children>
+                              </HBox>
+                           </top>
+                           <center>
+                              <TableView fixedCellSize="1.0" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                <columns>
+                                  <TableColumn fx:id="col_RW_Mitarbeit" editable="false" prefWidth="151.0" text="Mitarbeiter" />
+                                  <TableColumn fx:id="col_RW_Montag" editable="false" prefWidth="109.0" text="Montag" />
+                                    <TableColumn fx:id="col_RW_Dienstag" editable="false" prefWidth="108.0" text="Dienstag" />
+                                    <TableColumn fx:id="col_RW_Mittwoch" editable="false" prefWidth="125.0" text="Mittwoch" />
+                                    <TableColumn fx:id="col_RW_Donnerstag" editable="false" prefWidth="109.0" text="Donnerstag" />
+                                    <TableColumn fx:id="col_RW_Freitag" prefWidth="148.0" text="Freitag" />
+                                </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                                 <opaqueInsets>
+                                    <Insets left="10.0" />
+                                 </opaqueInsets>
+                              </TableView>
+                           </center>
+                           <opaqueInsets>
+                              <Insets left="10.0" />
+                           </opaqueInsets>
+                        </BorderPane>
+                     </content>
                 </Tab>
                 <Tab fx:id="tabListe">
                   <content>
