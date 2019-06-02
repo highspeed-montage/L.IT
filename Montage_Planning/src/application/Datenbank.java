@@ -76,39 +76,39 @@ public class Datenbank {
 		return list;
 	}
 
-//	// Abfrage der Passw�rter
-//	public ArrayList Passwortabfrage() throws SQLException {
-//
-//		Statement stmt = connection.createStatement();
-//		ResultSet rs = stmt.executeQuery("SELECT name FROM Mitarbeiter"); // Abfrage wie Mitarbeiter hei�en
-//
-//		ResultSetMetaData rsmd = rs.getMetaData(); // Gr��e der Tabelle
-//		int columnCount = rsmd.getColumnCount(); //
-//		ArrayList<String> list = new ArrayList(columnCount); // Erstellt ArrayList
-//
-//		while (rs.next()) {
-//			int i = 1;
-//			while (i <= columnCount) {
-//				list.add(rs.getString(i++));
-//			}
-//		}
-//		return list;
-//	}
-
+	// // Abfrage der Passwoerter
+	// public ArrayList Passwortabfrage() throws SQLException {
 	//
+	// Statement stmt = connection.createStatement();
+	// ResultSet rs = stmt.executeQuery("SELECT name FROM Mitarbeiter"); // Abfrage
+	// wie Mitarbeiter hei�en
+	//
+	// ResultSetMetaData rsmd = rs.getMetaData(); // Gr��e der Tabelle
+	// int columnCount = rsmd.getColumnCount(); //
+	// ArrayList<String> list = new ArrayList(columnCount); // Erstellt ArrayList
+	//
+	// while (rs.next()) {
+	// int i = 1;
+	// while (i <= columnCount) {
+	// list.add(rs.getString(i++));
+	// }
+	// }
+	// return list;
+	// }
+
+	// Rechner - Listenansicht Inhalt Tabelle
 	public List<String> listRechnerBySeriennr() throws SQLException {
 		Statement stmt = connection.createStatement();
-		String query = "SELECT Rechner_seriennummer FROM Auftragsverteilung";
+		String query = "SELECT Rechner_seriennummer, Status, Bearbeitungsdatum, Lieferdatum FROM Auftragsverteilung";
 		ResultSet rs = stmt.executeQuery(query);
 		List<String> rechnerSeriennr = new ArrayList<>();
 		while (rs.next()) {
-			System.out.println(rs.getString("Rechner_seriennummer"));
+			System.out.println(rs.getString("Rechner_seriennummer")
+					+ rs.getString("Status")
+					+ rs.getString("Bearbeitungsdatum")
+					+ rs.getString("Lieferdatum"));
 			rechnerSeriennr.add(rs.getString("Rechner_seriennummer"));
 		}
 		return rechnerSeriennr;
 	}
 }
-	
-	
-	
-	
