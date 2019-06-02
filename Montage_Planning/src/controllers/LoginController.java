@@ -36,11 +36,12 @@ public class LoginController implements EventHandler  {
 // public static Datenbank db = new Datenbank();
  public void Login (Event event) throws IOException{
 	 
-	//if(txtUsername.getText().equals(db.Usernameabfrage()) && txtPassword.getText().equals(db.Passwortabfrage())) {
-	 if(txtUsername.getText().equals("") && txtPassword.getText().equals("")) {
+//	if(txtUsername.getText().equals(db.Usernameabfrage()) && txtPassword.getText().equals(db.Passwortabfrage())) {
+	 
+	 if(txtUsername.getText().equals("a") && txtPassword.getText().equals("a")) {
 		lblStatus.setText("Great Success");
 		btnAnmelden.setText("Wird durchgefuehrt");
-		new FolgeFenster("/application/Auftragsansicht.fxml");
+		new FolgeFenster("/views/Auftragsansicht.fxml");
 
 	} else {
 		lblStatus.setText("RIP");
