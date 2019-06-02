@@ -3,6 +3,7 @@ package application;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -75,6 +76,12 @@ public class Datenbank {
 		}
 		return list;
 	}
+<<<<<<< Updated upstream
+=======
+
+	// Abfrage der Passwoerter
+	public ArrayList Passwortabfrage() throws SQLException {
+>>>>>>> Stashed changes
 
 //	// Abfrage der Passw�rter
 //	public ArrayList Passwortabfrage() throws SQLException {
@@ -95,7 +102,24 @@ public class Datenbank {
 //		return list;
 //	}
 
+<<<<<<< Updated upstream
 	//
+=======
+		ResultSetMetaData rsmd = rs.getMetaData(); // Gr��e der Tabelle
+		int columnCount = rsmd.getColumnCount(); //
+		ArrayList<String> list = new ArrayList(columnCount); // Erstellt ArrayList
+
+		while (rs.next()) {
+			int i = 1;
+			while (i <= columnCount) {
+				list.add(rs.getString(i++));
+			}
+		}
+		return list;
+	}
+
+	/** Auflistung aller Rechner-Seriennummern */
+>>>>>>> Stashed changes
 	public List<String> listRechnerBySeriennr() throws SQLException {
 		Statement stmt = connection.createStatement();
 		String query = "SELECT Rechner_seriennummer FROM Auftragsverteilung";
@@ -107,8 +131,5 @@ public class Datenbank {
 		}
 		return rechnerSeriennr;
 	}
+
 }
-	
-	
-	
-	

@@ -35,7 +35,6 @@ public class RechneransichtController {
 
 //WOchenansicht
 @FXML private ComboBox comboBox_RW_Wochenansicht;
-@FXML private TableColumn col_RW_Mitarbeit;
 @FXML private TableColumn col_RW_Montag;
 @FXML private TableColumn col_RW_Dienstag;
 @FXML private TableColumn col_RW_Mittwoch;

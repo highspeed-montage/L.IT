@@ -38,7 +38,6 @@
                            <center>
                               <TableView fixedCellSize="1.0" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                 <columns>
-                                  <TableColumn fx:id="col_RW_Mitarbeit" editable="false" prefWidth="151.0" text="Mitarbeiter" />
                                   <TableColumn fx:id="col_RW_Montag" editable="false" prefWidth="109.0" text="Montag" />
                                     <TableColumn fx:id="col_RW_Dienstag" editable="false" prefWidth="108.0" text="Dienstag" />
                                     <TableColumn fx:id="col_RW_Mittwoch" editable="false" prefWidth="125.0" text="Mittwoch" />
