@@ -28,14 +28,18 @@ public class Main extends Application
 
 	public static void main(String[] args) {
 		launch(args);
-		
-		Datenbank db = new Datenbank();
-		try {
-			System.out.println(db.listRechnerBySeriennr().toString());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+<<<<<<< Updated upstream
 
+		//Datenbank db = new Datenbank();
+		//db.openConnection();
+
+=======
+		
+		
+//		Datenbank db = new Datenbank();
+//		db.closeConnection();
+		
+>>>>>>> Stashed changes
 	}
 	
 	
