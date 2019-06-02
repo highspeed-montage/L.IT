@@ -1,6 +1,7 @@
 package application;
 
 import java.sql.Connection;
+import java.util.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -75,9 +76,9 @@ public class Datenbank {
 			}
 		}
 		return list;
-	}
-<<<<<<< Updated upstream
-=======
+	}<<<<<<<
+
+	Updated upstream=======
 
 	// Abfrage der Passwoerter
 	public ArrayList Passwortabfrage() throws SQLException {
@@ -119,7 +120,10 @@ public class Datenbank {
 	}
 
 	/** Auflistung aller Rechner-Seriennummern */
->>>>>>> Stashed changes
+	>>>>>>>
+
+	Stashed changes
+
 	public List<String> listRechnerBySeriennr() throws SQLException {
 		Statement stmt = connection.createStatement();
 		String query = "SELECT Rechner_seriennummer FROM Auftragsverteilung";
@@ -132,4 +136,122 @@ public class Datenbank {
 		return rechnerSeriennr;
 	}
 
+	/** Auflisten aller Rechner-STatus */
+	public List<String> listRechnerByStatus() {
+		// Aufrufen der status id des jwlg Rechners
+		Statement stmt = connection.createStatement();
+		String query = "SELECT Status_idStatus FROM Rechner";
+		ResultSet rs = stmt.executeQuery(query);
+		List<String> rechnerStatus = new ArrayList<>();
+		while (rs.next()) {
+			// laden des STatus mit der jwlg id
+			// hinzufügen zu liste: "rechnerStatus"
+			int idStatus = rs.getInt("Status_idStatus");
+			String innerQuery = "SELECT Bezeichnung FROM Status WHERE idStatus = '" + idStatus + "' ";
+			ResultSet irs = stmt.executeQuery(innerQuery);
+			while (irs.next()) {
+				rechnerStatus.add(irs.getString("Bezeichnung"));
+			}
+		}
+		return rechnerStatus;
+	}
+
+	/** Auflisten aller Rechner-Bearbeitungsdaten */
+	public List<Date> listRechnerByBearbeitungsdatum() throws SQLException { // java.util.date
+		Statement stmt = connection.createStatement();
+		String query = "SELECT Datum FROM Auftragsverteilung";
+		ResultSet rs = stmt.executeQuery(query);
+		List<Date> rechnerBearbeitungsdaten = new ArrayList<>(); // Welcher Datentyp?
+
+		while (rs.next()) {
+			java.sql.Date sqlDate = rs.getDate("Datum"); // wie ist der ColumnName wirklich??
+			java.util.Date javaDate = new java.util.Date(sqlDate.getTime()); // Umwandlung von sql.Date zu util.Date
+			rechnerBearbeitungsdaten.add(javaDate);
+		}
+		return rechnerBearbeitungsdaten;
+	}
+	
+	
+	
+
+	// Hier die Abfragen für die Rechnerinformationscontroller
+	/** Seriennummer */
+	//FRAGE: wenn man den Hyperlink Seriennummer  in der Rechner Listenansicht anklickt -> dann muss die Seriennummer irgendwo zwischengespeichert werden!
+	//Dieser Schritt entfällt deshalb
+	//Die Seriennummer ist für viele der folgenden Methoden notwendig
+	
+	
+	
+	
+	
+	/** Kunde */
+	public int getKunde(int serienNummer) throws SQLException {
+		Statement stmt = connection.createStatement();
+		String query = "SELECT Kunde FROM Auftrag WHERE idAuftragsnummer = (SELECT Auftrag_idAuftragsnummer FROM Rechner_Teile WHERE Bezeichnung = '"+serienNummer+"')";
+		ResultSet rs = stmt.executeQuery(query);
+		int lagerbestand;
+
+		while (rs.next()) {
+
+			lagerbestand = rs.getInt("Lagerbestand");
+		}
+		return lagerbestand;
+	}
+	
+	
+	/** KundenEMail */
+	public int getKundenMail(int serienNummer) throws SQLException {
+		//Auftrag holen
+		//Kunde des jwlg Auftrags holen
+		//Kundenid + name auf davon holen
+		Statement stmt = connection.createStatement();
+		String query = "SELECT EMail FROM Kunde WHERE idKundennummer = (SELECT Kunde_idKunde FROM Auftrag WHERE idAuftragsnummer = (SELECT Auftrag_idAuftragsnummer FROM Rechner_Teile WHERE Bezeichnung = '"+serienNummer+"'))";
+		ResultSet rs = stmt.executeQuery(query);
+		int lagerbestand;
+
+		while (rs.next()) {
+
+			lagerbestand = rs.getInt("Lagerbestand");
+		}
+		return lagerbestand;
+	}
+	
+	
+	/** Bearbeitungsdatum */
+	
+	
+	
+	/** Lieferdatum */
+	
+	
+	
+	/** Einzelteile */
+	public List<String> getRechnerEinzelteile(int serienNummer) throws SQLException {
+		Statement stmt = connection.createStatement();
+		String query = "SELECT Bezeichnung FROM Teile WHERE idTeilenummer = (SELECT Teile_idTeilenummer FROM Rechner_Teile WHERE Rechner_idSeriennummer = '"+ serienNummer + "')";
+		ResultSet rs = stmt.executeQuery(query);
+		
+		List<String> rechnerEinzelteile = new ArrayList<>();
+
+		while (rs.next()) {
+			
+			rechnerEinzelteile.add(rs.getString("Bezeichnung"));
+		}
+		return rechnerEinzelteile;
+	}
+
+	/** Einzelteil SUche im Servicauftrag */
+	public int getEinzelteilLagerbestand(String eingabe) throws SQLException {
+		// Hier muss noch gecheckt werden, dass die eingabe überhaupt sinnvoll ist.
+		Statement stmt = connection.createStatement();
+		String query = "SELECT Lagerbestand FROM Rechner_Teile WHERE Bezeichnung = '" + eingabe + "'";
+		ResultSet rs = stmt.executeQuery(query);
+		int lagerbestand;
+
+		while (rs.next()) {
+
+			lagerbestand = rs.getInt("Lagerbestand");
+		}
+		return lagerbestand;
+	}
 }
