@@ -14,17 +14,15 @@ import models.Auftragsverteilung;
 
 public class Datenbank {
 
-	/*
-	 * private static final String DB_CONNECTION =
-	 * "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC"; private
-	 * static final String DB_USER = "aj9s-montage"; private static final String
-	 * DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
-	 */
+	
+	private static final String DB_CONNECTION = "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
+	private static final String DB_USER = "aj9s-montage";
+	private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
 
-	// Datenbankverbindung GABBY LOKAL fürs testen, weil VPN nicht geht
-	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage?serverTimezone=UTC";
-	private static final String DB_USER = "root";
-	private static final String DB_PASSWORD = "root";
+//	// NICHT LÖSCHEN: Datenbankverbindung GABBY LOKAL fürs testen, weil VPN nicht geht (ich habe mir die Datenbank geklont)
+//	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage?serverTimezone=UTC";
+//	private static final String DB_USER = "root";
+//	private static final String DB_PASSWORD = "root";
 
 	private Connection connection;
 
@@ -108,8 +106,8 @@ public class Datenbank {
 		List<Auftragsverteilung> tabelleninhalt = new ArrayList<>();
 		Statement stmt = connection.createStatement();
 		String query = "SELECT Auftragsverteilung.Datum, Auftragsverteilung.Rechner_seriennummer, "
-				+ "Rechner.Status_idStatus "
-				+ "FROM Auftragsverteilung, Rechner WHERE Auftragsverteilung.Rechner_seriennummer = Rechner.idSeriennummer";
+				+ "Rechner.Status_idStatus FROM Auftragsverteilung, Rechner "
+				+ "WHERE Auftragsverteilung.Rechner_seriennummer = Rechner.idSeriennummer";
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
 			tabelleninhalt.add(new Auftragsverteilung(rs.getDate("Auftragsverteilung.Datum"), rs.getDate("Auftragsverteilung.Datum"),
