@@ -140,19 +140,14 @@ public class Datenbank {
 	public List<String> listRechnerByStatus() {
 		// Aufrufen der status id des jwlg Rechners
 		Statement stmt = connection.createStatement();
-		String query = "SELECT Status_idStatus FROM Rechner";
+		String query = "SELECT Bezeichnung FROM Status WHERE idStatus = (SELECT Status_idStatus FROM Rechner)";
 		ResultSet rs = stmt.executeQuery(query);
 		List<String> rechnerStatus = new ArrayList<>();
-		while (rs.next()) {
-			// laden des STatus mit der jwlg id
-			// hinzufügen zu liste: "rechnerStatus"
-			int idStatus = rs.getInt("Status_idStatus");
-			String innerQuery = "SELECT Bezeichnung FROM Status WHERE idStatus = '" + idStatus + "' ";
-			ResultSet irs = stmt.executeQuery(innerQuery);
-			while (irs.next()) {
-				rechnerStatus.add(irs.getString("Bezeichnung"));
+		
+			while (rs.next()) {
+				rechnerStatus.add(rs.getString("Bezeichnung"));
 			}
-		}
+		
 		return rechnerStatus;
 	}
 
