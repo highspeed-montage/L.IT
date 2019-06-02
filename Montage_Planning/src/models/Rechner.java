@@ -1,7 +1,7 @@
 package models;
 
 public abstract class Rechner {
-	private int seriennr;
+	private Integer seriennr;
 	private Auftrag auftrag;
 	private String status;
 	private Monteur monteur;
