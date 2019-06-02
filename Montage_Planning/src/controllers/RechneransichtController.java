@@ -32,6 +32,7 @@ public class RechneransichtController {
 @FXML private TableColumn col_RL_bearbeitungsdatum;
 @FXML private TableColumn col_RL_lieferdatum;
 
+
 //WOchenansicht
 @FXML private ComboBox comboBox_RW_Wochenansicht;
 @FXML private TableColumn col_RW_Mitarbeit;
@@ -45,10 +46,10 @@ public class RechneransichtController {
 //Funktionen: Wochenansicht:
 //Table: Auftragsverteilung
 //dropDown Wochenauswahl
-//für jeden MA werden alle seine Aufträge für die jwlg. Woche angezeigt
-//Klick auf Überschrift einer Tabellenspalte (col_RW_Montag...)
-//Inhalt zu Tabelle hinzufügen (MA und Rechner) 
-//REchner müssen verschoben werden, wenn sie das täglich maximale Arbeitspensum des MAs (4h/8h)
+//fï¿½r jeden MA werden alle seine Auftrï¿½ge fï¿½r die jwlg. Woche angezeigt
+//Klick auf ï¿½berschrift einer Tabellenspalte (col_RW_Montag...)
+//Inhalt zu Tabelle hinzufï¿½gen (MA und Rechner) 
+//REchner mï¿½ssen verschoben werden, wenn sie das tï¿½glich maximale Arbeitspensum des MAs (4h/8h)
 
 
 //FUnktionen: Listenansicht
