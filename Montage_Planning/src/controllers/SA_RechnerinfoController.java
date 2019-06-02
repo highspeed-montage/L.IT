@@ -1,10 +1,13 @@
 package controllers;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
 
 public class SA_RechnerinfoController {
-	/**Rechnerinfo*/
+	/** Rechnerinfo */
 	@FXML
 	private Label lbl_SAI_status;
 	@FXML
@@ -19,4 +22,20 @@ public class SA_RechnerinfoController {
 	private Label lbl_SAI_kundenEMail;
 	@FXML
 	private Label lbl_SAI_Seriennummer;
+
+	/**Problemdokumentation*/
+	@FXML
+	private Label lbl_SAI_SuchStatus;
+
+	@FXML
+	private TextField txt_SAI_Einzelteilsuche;
+
+	@FXML
+	private RadioButton rbtn_SAI_Hardware;
+	@FXML
+	private RadioButton rbtn_SAI_Software;
+	@FXML
+	private RadioButton rbtn_SAI_Kunde;
+	@FXML
+	private Button btn_SAI_pdf;
 }
