@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.List;
 import com.mysql.cj.jdbc.result.ResultSetMetaData;
 
 import models.Auftragsverteilung;
+import models.Mitarbeiter;
 
 public class Datenbank {
 
@@ -21,7 +24,7 @@ public class Datenbank {
 	// private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
 
 	// NICHT LoeSCHEN: Datenbankverbindung GABBY LOKAL fuers testen, weil VPN nicht geht (ich habe mir die Datenbank geklont)
-//	private static final String DB_CONNECTION = "jdbc:mysql://localhost:3306/aj9s-montage?serverTimezone=UTC";	//für jan
+//	private static final String DB_CONNECTION = "jdbc:mysql://localhost:3306/aj9s-montage?serverTimezone=UTC";	//fuer jan
 	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage?serverTimezone=UTC";
 	private static final String DB_USER = "root";
 	private static final String DB_PASSWORD = "root";
@@ -68,7 +71,7 @@ public class Datenbank {
 	}
 
 	// Abfrage der Usernamen
-	public ArrayList Usernameabfrage() throws SQLException {
+	public ArrayList<String> Usernameabfrage() throws SQLException {
 		Statement stmt = connection.createStatement();
 		ResultSet rs = stmt.executeQuery("SELECT idPersonalnummer FROM Mitarbeiter");
 		ResultSetMetaData rsmd = (ResultSetMetaData) rs.getMetaData();
@@ -103,20 +106,35 @@ public class Datenbank {
 	// return list;
 	// }
 
-	// Rechner - Listenansicht Daten fuer Tabelleninhalt
-	public List<Auftragsverteilung> listRechnerAusAuftragsverteilung(/* String user */) throws SQLException {
+	/** Rechner - Listenansicht Daten fuer Tabelleninhalt*/
+	public List<Auftragsverteilung> listRechnerAusAuftragsverteilungListe(/*Mitarbeiter user*/) throws SQLException {
 
 		List<Auftragsverteilung> tabelleninhalt = new ArrayList<>();
 		Statement stmt = connection.createStatement();
-		String query = "SELECT Auftragsverteilung.Datum, Auftragsverteilung.Rechner_seriennummer, "
-				+ "Rechner.Status_idStatus FROM Auftragsverteilung, Rechner "
-				+ "WHERE Auftragsverteilung.Rechner_seriennummer = Rechner.idSeriennummer ";
-		// + "AND Auftragsverteilung.Mitarbeiter_idPersonalnummer = '"+user+"'";
+		String query = "SELECT Auftragsverteilung.Datum, Auftragsverteilung.Rechner_seriennummer, Status.Bezeichnung " + 
+				"FROM Auftragsverteilung, Status, Rechner " + 
+				"WHERE Auftragsverteilung.Rechner_seriennummer = Rechner.idSeriennummer " + 
+				"AND Rechner.Status_idStatus = Status.idStatus";
+		// + "AND Auftragsverteilung.Mitarbeiter_idPersonalnummer = '"+user.benutzername+"'";
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
 			tabelleninhalt.add(new Auftragsverteilung(rs.getDate("Auftragsverteilung.Datum"),
 					rs.getDate("Auftragsverteilung.Datum"), rs.getInt("Auftragsverteilung.Rechner_seriennummer"),
-					rs.getString("Rechner.Status_idStatus")));
+					rs.getString("Status.Bezeichnung")));
+		}
+		return tabelleninhalt;
+	}
+	
+	/** Rechner - Wochenansicht Daten fuer Tabelleninhalt*/
+	public List<Auftragsverteilung> listRechnerAusAuftragsverteilungWoche(/*Mitarbeiter user*/) throws SQLException {
+
+		List<Auftragsverteilung> tabelleninhalt = new ArrayList<>();
+		Statement stmt = connection.createStatement();
+		String query = "SELECT Rechner_seriennummer, Datum FROM Auftragsverteilung";
+		// + "WHERE Auftragsverteilung.Mitarbeiter_idPersonalnummer = '"+user.benutzername+"'";
+		ResultSet rs = stmt.executeQuery(query);
+		while (rs.next()) {
+			tabelleninhalt.add(new Auftragsverteilung(rs.getInt("Rechner_seriennummer"), rs.getDate("Datum")));
 		}
 		return tabelleninhalt;
 	}
