@@ -10,19 +10,23 @@ import java.util.List;
 
 import com.mysql.cj.jdbc.result.ResultSetMetaData;
 
+import models.Auftrag;
 import models.Auftragsverteilung;
+import models.Rechner;
+import models.Teile;
+
 
 public class Datenbank {
 
 	
-	private static final String DB_CONNECTION = "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
-	private static final String DB_USER = "aj9s-montage";
-	private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
+//	private static final String DB_CONNECTION = "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
+//	private static final String DB_USER = "aj9s-montage";
+//	private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
 
-//	// NICHT LoeSCHEN: Datenbankverbindung GABBY LOKAL fuers testen, weil VPN nicht geht (ich habe mir die Datenbank geklont)
-//	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage?serverTimezone=UTC";
-//	private static final String DB_USER = "root";
-//	private static final String DB_PASSWORD = "root";
+	// NICHT LoeSCHEN: Datenbankverbindung GABBY LOKAL fuers testen, weil VPN nicht geht (ich habe mir die Datenbank geklont)
+	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage?serverTimezone=UTC";
+	private static final String DB_USER = "root";
+	private static final String DB_PASSWORD = "root";
 
 	private Connection connection;
 
@@ -142,43 +146,46 @@ public class Datenbank {
 		
 		
 		
-		/** Kunde */
-		public String getKunde(int serienNummer) throws SQLException {
-			Statement stmt = connection.createStatement();
-			String query = "SELECT Kunde FROM Auftrag WHERE idAuftragsnummer = (SELECT Auftrag_idAuftragsnummer FROM Rechner_Teile WHERE Bezeichnung = '"+serienNummer+"')";
-			ResultSet rs = stmt.executeQuery(query);
-			String kunde = null;
 
-			while (rs.next()) {
+//		/** KundenEMail,NAme,ID */
+//		public List<Rechner> getKundenMail(int serienNummer) throws SQLException {
+//			//Auftrag holen
+//			//Kunde des jwlg Auftrags holen
+//			//Kundenid + name auf davon holen
+//			Statement stmt = connection.createStatement();
+//			String query = "SELECT Kunde.EMail,Kunde.Name,Kunde.Id FROM Kunde WHERE idKundennummer = (SELECT Kunde_idKunde FROM Auftrag WHERE idAuftragsnummer = (SELECT Auftrag_idAuftragsnummer FROM Rechner_Teile WHERE Bezeichnung = '"+serienNummer+"'))";
+//			ResultSet rs = stmt.executeQuery(query);
+//			String kundenEMail = null;
+//
+//			while (rs.next()) {
+//
+//				kundenEMail = rs.getString("EMail");
+//			}
+//			return kundenEMail;
+//		}
+		
+	/** KundenEMail,NAme,ID,STatus, Einzelteile... */
+	public List<Rechner> getRechnerinfo(int serienNummer) throws SQLException {
+		//Auftrag holen
+		//Kunde des jwlg Auftrags holen
+		//Kundenid + name auf davon holen
+		Statement stmt = connection.createStatement();
+		String query = "SELECT Kunde.EMail,Kunde.Name,Kunde.Id FROM Kunde WHERE idKundennummer = (SELECT Kunde_idKunde FROM Auftrag WHERE idAuftragsnummer = (SELECT Auftrag_idAuftragsnummer FROM Rechner_Teile WHERE Bezeichnung = '"+serienNummer+"'))";
+		ResultSet rs = stmt.executeQuery(query);
+		List <Rechner> rechnerinfo= new ArrayList<Rechner>();
 
-				kunde = rs.getString("kunde");
-			}
-			return kunde;
+		while (rs.next()) {
+
+			rechnerinfo.add(new Rechner(int pSeriennr, Auftrag pAuftrag, String pStatus, Teile pTeile));
 		}
-		/** KundenEMail */
-		public String getKundenMail(int serienNummer) throws SQLException {
-			//Auftrag holen
-			//Kunde des jwlg Auftrags holen
-			//Kundenid + name auf davon holen
-			Statement stmt = connection.createStatement();
-			String query = "SELECT EMail FROM Kunde WHERE idKundennummer = (SELECT Kunde_idKunde FROM Auftrag WHERE idAuftragsnummer = (SELECT Auftrag_idAuftragsnummer FROM Rechner_Teile WHERE Bezeichnung = '"+serienNummer+"'))";
-			ResultSet rs = stmt.executeQuery(query);
-			String kundenEMail = null;
-
-			while (rs.next()) {
-
-				kundenEMail = rs.getString("EMail");
-			}
-			return kundenEMail;
-		}
-		
-		
-		/** Bearbeitungsdatum */
-		
-		
-		
+		return rechnerinfo;
+	}
+		/** Bearbeitungsdatum */		
+	
+	
 		/** Lieferdatum */
 		
+	
 		/** Einzelteile */
 		public List<String> getRechnerEinzelteile(int serienNummer) throws SQLException {
 			Statement stmt = connection.createStatement();

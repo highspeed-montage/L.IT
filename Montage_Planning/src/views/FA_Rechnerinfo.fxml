@@ -12,7 +12,7 @@
          <top>
             <HBox alignment="TOP_CENTER" prefHeight="0.0" prefWidth="450.0" spacing="5.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label text="Auftrag" />
+                  <Label text="Rechner" />
                   <Label fx:id="lbl_FAI_Seriennummer" text="Label" />
                </children>
                <BorderPane.margin>

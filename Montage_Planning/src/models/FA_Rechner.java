@@ -7,7 +7,7 @@ public class FA_Rechner extends Rechner {
 	public FA_Rechner(int pSeriennr, Auftrag pAuftrag, String pStatus, Teile pTeile) {
 		super(pSeriennr, pAuftrag, pStatus, pTeile);
 	}
-
+	
 	public double getArbeitsaufwand() {
 		return arbeitsaufwand;
 	}
