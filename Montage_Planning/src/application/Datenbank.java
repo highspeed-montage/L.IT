@@ -5,22 +5,14 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
 import com.mysql.cj.jdbc.result.ResultSetMetaData;
-
 import models.Auftragsverteilung;
-<<<<<<< HEAD
 import models.Mitarbeiter;
-=======
 import models.FA_Rechner;
 import models.Rechner;
 import models.Teile;
->>>>>>> d3d9dfe8ad516d4e528e03bdb74adafba9904745
 
 public class Datenbank {
 
