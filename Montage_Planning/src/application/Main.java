@@ -25,16 +25,16 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-//		launch(args);	
-	Datenbank db = new Datenbank();
-	db.openConnection();
-	try {
-		db.listKunde();
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+		// launch(args);
+
+		Datenbank db = new Datenbank();
+		db.openConnection();
+		try {
+			db.listKunde();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		db.closeConnection();
+
 	}
-	db.closeConnection();
-			
-	}	
 }

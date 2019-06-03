@@ -92,6 +92,7 @@ public class RechneransichtController implements Initializable {
 		db.openConnection();
 
 		try {
+			// User fehlt noch
 			rechnerListenansichtTabelle.addAll(db.listRechnerAusAuftragsverteilung());
 			System.out.println(rechnerListenansichtTabelle.toString());
 		} catch (SQLException e) {

@@ -6,22 +6,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.mysql.cj.jdbc.result.ResultSetMetaData;
 
-import models.Auftrag;
 import models.Auftragsverteilung;
-import models.Rechner;
-import models.Teile;
-
 
 public class Datenbank {
 
-	
-//	private static final String DB_CONNECTION = "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
-//	private static final String DB_USER = "aj9s-montage";
-//	private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
+	// private static final String DB_CONNECTION =
+	// "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
+	// private static final String DB_USER = "aj9s-montage";
+	// private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
 
 	// NICHT LoeSCHEN: Datenbankverbindung GABBY LOKAL fuers testen, weil VPN nicht geht (ich habe mir die Datenbank geklont)
 	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage?serverTimezone=UTC";
@@ -106,22 +103,23 @@ public class Datenbank {
 	// }
 
 	// Rechner - Listenansicht Daten fuer Tabelleninhalt
-	public List<Auftragsverteilung> listRechnerAusAuftragsverteilung() throws SQLException {
+	public List<Auftragsverteilung> listRechnerAusAuftragsverteilung(/* String user */) throws SQLException {
+
 		List<Auftragsverteilung> tabelleninhalt = new ArrayList<>();
 		Statement stmt = connection.createStatement();
 		String query = "SELECT Auftragsverteilung.Datum, Auftragsverteilung.Rechner_seriennummer, "
 				+ "Rechner.Status_idStatus FROM Auftragsverteilung, Rechner "
-				+ "WHERE Auftragsverteilung.Rechner_seriennummer = Rechner.idSeriennummer";
+				+ "WHERE Auftragsverteilung.Rechner_seriennummer = Rechner.idSeriennummer ";
+		// + "AND Auftragsverteilung.Mitarbeiter_idPersonalnummer = '"+user+"'";
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
-			tabelleninhalt.add(new Auftragsverteilung(rs.getDate("Auftragsverteilung.Datum"), rs.getDate("Auftragsverteilung.Datum"),
-					rs.getInt("Auftragsverteilung.Rechner_seriennummer"), rs.getString("Rechner.Status_idStatus")));
+			tabelleninhalt.add(new Auftragsverteilung(rs.getDate("Auftragsverteilung.Datum"),
+					rs.getDate("Auftragsverteilung.Datum"), rs.getInt("Auftragsverteilung.Rechner_seriennummer"),
+					rs.getString("Rechner.Status_idStatus")));
 		}
 		return tabelleninhalt;
 	}
-	
-	
-	
+
 	/** Auflisten aller Rechner-Bearbeitungsdaten */
 	public List<Date> listRechnerByBearbeitungsdatum() throws SQLException { // java.util.date
 		Statement stmt = connection.createStatement();
@@ -137,82 +135,76 @@ public class Datenbank {
 		return rechnerBearbeitungsdaten;
 	}
 	// Hier die Abfragen fuer die Rechnerinformationscontroller
-		/** Seriennummer */
-		//FRAGE: wenn man den Hyperlink Seriennummer  in der Rechner Listenansicht anklickt -> dann muss die Seriennummer irgendwo zwischengespeichert werden!
-		//Dieser Schritt entfaellt deshalb
-		//Die Seriennummer ist fuer viele der folgenden Methoden notwendig
-		
-		
-		
-		
-		
+	/** Seriennummer */
+	// FRAGE: wenn man den Hyperlink Seriennummer in der Rechner Listenansicht
+	// anklickt -> dann muss die Seriennummer irgendwo zwischengespeichert werden!
+	// Dieser Schritt entfaellt deshalb
+	// Die Seriennummer ist fuer viele der folgenden Methoden notwendig
 
-//		/** KundenEMail,NAme,ID */
-//		public List<Rechner> getKundenMail(int serienNummer) throws SQLException {
-//			//Auftrag holen
-//			//Kunde des jwlg Auftrags holen
-//			//Kundenid + name auf davon holen
-//			Statement stmt = connection.createStatement();
-//			String query = "SELECT Kunde.EMail,Kunde.Name,Kunde.Id FROM Kunde WHERE idKundennummer = (SELECT Kunde_idKunde FROM Auftrag WHERE idAuftragsnummer = (SELECT Auftrag_idAuftragsnummer FROM Rechner_Teile WHERE Bezeichnung = '"+serienNummer+"'))";
-//			ResultSet rs = stmt.executeQuery(query);
-//			String kundenEMail = null;
-//
-//			while (rs.next()) {
-//
-//				kundenEMail = rs.getString("EMail");
-//			}
-//			return kundenEMail;
-//		}
-		
-	/** KundenEMail,NAme,ID,STatus, Einzelteile... */
-	public List<Rechner> getRechnerinfo(int serienNummer) throws SQLException {
-		//Auftrag holen
-		//Kunde des jwlg Auftrags holen
-		//Kundenid + name auf davon holen
+	/** Kunde */
+	public String getKunde(int serienNummer) throws SQLException {
 		Statement stmt = connection.createStatement();
-		String query = "SELECT Kunde.EMail,Kunde.Name,Kunde.Id FROM Kunde WHERE idKundennummer = (SELECT Kunde_idKunde FROM Auftrag WHERE idAuftragsnummer = (SELECT Auftrag_idAuftragsnummer FROM Rechner_Teile WHERE Bezeichnung = '"+serienNummer+"'))";
+		String query = "SELECT Kunde FROM Auftrag WHERE idAuftragsnummer = (SELECT Auftrag_idAuftragsnummer FROM Rechner_Teile WHERE Bezeichnung = '"
+				+ serienNummer + "')";
 		ResultSet rs = stmt.executeQuery(query);
-		List <Rechner> rechnerinfo= new ArrayList<Rechner>();
+		String kunde = null;
 
 		while (rs.next()) {
 
-			rechnerinfo.add(new Rechner(int pSeriennr, Auftrag pAuftrag, String pStatus, Teile pTeile));
+			kunde = rs.getString("kunde");
 		}
-		return rechnerinfo;
+		return kunde;
 	}
-		/** Bearbeitungsdatum */		
-	
-	
-		/** Lieferdatum */
-		
-	
-		/** Einzelteile */
-		public List<String> getRechnerEinzelteile(int serienNummer) throws SQLException {
-			Statement stmt = connection.createStatement();
-			String query = "SELECT Bezeichnung FROM Teile WHERE idTeilenummer = (SELECT Teile_idTeilenummer FROM Rechner_Teile WHERE Rechner_idSeriennummer = '"+ serienNummer + "')";
-			ResultSet rs = stmt.executeQuery(query);
-			
-			List<String> rechnerEinzelteile = new ArrayList<>();
 
-			while (rs.next()) {
-				
-				rechnerEinzelteile.add(rs.getString("Bezeichnung"));
-			}
-			return rechnerEinzelteile;
+	/** KundenEMail */
+	public String getKundenMail(int serienNummer) throws SQLException {
+		// Auftrag holen
+		// Kunde des jwlg Auftrags holen
+		// Kundenid + name auf davon holen
+		Statement stmt = connection.createStatement();
+		String query = "SELECT EMail FROM Kunde WHERE idKundennummer = (SELECT Kunde_idKunde FROM Auftrag WHERE idAuftragsnummer = (SELECT Auftrag_idAuftragsnummer FROM Rechner_Teile WHERE Bezeichnung = '"
+				+ serienNummer + "'))";
+		ResultSet rs = stmt.executeQuery(query);
+		String kundenEMail = null;
+
+		while (rs.next()) {
+
+			kundenEMail = rs.getString("EMail");
 		}
+		return kundenEMail;
+	}
 
-		/** Einzelteil SUche im Servicauftrag */
-		public int getEinzelteilLagerbestand(String eingabe) throws SQLException {
-			// Hier muss noch gecheckt werden, dass die eingabe ueberhaupt sinnvoll ist.
-			Statement stmt = connection.createStatement();
-			String query = "SELECT Lagerbestand FROM Rechner_Teile WHERE Bezeichnung = '" + eingabe + "'";
-			ResultSet rs = stmt.executeQuery(query);
-			int lagerbestand=0;
+	/** Bearbeitungsdatum */
 
-			while (rs.next()) {
+	/** Lieferdatum */
 
-				lagerbestand = rs.getInt("Lagerbestand");
-			}
-			return lagerbestand;
+	/** Einzelteile */
+	public List<String> getRechnerEinzelteile(int serienNummer) throws SQLException {
+		Statement stmt = connection.createStatement();
+		String query = "SELECT Bezeichnung FROM Teile WHERE idTeilenummer = (SELECT Teile_idTeilenummer FROM Rechner_Teile WHERE Rechner_idSeriennummer = '"
+				+ serienNummer + "')";
+		ResultSet rs = stmt.executeQuery(query);
+
+		List<String> rechnerEinzelteile = new ArrayList<>();
+
+		while (rs.next()) {
+
+			rechnerEinzelteile.add(rs.getString("Bezeichnung"));
 		}
+		return rechnerEinzelteile;
+	}
+
+	/** Einzelteil Suche im Servicauftrag */
+	public int getEinzelteilLagerbestand(String eingabe) throws SQLException {
+		// Hier muss noch gecheckt werden, dass die eingabe ueberhaupt sinnvoll ist.
+		Statement stmt = connection.createStatement();
+		String query = "SELECT Lagerbestand FROM Rechner_Teile WHERE Bezeichnung = '" + eingabe + "'";
+		ResultSet rs = stmt.executeQuery(query);
+		int lagerbestand = 0;
+
+		while (rs.next()) {
+			lagerbestand = rs.getInt("Lagerbestand");
+		}
+		return lagerbestand;
+	}
 }
