@@ -1,6 +1,6 @@
 package models;
 
-public abstract class Mitarbeiter {
+public class Mitarbeiter {
 	private int personalnr;
 	private String name;
 	private String vorname;
@@ -15,6 +15,17 @@ public abstract class Mitarbeiter {
 		urlaubstage = pUrlaubstage;
 		krankheitstage = pKrankheitstage;
 	}
+	
+	
+	public Mitarbeiter(int personalnr, String name) {
+		super();
+		this.personalnr = personalnr;
+		this.name = name;
+	}
+
+
+
+
 	public void setName(String pName)
 	{
 		name = pName;
