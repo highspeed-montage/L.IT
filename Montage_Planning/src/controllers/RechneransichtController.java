@@ -2,8 +2,11 @@ package controllers;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -53,11 +56,9 @@ public class RechneransichtController implements Initializable {
 	@FXML
 	private TableColumn<Auftragsverteilung, Date> col_RL_lieferdatum;
 
-	// WOchenansicht
+	// Wochenansicht
 	@FXML
 	private ComboBox comboBox_RW_Wochenansicht;
-	@FXML
-	private TableColumn col_RW_Mitarbeit;
 	@FXML
 	private TableColumn col_RW_Montag;
 	@FXML
@@ -77,16 +78,35 @@ public class RechneransichtController implements Initializable {
 	// Inhalt zu Tabelle hinzuf�gen (MA und Rechner)
 	// REchner m�ssen verschoben werden, wenn sie das t�glich maximale Arbeitspensum
 	// des MAs (4h/8h)
-	
+
 	// Wenn Benutzer-Rolle = Monteur, dann Laden aller Rechner als Liste
 
 	
 
 	
-	// Rechner - Listenansicht Tabelle befüllen
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
+		// Rechner - Wochenansicht Tabelle befüllen
+		
+		// Combo-Box mit Wochen befüllen
+		
+		Date ersteWoche = new Date();
+		Date zweiteWoche = new Date();
+		Date dritteWoche = new Date();
+		
+		ersteWoche = printSimpleDateFormat();
+		
+		ObservableList<Date> options = FXCollections.observableArrayList(
+			        ersteWoche,
+			        zweiteWoche,
+			        dritteWoche			        
+			    );
+		
+		comboBox_RW_Wochenansicht = new ComboBox(options);		
+		
+		// Rechner - Listenansicht Tabelle befüllen
 		ObservableList<Auftragsverteilung> rechnerListenansichtTabelle = FXCollections.observableArrayList();
 		Datenbank db = new Datenbank();
 		db.openConnection();
@@ -105,5 +125,15 @@ public class RechneransichtController implements Initializable {
 		col_RL_lieferdatum.setCellValueFactory(new PropertyValueFactory<>("lieferdatum"));
 		
 		tableRechnerListe.setItems(rechnerListenansichtTabelle);
+		
+		
 	}
+
+
+    static Date printSimpleDateFormat() { 
+        SimpleDateFormat formatter = new SimpleDateFormat( 
+                "dd.MM.yyyy"); 
+        Date currentTime = new Date(); 
+        return currentTime;
+    } 
 }
