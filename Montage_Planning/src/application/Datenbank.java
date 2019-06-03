@@ -180,9 +180,9 @@ public class Datenbank {
 		// + "AND Auftragsverteilung.Mitarbeiter_idPersonalnummer = '"+user+"'";
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
-			rechnerinfo.add(new FA_Rechner(rs.getInt("Auftragsverteilung.Rechner_seriennummer"), rs.getString("Rechner.Status_idStatus"),  
-					rs.getDate("Auftragsverteilung.Datum"), rs.getDate("Auftragsverteilung.Datum"), rs.getString("Kunde.EMail"), 
-					rs.getString("Kunde.Name"), rs.getInt("Kunde.idKundennummer")));
+//			rechnerinfo.add(new FA_Rechner(rs.getInt("Auftragsverteilung.Rechner_seriennummer"), rs.getString("Rechner.Status_idStatus"),  
+//					rs.getDate("Auftragsverteilung.Datum"), rs.getDate("Auftragsverteilung.Datum"), rs.getString("Kunde.EMail"), 
+//					rs.getString("Kunde.Name"), rs.getInt("Kunde.idKundennummer")));
 					
 		}
 		return rechnerinfo;

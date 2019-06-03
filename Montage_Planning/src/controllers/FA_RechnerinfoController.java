@@ -32,13 +32,14 @@ public class FA_RechnerinfoController implements EventHandler, Initializable {
 	@FXML
 	private Label lbl_FAI_Seriennummer;
 	@FXML
-	private ComboBox<String> comboBox_FAI_Status;
+	private ComboBox<String> comboBox_FAI_Status=null;
 	/** Einzelteiltabelle */
 	@FXML
 	private TableColumn<?, ?> TableColumn_FAI_einzelteile;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		System.out.println("test");
 		lbl_FAI_status = new Label();
 		lbl_FAI_lieferdatum = new Label();
 		lbl_FAI_bearbeitungsdatum = new Label();
