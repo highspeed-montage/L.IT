@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.mysql.cj.jdbc.result.ResultSetMetaData;
@@ -14,15 +15,15 @@ import models.Auftragsverteilung;
 
 public class Datenbank {
 
-	
-	private static final String DB_CONNECTION = "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
-	private static final String DB_USER = "aj9s-montage";
-	private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
+	// private static final String DB_CONNECTION =
+	// "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
+	// private static final String DB_USER = "aj9s-montage";
+	// private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
 
-//	// NICHT LoeSCHEN: Datenbankverbindung GABBY LOKAL fuers testen, weil VPN nicht geht (ich habe mir die Datenbank geklont)
-//	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage?serverTimezone=UTC";
-//	private static final String DB_USER = "root";
-//	private static final String DB_PASSWORD = "root";
+	// NICHT LoeSCHEN: Datenbankverbindung GABBY LOKAL fuers testen, weil VPN nicht geht (ich habe mir die Datenbank geklont)
+	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage?serverTimezone=UTC";
+	private static final String DB_USER = "root";
+	private static final String DB_PASSWORD = "root";
 
 	private Connection connection;
 
@@ -101,29 +102,24 @@ public class Datenbank {
 	// return list;
 	// }
 
-<<<<<<< HEAD
-	// Rechner - Listenansicht Daten für Tabelleninhalt
-	public List<Auftragsverteilung> listRechnerAusAuftragsverteilung(/*String user*/) throws SQLException {
-=======
 	// Rechner - Listenansicht Daten fuer Tabelleninhalt
-	public List<Auftragsverteilung> listRechnerAusAuftragsverteilung() throws SQLException {
->>>>>>> 3cfb8ba5b9c3eefc96e9eebba88945187a80bcae
+	public List<Auftragsverteilung> listRechnerAusAuftragsverteilung(/* String user */) throws SQLException {
+
 		List<Auftragsverteilung> tabelleninhalt = new ArrayList<>();
 		Statement stmt = connection.createStatement();
 		String query = "SELECT Auftragsverteilung.Datum, Auftragsverteilung.Rechner_seriennummer, "
 				+ "Rechner.Status_idStatus FROM Auftragsverteilung, Rechner "
 				+ "WHERE Auftragsverteilung.Rechner_seriennummer = Rechner.idSeriennummer ";
-				//+ "AND Auftragsverteilung.Mitarbeiter_idPersonalnummer = '"+user+"'";
+		// + "AND Auftragsverteilung.Mitarbeiter_idPersonalnummer = '"+user+"'";
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
-			tabelleninhalt.add(new Auftragsverteilung(rs.getDate("Auftragsverteilung.Datum"), rs.getDate("Auftragsverteilung.Datum"),
-					rs.getInt("Auftragsverteilung.Rechner_seriennummer"), rs.getString("Rechner.Status_idStatus")));
+			tabelleninhalt.add(new Auftragsverteilung(rs.getDate("Auftragsverteilung.Datum"),
+					rs.getDate("Auftragsverteilung.Datum"), rs.getInt("Auftragsverteilung.Rechner_seriennummer"),
+					rs.getString("Rechner.Status_idStatus")));
 		}
 		return tabelleninhalt;
 	}
-	
-	
-	
+
 	/** Auflisten aller Rechner-Bearbeitungsdaten */
 	public List<Date> listRechnerByBearbeitungsdatum() throws SQLException { // java.util.date
 		Statement stmt = connection.createStatement();
@@ -139,79 +135,76 @@ public class Datenbank {
 		return rechnerBearbeitungsdaten;
 	}
 	// Hier die Abfragen fuer die Rechnerinformationscontroller
-		/** Seriennummer */
-		//FRAGE: wenn man den Hyperlink Seriennummer  in der Rechner Listenansicht anklickt -> dann muss die Seriennummer irgendwo zwischengespeichert werden!
-		//Dieser Schritt entfaellt deshalb
-		//Die Seriennummer ist fuer viele der folgenden Methoden notwendig
-		
-		
-		
-		
-		
-		/** Kunde */
-		public String getKunde(int serienNummer) throws SQLException {
-			Statement stmt = connection.createStatement();
-			String query = "SELECT Kunde FROM Auftrag WHERE idAuftragsnummer = (SELECT Auftrag_idAuftragsnummer FROM Rechner_Teile WHERE Bezeichnung = '"+serienNummer+"')";
-			ResultSet rs = stmt.executeQuery(query);
-			String kunde = null;
+	/** Seriennummer */
+	// FRAGE: wenn man den Hyperlink Seriennummer in der Rechner Listenansicht
+	// anklickt -> dann muss die Seriennummer irgendwo zwischengespeichert werden!
+	// Dieser Schritt entfaellt deshalb
+	// Die Seriennummer ist fuer viele der folgenden Methoden notwendig
 
-			while (rs.next()) {
+	/** Kunde */
+	public String getKunde(int serienNummer) throws SQLException {
+		Statement stmt = connection.createStatement();
+		String query = "SELECT Kunde FROM Auftrag WHERE idAuftragsnummer = (SELECT Auftrag_idAuftragsnummer FROM Rechner_Teile WHERE Bezeichnung = '"
+				+ serienNummer + "')";
+		ResultSet rs = stmt.executeQuery(query);
+		String kunde = null;
 
-				kunde = rs.getString("kunde");
-			}
-			return kunde;
+		while (rs.next()) {
+
+			kunde = rs.getString("kunde");
 		}
-		/** KundenEMail */
-		public String getKundenMail(int serienNummer) throws SQLException {
-			//Auftrag holen
-			//Kunde des jwlg Auftrags holen
-			//Kundenid + name auf davon holen
-			Statement stmt = connection.createStatement();
-			String query = "SELECT EMail FROM Kunde WHERE idKundennummer = (SELECT Kunde_idKunde FROM Auftrag WHERE idAuftragsnummer = (SELECT Auftrag_idAuftragsnummer FROM Rechner_Teile WHERE Bezeichnung = '"+serienNummer+"'))";
-			ResultSet rs = stmt.executeQuery(query);
-			String kundenEMail = null;
+		return kunde;
+	}
 
-			while (rs.next()) {
+	/** KundenEMail */
+	public String getKundenMail(int serienNummer) throws SQLException {
+		// Auftrag holen
+		// Kunde des jwlg Auftrags holen
+		// Kundenid + name auf davon holen
+		Statement stmt = connection.createStatement();
+		String query = "SELECT EMail FROM Kunde WHERE idKundennummer = (SELECT Kunde_idKunde FROM Auftrag WHERE idAuftragsnummer = (SELECT Auftrag_idAuftragsnummer FROM Rechner_Teile WHERE Bezeichnung = '"
+				+ serienNummer + "'))";
+		ResultSet rs = stmt.executeQuery(query);
+		String kundenEMail = null;
 
-				kundenEMail = rs.getString("EMail");
-			}
-			return kundenEMail;
+		while (rs.next()) {
+
+			kundenEMail = rs.getString("EMail");
 		}
-		
-		
-		/** Bearbeitungsdatum */
-		
-		
-		
-		/** Lieferdatum */
-		
-		/** Einzelteile */
-		public List<String> getRechnerEinzelteile(int serienNummer) throws SQLException {
-			Statement stmt = connection.createStatement();
-			String query = "SELECT Bezeichnung FROM Teile WHERE idTeilenummer = (SELECT Teile_idTeilenummer FROM Rechner_Teile WHERE Rechner_idSeriennummer = '"+ serienNummer + "')";
-			ResultSet rs = stmt.executeQuery(query);
-			
-			List<String> rechnerEinzelteile = new ArrayList<>();
+		return kundenEMail;
+	}
 
-			while (rs.next()) {
-				
-				rechnerEinzelteile.add(rs.getString("Bezeichnung"));
-			}
-			return rechnerEinzelteile;
+	/** Bearbeitungsdatum */
+
+	/** Lieferdatum */
+
+	/** Einzelteile */
+	public List<String> getRechnerEinzelteile(int serienNummer) throws SQLException {
+		Statement stmt = connection.createStatement();
+		String query = "SELECT Bezeichnung FROM Teile WHERE idTeilenummer = (SELECT Teile_idTeilenummer FROM Rechner_Teile WHERE Rechner_idSeriennummer = '"
+				+ serienNummer + "')";
+		ResultSet rs = stmt.executeQuery(query);
+
+		List<String> rechnerEinzelteile = new ArrayList<>();
+
+		while (rs.next()) {
+
+			rechnerEinzelteile.add(rs.getString("Bezeichnung"));
 		}
+		return rechnerEinzelteile;
+	}
 
-		/** Einzelteil SUche im Servicauftrag */
-		public int getEinzelteilLagerbestand(String eingabe) throws SQLException {
-			// Hier muss noch gecheckt werden, dass die eingabe ueberhaupt sinnvoll ist.
-			Statement stmt = connection.createStatement();
-			String query = "SELECT Lagerbestand FROM Rechner_Teile WHERE Bezeichnung = '" + eingabe + "'";
-			ResultSet rs = stmt.executeQuery(query);
-			int lagerbestand=0;
+	/** Einzelteil Suche im Servicauftrag */
+	public int getEinzelteilLagerbestand(String eingabe) throws SQLException {
+		// Hier muss noch gecheckt werden, dass die eingabe ueberhaupt sinnvoll ist.
+		Statement stmt = connection.createStatement();
+		String query = "SELECT Lagerbestand FROM Rechner_Teile WHERE Bezeichnung = '" + eingabe + "'";
+		ResultSet rs = stmt.executeQuery(query);
+		int lagerbestand = 0;
 
-			while (rs.next()) {
-
-				lagerbestand = rs.getInt("Lagerbestand");
-			}
-			return lagerbestand;
+		while (rs.next()) {
+			lagerbestand = rs.getInt("Lagerbestand");
 		}
+		return lagerbestand;
+	}
 }
