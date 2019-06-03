@@ -102,12 +102,13 @@ public class Datenbank {
 	// }
 
 	// Rechner - Listenansicht Daten für Tabelleninhalt
-	public List<Auftragsverteilung> listRechnerAusAuftragsverteilung() throws SQLException {
+	public List<Auftragsverteilung> listRechnerAusAuftragsverteilung(/*String user*/) throws SQLException {
 		List<Auftragsverteilung> tabelleninhalt = new ArrayList<>();
 		Statement stmt = connection.createStatement();
 		String query = "SELECT Auftragsverteilung.Datum, Auftragsverteilung.Rechner_seriennummer, "
 				+ "Rechner.Status_idStatus FROM Auftragsverteilung, Rechner "
-				+ "WHERE Auftragsverteilung.Rechner_seriennummer = Rechner.idSeriennummer";
+				+ "WHERE Auftragsverteilung.Rechner_seriennummer = Rechner.idSeriennummer ";
+				//+ "AND Auftragsverteilung.Mitarbeiter_idPersonalnummer = '"+user+"'";
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
 			tabelleninhalt.add(new Auftragsverteilung(rs.getDate("Auftragsverteilung.Datum"), rs.getDate("Auftragsverteilung.Datum"),
