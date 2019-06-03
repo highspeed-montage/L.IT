@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Date;
+
 public abstract class Rechner {
 	private Integer seriennr;
 	private Auftrag auftrag;
@@ -10,6 +12,14 @@ public abstract class Rechner {
 	private boolean installiert;
 	private boolean getestet;
 	
+	//DB Abfrage:
+	private Date lieferdatum;
+	private Date bearbeitungsdatum;
+	private String emailKunde;
+	private String nameKunde;
+	private Integer idKunde;
+	
+
 	public Rechner(int pSeriennr, Auftrag pAuftrag, String pStatus, Teile pTeile)
 	{
 		setSeriennr(pSeriennr);
@@ -17,13 +27,24 @@ public abstract class Rechner {
 		status = pStatus;
 		setTeile(pTeile);
 	}
-	
-	
+	//hier KOnstruktor für DB Abfrage //OHNE TEILE
+	public Rechner(Integer seriennr, String status,  Date lieferdatum, Date bearbeitungsdatum, String emailKunde, String nameKunde, Integer idKunde) {
+		this.seriennr = seriennr;
+		this.status = status;
+		//this.teile = teile;
+		this.lieferdatum = lieferdatum;
+		this.bearbeitungsdatum = bearbeitungsdatum;
+		this.emailKunde = emailKunde;
+		this.nameKunde = nameKunde;
+		this.idKunde = idKunde;
+	}
 	
 	public void disponieren()
 	{
 		status = "disponieren";
 	}
+	
+	
 	public void setUnvollstaendig()
 	{
 		status = "unvollstaendig";
@@ -97,6 +118,22 @@ public abstract class Rechner {
 	public void setGetestet(boolean pGetestet) 
 	{
 		getestet = pGetestet;
+	}
+	
+	public Date getLieferdatum() {
+		return lieferdatum;
+	}
+	public Date getBearbeitungsdatum() {
+		return bearbeitungsdatum;
+	}
+	public String getEmailKunde() {
+		return emailKunde;
+	}
+	public String getNameKunde() {
+		return nameKunde;
+	}
+	public Integer getIdKunde() {
+		return idKunde;
 	}
 	
 }
