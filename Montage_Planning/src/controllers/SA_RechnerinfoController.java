@@ -2,6 +2,7 @@ package controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -23,7 +24,9 @@ public class SA_RechnerinfoController {
 	@FXML
 	private Label lbl_SAI_Seriennummer;
 
-	/**Problemdokumentation*/
+	/** Problemdokumentation */
+	@FXML
+	private ComboBox<String> comboBox_SAI_Bearbeitungsstatus;
 	@FXML
 	private Label lbl_SAI_SuchStatus;
 
@@ -38,4 +41,6 @@ public class SA_RechnerinfoController {
 	private RadioButton rbtn_SAI_Kunde;
 	@FXML
 	private Button btn_SAI_pdf;
+	
+	
 }

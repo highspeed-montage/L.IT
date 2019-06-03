@@ -11,10 +11,16 @@ public class Teile {
 		kategorie = pKategorie; 
 		lagerbestand = pLagerbestand;
 	}
+	
+
+	
+	
 	public void setKategorie(String pKategorie)
 	{
 		kategorie = pKategorie;
 	}
+	
+
 	//Lagerbestand berechnen?
 	public int getTeilenr()
 	{
@@ -28,4 +34,8 @@ public class Teile {
 	{
 		return lagerbestand;
 	}
+
+	
+
+	
 }

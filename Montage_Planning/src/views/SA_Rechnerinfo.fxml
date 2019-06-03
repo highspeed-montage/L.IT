@@ -14,7 +14,7 @@
                <children>
                   <HBox alignment="TOP_CENTER" spacing="5.0">
                      <children>
-                        <Label text="Auftrag" />
+                        <Label text="Rechner" />
                         <Label fx:id="lbl_SAI_Seriennummer" text="Label" />
                      </children>
                   </HBox>
@@ -76,6 +76,11 @@
          <center>
             <VBox spacing="40.0">
                <children>
+                  <HBox alignment="TOP_CENTER">
+                     <children>
+                        <ComboBox fx:id="comboBox_SAI_Bearbeitungsstatus" prefWidth="150.0" promptText="Bearbeitungsstatus" />
+                     </children>
+                  </HBox>
                   <RadioButton fx:id="rbtn_SAI_Hardware" mnemonicParsing="false" text="Hardware">
                      <toggleGroup>
                         <ToggleGroup fx:id="dokumentation" />

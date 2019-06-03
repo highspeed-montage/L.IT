@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Date;
+
 public abstract class Rechner {
 	private Integer seriennr;
 	private Auftrag auftrag;
@@ -10,6 +12,9 @@ public abstract class Rechner {
 	private boolean installiert;
 	private boolean getestet;
 	
+	
+	
+
 	public Rechner(int pSeriennr, Auftrag pAuftrag, String pStatus, Teile pTeile)
 	{
 		setSeriennr(pSeriennr);
@@ -19,11 +24,12 @@ public abstract class Rechner {
 	}
 	
 	
-	
 	public void disponieren()
 	{
 		status = "disponieren";
 	}
+	
+	
 	public void setUnvollstaendig()
 	{
 		status = "unvollstaendig";
@@ -98,5 +104,7 @@ public abstract class Rechner {
 	{
 		getestet = pGetestet;
 	}
+	
+	
 	
 }

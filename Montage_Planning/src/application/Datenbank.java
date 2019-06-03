@@ -14,7 +14,13 @@ import java.util.List;
 import com.mysql.cj.jdbc.result.ResultSetMetaData;
 
 import models.Auftragsverteilung;
+<<<<<<< HEAD
 import models.Mitarbeiter;
+=======
+import models.FA_Rechner;
+import models.Rechner;
+import models.Teile;
+>>>>>>> d3d9dfe8ad516d4e528e03bdb74adafba9904745
 
 public class Datenbank {
 
@@ -139,20 +145,7 @@ public class Datenbank {
 		return tabelleninhalt;
 	}
 
-	/** Auflisten aller Rechner-Bearbeitungsdaten */
-	public List<Date> listRechnerByBearbeitungsdatum() throws SQLException { // java.util.date
-		Statement stmt = connection.createStatement();
-		String query = "SELECT Datum FROM Auftragsverteilung";
-		ResultSet rs = stmt.executeQuery(query);
-		List<Date> rechnerBearbeitungsdaten = new ArrayList<>(); // Welcher Datentyp?
-
-		while (rs.next()) {
-			java.sql.Date sqlDate = rs.getDate("Datum"); // wie ist der ColumnName wirklich??
-			java.util.Date javaDate = new java.util.Date(sqlDate.getTime()); // Umwandlung von sql.Date zu util.Date
-			rechnerBearbeitungsdaten.add(javaDate);
-		}
-		return rechnerBearbeitungsdaten;
-	}
+	
 	// Hier die Abfragen fuer die Rechnerinformationscontroller
 	/** Seriennummer */
 	// FRAGE: wenn man den Hyperlink Seriennummer in der Rechner Listenansicht
@@ -175,23 +168,52 @@ public class Datenbank {
 		return kunde;
 	}
 
-	/** KundenEMail */
-	public String getKundenMail(int serienNummer) throws SQLException {
-		// Auftrag holen
-		// Kunde des jwlg Auftrags holen
-		// Kundenid + name auf davon holen
+//	/** KundenEMail */
+//	public String getKundenMail(int serienNummer) throws SQLException {
+//		// Auftrag holen
+//		// Kunde des jwlg Auftrags holen
+//		// Kundenid + name auf davon holen
+//		Statement stmt = connection.createStatement();
+//		String query = "SELECT EMail FROM Kunde WHERE idKundennummer = (SELECT Kunde_idKunde FROM Auftrag WHERE idAuftragsnummer = (SELECT Auftrag_idAuftragsnummer FROM Rechner_Teile WHERE Bezeichnung = '"
+//				+ serienNummer + "'))";
+//		ResultSet rs = stmt.executeQuery(query);
+//		String kundenEMail = null;
+//
+//		while (rs.next()) {
+//
+//			kundenEMail = rs.getString("EMail");
+//		}
+//		return kundenEMail;
+//	}
+	/**Rechnerinfo*/
+//	Konstutor Rechner: (Integer seriennr, String status, Date lieferdatum, Date bearbeitungsdatum, String emailKunde, String nameKunde, Integer idKunde)
+//	Teile erstmal vorweg..: Teile (...SELECT id_rechnerteile WHERE REchner.id_snr = Rechner_Teile.REchner_idsnr)
+	
+
+	
+	public List<Rechner> getRechnerInfo(/**   */) throws SQLException {
+
+		List<Rechner> rechnerinfo = new ArrayList<>();
 		Statement stmt = connection.createStatement();
-		String query = "SELECT EMail FROM Kunde WHERE idKundennummer = (SELECT Kunde_idKunde FROM Auftrag WHERE idAuftragsnummer = (SELECT Auftrag_idAuftragsnummer FROM Rechner_Teile WHERE Bezeichnung = '"
-				+ serienNummer + "'))";
+		String query = "SELECT Auftragsverteilung.Rechner_seriennummer, Rechner.Status_idStatus, Auftragsverteilung.Datum, Kunde.EMail, Kunde.Name, Kunde.idKundennummer "
+				+ "FROM Auftragsverteilung, Rechner, Kunde "
+				+ "WHERE (Auftragsverteilung.Rechner_seriennummer = Rechner.idSeriennummer) OR ((SELECT Auftrag.Kunde_idKunde FROM Auftrag WHERE Rechner.Auftrag_idAuftragsnummer = Auftrag.idAuftragsnummer) = Kunde.idKundennummer )";
+		// + "AND Auftragsverteilung.Mitarbeiter_idPersonalnummer = '"+user+"'";
 		ResultSet rs = stmt.executeQuery(query);
-		String kundenEMail = null;
-
 		while (rs.next()) {
-
-			kundenEMail = rs.getString("EMail");
+//			rechnerinfo.add(new FA_Rechner(rs.getInt("Auftragsverteilung.Rechner_seriennummer"), rs.getString("Rechner.Status_idStatus"),  
+//					rs.getDate("Auftragsverteilung.Datum"), rs.getDate("Auftragsverteilung.Datum"), rs.getString("Kunde.EMail"), 
+//					rs.getString("Kunde.Name"), rs.getInt("Kunde.idKundennummer")));
+					
 		}
-		return kundenEMail;
+		return rechnerinfo;
 	}
+
+	
+	
+	
+	
+	
 
 	/** Bearbeitungsdatum */
 
@@ -200,8 +222,7 @@ public class Datenbank {
 	/** Einzelteile */
 	public List<String> getRechnerEinzelteile(int serienNummer) throws SQLException {
 		Statement stmt = connection.createStatement();
-		String query = "SELECT Bezeichnung FROM Teile WHERE idTeilenummer = (SELECT Teile_idTeilenummer FROM Rechner_Teile WHERE Rechner_idSeriennummer = '"
-				+ serienNummer + "')";
+		String query = "SELECT Bezeichnung FROM Teile WHERE idTeilenummer = (SELECT Teile_idTeilenummer FROM Rechner_Teile WHERE Rechner_idSeriennummer = '"+ serienNummer + "')";
 		ResultSet rs = stmt.executeQuery(query);
 
 		List<String> rechnerEinzelteile = new ArrayList<>();
