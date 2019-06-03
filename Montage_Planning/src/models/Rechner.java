@@ -17,6 +17,9 @@ public abstract class Rechner {
 		status = pStatus;
 		setTeile(pTeile);
 	}
+	
+	
+	
 	public void disponieren()
 	{
 		status = "disponieren";

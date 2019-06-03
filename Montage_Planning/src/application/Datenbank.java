@@ -21,10 +21,11 @@ public class Datenbank {
 	// private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
 
 	// NICHT LoeSCHEN: Datenbankverbindung GABBY LOKAL fuers testen, weil VPN nicht geht (ich habe mir die Datenbank geklont)
+//	private static final String DB_CONNECTION = "jdbc:mysql://localhost:3306/aj9s-montage?serverTimezone=UTC";	//für jan
 	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage?serverTimezone=UTC";
 	private static final String DB_USER = "root";
 	private static final String DB_PASSWORD = "root";
-
+	
 	private Connection connection;
 
 	// Datenbankverbindung herstellen

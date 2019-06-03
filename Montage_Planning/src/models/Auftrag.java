@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Date;
+
 public abstract class Auftrag {
 	private int auftragsnr;
 	private String status;
@@ -8,6 +10,7 @@ public abstract class Auftrag {
 	private Rechner rechner;
 	private double arbeitsaufwand;
 	private static final int lieferzeit = 14;
+	private Date lieferdatum;
 	
 	public Auftrag(int pAuftragsnr, String pStatus, Kunde pKunde, boolean pZugewiesen, Rechner pRechner)
 	{
@@ -17,6 +20,8 @@ public abstract class Auftrag {
 		zugewiesen = pZugewiesen;
 		rechner = pRechner;
 	}
+	
+	
 	public void setAngelegt()
 	{
 		status = "angelegt";
