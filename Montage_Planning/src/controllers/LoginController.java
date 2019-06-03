@@ -2,7 +2,9 @@ package controllers;
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 import application.Datenbank;
 import javafx.scene.control.Label;
@@ -12,6 +14,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,7 +22,7 @@ import javafx.scene.control.Button;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class LoginController implements EventHandler  {
+public class LoginController implements EventHandler, Initializable  {
  @FXML
  private Label lblMontage;
 
@@ -51,5 +54,16 @@ public class LoginController implements EventHandler  {
 
 @Override
 public void handle(Event event) {
+}
+
+@Override
+public void initialize(URL location, ResourceBundle resources) {
+	
+ lblMontage = new Label();
+ lblStatus = new Label();
+ txtUsername = new TextField();
+ txtPassword = new TextField();
+ btnAnmelden = new Button();
+	
 }
 }
