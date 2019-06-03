@@ -3,18 +3,25 @@ package models;
 import java.util.Date;
 
 public class Auftragsverteilung {
-	
+
 	private Date bearbeitungsdatum;
 	private Date lieferdatum;
 	private Integer seriennr;
 	private String status;
-	
+
 	public Auftragsverteilung(Date bearbeitungsdatum, Date lieferdatum, Integer seriennr, String status) {
 		super();
 		this.bearbeitungsdatum = bearbeitungsdatum;
 		this.lieferdatum = lieferdatum;
 		this.seriennr = seriennr;
 		this.status = status;
+	}
+
+	// Konstruktor für Datenbankabfrage listRechnerAusAuftragsverteilungWoche()
+	public Auftragsverteilung(Integer seriennr, Date bearbeitungsdatum) {
+		super();
+		this.seriennr = seriennr;
+		this.bearbeitungsdatum = bearbeitungsdatum;
 	}
 
 	@Override
@@ -53,7 +60,6 @@ public class Auftragsverteilung {
 
 	public void setStatus(String status) {
 		this.status = status;
-	}	
-	
-	
+	}
+
 }
