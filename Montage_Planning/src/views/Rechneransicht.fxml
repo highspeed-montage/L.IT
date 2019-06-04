@@ -36,7 +36,7 @@
                               </HBox>
                            </top>
                            <center>
-                              <TableView fx:id="tableRechnerWoche" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                              <TableView fx:id="tableRechnerWoche" onMouseClicked="#clickRechnerWoche" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                 <columns>
                                   <TableColumn fx:id="col_RW_Montag" prefWidth="109.0" text="Montag" />
                                     <TableColumn fx:id="col_RW_Dienstag" prefWidth="108.0" text="Dienstag" />
@@ -62,7 +62,7 @@
                   <content>
                         <BorderPane prefHeight="200.0" prefWidth="200.0">
                            <center>
-                              <TableView fx:id="tableRechnerListe" layoutY="26.0" prefHeight="304.0" prefWidth="750.0" AnchorPane.bottomAnchor="-252.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-333.0" AnchorPane.topAnchor="25.0">
+                              <TableView fx:id="tableRechnerListe" layoutY="26.0" onMouseClicked="#clickRechnerListe" prefHeight="304.0" prefWidth="750.0" AnchorPane.bottomAnchor="-252.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-333.0" AnchorPane.topAnchor="25.0">
                                 <columns>
                                   <TableColumn fx:id="col_RL_serienNr" prefWidth="75.0" text="SerienNr" />
                                     <TableColumn fx:id="col_RL_status" prefWidth="75.0" text="Status" />
