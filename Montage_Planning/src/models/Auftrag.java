@@ -22,6 +22,13 @@ public abstract class Auftrag {
 	}
 	
 	
+	
+	public Auftrag( Date lieferdatum) {
+		this.lieferdatum = lieferdatum;
+	}
+
+
+
 	public void setAngelegt()
 	{
 		status = "angelegt";

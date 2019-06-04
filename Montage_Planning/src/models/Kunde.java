@@ -15,4 +15,6 @@ public abstract class Kunde {
 	{
 		return eMail;
 	}
+	
+	
 }

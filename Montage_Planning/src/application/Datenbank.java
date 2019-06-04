@@ -183,14 +183,13 @@ public class Datenbank {
 	
 
 	
-	public List<Rechner> getRechnerInfo(/**   */) throws SQLException {
+	public List<FA_Rechner> getFARechnerInfo(/**   */) throws SQLException {
 
-		List<Rechner> rechnerinfo = new ArrayList<>();
+		List<FA_Rechner> rechnerinfo = new ArrayList<>();
 		Statement stmt = connection.createStatement();
 		String query = "SELECT Auftragsverteilung.Rechner_seriennummer, Rechner.Status_idStatus, Auftragsverteilung.Datum, Kunde.EMail, Kunde.Name, Kunde.idKundennummer "
 				+ "FROM Auftragsverteilung, Rechner, Kunde "
 				+ "WHERE (Auftragsverteilung.Rechner_seriennummer = Rechner.idSeriennummer) OR ((SELECT Auftrag.Kunde_idKunde FROM Auftrag WHERE Rechner.Auftrag_idAuftragsnummer = Auftrag.idAuftragsnummer) = Kunde.idKundennummer )";
-		// + "AND Auftragsverteilung.Mitarbeiter_idPersonalnummer = '"+user+"'";
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
 //			rechnerinfo.add(new FA_Rechner(rs.getInt("Auftragsverteilung.Rechner_seriennummer"), rs.getString("Rechner.Status_idStatus"),  

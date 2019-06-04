@@ -1,26 +1,38 @@
 package models;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public abstract class Rechner {
 	private Integer seriennr;
 	private Auftrag auftrag;
 	private String status;
 	private Monteur monteur;
-	private Teile teile ;
+	private List <Teile> teile ;
 	private boolean montiert;
 	private boolean installiert;
 	private boolean getestet;
+	private Fertigungsauftrag fa;
 	
 	
 	
 
-	public Rechner(int pSeriennr, Auftrag pAuftrag, String pStatus, Teile pTeile)
+	public Rechner(int pSeriennr, Auftrag pAuftrag, String pStatus, Teile... pTeile)
 	{
 		setSeriennr(pSeriennr);
 		setAuftrag(pAuftrag);
 		status = pStatus;
-		setTeile(pTeile);
+		this.teile = new ArrayList<Teile>(Arrays.asList(pTeile));
+	}
+	//KOnstruktor für FA_REchner
+	public Rechner(int pSeriennr, Fertigungsauftrag fa, String pStatus, Teile... pTeile)
+	{
+		setSeriennr(pSeriennr);
+		this.fa = fa;
+		status = pStatus;
+		this.teile = new ArrayList<Teile>(Arrays.asList(pTeile));
 	}
 	
 	
