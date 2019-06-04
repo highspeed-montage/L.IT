@@ -55,7 +55,7 @@ public class FA_RechnerinfoController implements EventHandler, Initializable {
 
 		ObservableList<String> status = FXCollections.observableArrayList(stsBearb, stsFertig, stsImLager);
 
-		comboBox_FAI_Status = new ComboBox<String>(status);
+		comboBox_FAI_Status.setItems(status);
 		
 		
 //		TableColumn_FAI_einzelteile.setCellValueFactory(new PropertyValueFactory<>("einzelteile"));
