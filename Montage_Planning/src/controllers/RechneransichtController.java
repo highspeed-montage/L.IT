@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -20,6 +21,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import models.Auftragsverteilung;
 
 public class RechneransichtController implements Initializable {
@@ -41,7 +43,6 @@ public class RechneransichtController implements Initializable {
 	private TextField txt_RL_sucheingabe;
 	@FXML
 	private TableView<Auftragsverteilung> tableRechnerListe;
-
 	@FXML
 	private TableColumn<Auftragsverteilung, Integer> col_RL_serienNr;
 	@FXML
@@ -130,7 +131,7 @@ public class RechneransichtController implements Initializable {
 
 		try {
 			rechnerWochenansichtTabelle.addAll(db.listRechnerAusAuftragsverteilungWoche(/* LoginController.user */));
-			System.out.println(rechnerWochenansichtTabelle.toString());
+			// System.out.println(rechnerWochenansichtTabelle.toString());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -143,6 +144,9 @@ public class RechneransichtController implements Initializable {
 		// col_RW_Freitag.setCellValueFactory(new PropertyValueFactory<>("seriennr"));
 
 		tableRechnerWoche.setItems(rechnerWochenansichtTabelle);
+
+		// tableRechnerWoche.getColumns().add(col_RW_Montag);
+
 	}
 
 	// Listenansicht Tabelle befüllen
@@ -162,6 +166,34 @@ public class RechneransichtController implements Initializable {
 		col_RL_lieferdatum.setCellValueFactory(new PropertyValueFactory<>("lieferdatum"));
 
 		tableRechnerListe.setItems(rechnerListenansichtTabelle);
+	}
+
+	// Wochennansicht - Klick auf Rechner öffnet Rechnerinfo --> Abfrage FA/SA fehlt
+	// noch
+	public void clickRechnerWoche(MouseEvent e) {
+
+		if (e.getClickCount() == 2) {
+			System.out.println(tableRechnerWoche.getSelectionModel().getSelectedItem().getSeriennr());
+			try {
+				new FolgeFenster("/views/FA_Rechnerinfo.fxml");
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
+
+	// Listenansicht - Klick auf Rechner öffnet Rechnerinfo --> Abfrage FA/SA fehlt
+	// noch
+	public void clickRechnerListe(MouseEvent e) {
+
+		if (e.getClickCount() == 2) {
+			System.out.println(tableRechnerListe.getSelectionModel().getSelectedItem().getSeriennr());
+			try {
+				new FolgeFenster("/views/FA_Rechnerinfo.fxml");
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
 
 }
