@@ -91,15 +91,6 @@ public class RechneransichtController implements Initializable {
 	LocalDate woche3_tag4 = LocalDate.of(2019, Month.JUNE, 20);
 	LocalDate woche3_tag5 = LocalDate.of(2019, Month.JUNE, 21);
 
-	// Funktionen: Wochenansicht:
-	// Table: Auftragsverteilung
-	// dropDown Wochenauswahl
-	// fuer jeden MA werden alle seine Auftraege fuer die jwlg. Woche angezeigt
-	// Inhalt zu Tabelle hinzufuegen (MA und Rechner)
-	// REchner muessen verschoben werden, wenn sie das taeglich maximale
-	// Arbeitspensum
-	// des MAs (4h/8h)
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -168,31 +159,56 @@ public class RechneransichtController implements Initializable {
 		tableRechnerListe.setItems(rechnerListenansichtTabelle);
 	}
 
-	// Wochennansicht - Klick auf Rechner öffnet Rechnerinfo --> Abfrage FA/SA fehlt
-	// noch
+	// Wochenansicht - Klick auf Rechner öffnet Rechnerinfo
 	public void clickRechnerWoche(MouseEvent e) {
 
 		if (e.getClickCount() == 2) {
-			System.out.println(tableRechnerWoche.getSelectionModel().getSelectedItem().getSeriennr());
+			int seriennrAktuell = tableRechnerWoche.getSelectionModel().getSelectedItem().getSeriennr();
+			System.out.println(seriennrAktuell);
+
+			// idAuftragsart 501 = Serviceauftrag
+			// idAuftragsart 502 = Fertigungsauftrag
 			try {
-				new FolgeFenster("/views/FA_Rechnerinfo.fxml");
-			} catch (IOException e1) {
-				e1.printStackTrace();
+				int idAuftragsart = db.getRechnerAuftragsart(seriennrAktuell);
+				System.out.println(idAuftragsart);
+				if (idAuftragsart == 502) {
+					new FolgeFenster("/views/FA_Rechnerinfo.fxml");
+				} else if (idAuftragsart == 501) {
+					new FolgeFenster("/views/SA_Rechnerinfo.fxml");
+				} else {
+					System.out.println("Keine Info vorhanden");
+				}
+			} catch (SQLException | IOException e2) {
+				e2.printStackTrace();
 			}
+
 		}
 	}
 
-	// Listenansicht - Klick auf Rechner öffnet Rechnerinfo --> Abfrage FA/SA fehlt
-	// noch
+	// Listenansicht - Klick auf Rechner öffnet Rechnerinfo
 	public void clickRechnerListe(MouseEvent e) {
 
 		if (e.getClickCount() == 2) {
-			System.out.println(tableRechnerListe.getSelectionModel().getSelectedItem().getSeriennr());
+			int seriennrAktuell = tableRechnerListe.getSelectionModel().getSelectedItem().getSeriennr();
+			System.out.println(seriennrAktuell);
+
+			// idAuftragsart 501 = Serviceauftrag
+			// idAuftragsart 502 = Fertigungsauftrag
+
 			try {
-				new FolgeFenster("/views/FA_Rechnerinfo.fxml");
-			} catch (IOException e1) {
-				e1.printStackTrace();
+				int idAuftragsart = db.getRechnerAuftragsart(seriennrAktuell);
+				System.out.println(idAuftragsart);
+				if (idAuftragsart == 502) {
+					new FolgeFenster("/views/FA_Rechnerinfo.fxml");
+				} else if (idAuftragsart == 501) {
+					new FolgeFenster("/views/SA_Rechnerinfo.fxml");
+				} else {
+					System.out.println("Keine Info vorhanden");
+				}
+			} catch (SQLException | IOException e2) {
+				e2.printStackTrace();
 			}
+
 		}
 	}
 
