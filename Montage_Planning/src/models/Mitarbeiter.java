@@ -6,60 +6,62 @@ public class Mitarbeiter {
 	private String vorname;
 	private double urlaubstage;
 	private int krankheitstage;
-	
-	public Mitarbeiter(int pPersonalnr, String pName, String pVorname, double pUrlaubstage, int pKrankheitstage)
-	{
+
+	public Mitarbeiter(int pPersonalnr, String pName, String pVorname, double pUrlaubstage, int pKrankheitstage) {
 		personalnr = pPersonalnr;
 		name = pName;
 		vorname = pVorname;
 		urlaubstage = pUrlaubstage;
 		krankheitstage = pKrankheitstage;
 	}
-	
-	
+
 	public Mitarbeiter(int personalnr, String name) {
 		super();
 		this.personalnr = personalnr;
 		this.name = name;
 	}
 
-
-
-
-	public void setName(String pName)
-	{
-		name = pName;
-	}
-	public void setVorname(String pVorname)
-	{
-		vorname = pVorname;
-	}
-	public void setUrlaubstage(double pUrlaubstage)
-	{
-		urlaubstage = pUrlaubstage;
-	}
-	public void setKrankheitstage(int pKrankheitstage)
-	{
-		krankheitstage = pKrankheitstage;
-	}
-	public int getPerosnalnr()
-	{
+	public int getPersonalnr() {
 		return personalnr;
 	}
-	public String getName()
-	{
+
+	public void setPersonalnr(int personalnr) {
+		this.personalnr = personalnr;
+	}
+
+	public void setName(String pName) {
+		name = pName;
+	}
+
+	public void setVorname(String pVorname) {
+		vorname = pVorname;
+	}
+
+	public void setUrlaubstage(double pUrlaubstage) {
+		urlaubstage = pUrlaubstage;
+	}
+
+	public void setKrankheitstage(int pKrankheitstage) {
+		krankheitstage = pKrankheitstage;
+	}
+
+	public int getPerosnalnr() {
+		return personalnr;
+	}
+
+	public String getName() {
 		return name;
 	}
-	public String getVorname()
-	{
+
+	public String getVorname() {
 		return vorname;
 	}
-	public double getUrlaubstage()
-	{
+
+	public double getUrlaubstage() {
 		return urlaubstage;
 	}
-	public int getKrankheitstage()
-	{
+
+	public int getKrankheitstage() {
 		return krankheitstage;
 	}
 }
