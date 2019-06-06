@@ -1,5 +1,7 @@
 package models;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 public abstract class Auftrag {
@@ -7,18 +9,18 @@ public abstract class Auftrag {
 	private String status;
 	private Kunde kunde;
 	private boolean zugewiesen;
-	private Rechner rechner;
+	private ArrayList<Rechner> rechner;
 	private double arbeitsaufwand;
 	private static final int lieferzeit = 14;
 	private Date lieferdatum;
 	
-	public Auftrag(int pAuftragsnr, String pStatus, Kunde pKunde, boolean pZugewiesen, Rechner pRechner)
+	public Auftrag(int pAuftragsnr, String pStatus, Kunde pKunde, boolean pZugewiesen, Rechner... pRechner)
 	{
 		auftragsnr = pAuftragsnr;
 		status = pStatus;
 		kunde = pKunde;
 		zugewiesen = pZugewiesen;
-		rechner = pRechner;
+		rechner = new ArrayList<Rechner>(Arrays.asList(pRechner));
 	}
 	
 	

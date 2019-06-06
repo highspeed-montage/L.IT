@@ -1,7 +1,6 @@
 package controllers;
 
 import java.net.URL;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -13,7 +12,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 public class FA_RechnerinfoController implements EventHandler, Initializable {
 	/** Rechnerinfo */
