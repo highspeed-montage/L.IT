@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;  
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,7 +32,7 @@ public class Datenbank {
 	// geht (ich habe mir die Datenbank geklont)
 	// private static final String DB_CONNECTION =
 	// "jdbc:mysql://localhost:3306/aj9s-montage?serverTimezone=UTC"; //fuer jan
-	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage?serverTimezone=UTC";
+	private static final String DB_CONNECTION = "jdbc:mysql://localhost:3306/aj9s-montage?serverTimezone=UTC";
 	private static final String DB_USER = "root";
 	private static final String DB_PASSWORD = "root";
 
@@ -134,21 +134,20 @@ public class Datenbank {
 	}
 
 	/** Rechner - Wochenansicht Daten fuer Tabelleninhalt */
-	public List<Auftragsverteilung> getRechnerAusAuftragsverteilungWoche(String startdatum, String enddatum/* Mitarbeiter user, */ ) throws SQLException {
-		
+	public List<Auftragsverteilung> getRechnerAusAuftragsverteilungWoche(String startdatum,
+			String enddatum/* Mitarbeiter user, */ ) throws SQLException {
+
 		/*
-		DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		Date start = new SimpleDateFormat("yyyy-MM-dd").parse(startdatum);
-		Date ende = (Date) f.parse(enddatum);
-		*/
-		
-				
-		
-	    
+		 * DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd"); Date start =
+		 * new SimpleDateFormat("yyyy-MM-dd").parse(startdatum); Date ende = (Date)
+		 * f.parse(enddatum);
+		 */
+
 		List<Auftragsverteilung> tabelleninhalt = new ArrayList<>();
 		Statement stmt = connection.createStatement();
-		String query = "SELECT * FROM Auftragsverteilung WHERE Datum BETWEEN '"+startdatum+"' AND '"+enddatum+"'";
-		
+		String query = "SELECT * FROM Auftragsverteilung WHERE Datum BETWEEN '" + startdatum + "' AND '" + enddatum
+				+ "'";
+
 		System.out.println(query);
 		// + "WHERE Mitarbeiter_idPersonalnummer = '"+user.benutzername+"'";
 		ResultSet rs = stmt.executeQuery(query);
@@ -157,7 +156,6 @@ public class Datenbank {
 		}
 		return tabelleninhalt;
 	}
-	
 
 	// Hier die Abfragen fuer die Rechnerinformationscontroller
 	/** Seriennummer */
@@ -207,36 +205,40 @@ public class Datenbank {
 	// = Rechner_Teile.REchner_idsnr)
 
 	// INFO FÜR FA_RECHNER ANSICHT
-	public FA_Rechner getFARechnerInfo(int pSeriennr) throws SQLException {
+	public void  getFARechnerInfo(int pSeriennr) throws SQLException { //FA_Rechner
 
 //		List<FA_Rechner> rechnerinfo = new ArrayList<>();
-		FA_Rechner fr;
+		FA_Rechner fr = null;
 
 		Statement stmt = connection.createStatement();
-		String query = "SELECT Auftragsverteilung.Rechner_seriennummer, Rechner.Status_idStatus, Auftragsverteilung.Datum, Kunde.EMail, Kunde.Name, Kunde.idKundennummer "
-				+ "FROM Auftragsverteilung, Rechner, Kunde "
-				+ "WHERE (Auftragsverteilung.Rechner_seriennummer = Rechner.idSeriennummer) OR ((SELECT Auftrag.Kunde_idKunde FROM Auftrag WHERE Rechner.Auftrag_idAuftragsnummer = Auftrag.idAuftragsnummer) = Kunde.idKundennummer )";
+		String query = "SELECT Rechner.Auftrag_idAuftragsnummer, Auftrag.Kunde_idKunde, Status.Bezeichnung, "
+								+ "Teile.Bezeichnung, Auftragsverteilung.Datum, Kunde.Firmenname, Kunde.Name"
+					+ "FROM Auftragsverteilung, Auftrag, Status, Teile, Rechner, Kunde "
+					+ "WHERE (Rechner.Auftrag_idAuftragsnummer='"+pSeriennr+"') AND (Rechner.Auftrag_idAuftragsnummer=Auftrag.idAuftragsnummer) "
+							+ "AND (Status.idStatus = Rechner.Status_idStatus) AND (Teile.idTeilenummer = Rechner_Teile.Teile_idTeilenummer) "
+							+ "AND (WHERE Auftragsverteilung.Rechner_seriennummer = '"+pSeriennr+"') AND (Auftrag.Kunde_idKunde = Kunde.idKundennummer)";
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
-			int auftragsNr; //REcner.Auftrag_idAuftragsnummer
-			String pStatus; //Rechner_Status_idStatus -> Status_Bezeichnung
-			Teile pTeile;	//In auftragsVert und Rechner gibts die Seriennummer, die in der Teile Klasse benötigt wurde-> Such dir die praktischere aus
-			Date lieferdatum;	//GIBT ES NOCH NICHT
-			Date pBearbeitungsdatum; //Auftragsverteilung.Datum
+			int auftragsNr = Integer.parseInt(rs.getString("Rechner.Auftrag_idAuftragsnummer")); //xWHERE Rechner.Auftrag_idAuftragsnummer = '"+pSeriennr+"'
+			int kundenId = Integer.parseInt(rs.getString("Auftrag.Kunde_idKunde")); //xWHERE Rechner.Auftrag_idAuftragsnummer=Auftrag.idAuftragsnummer
+			String pStatus = rs.getString("Status.Bezeichnung"); //WHERE Status.idStatus = Rechner.Status_idStatus
+			Teile pTeile = (Teile) rs.getObject("Teile.Bezeichnung");	//Teile.idTeilenummer = Rechner_Teile.Teile_idTeilenummer
+			Date lieferdatum = rs.getDate("Auftragsverteilung.Datum");	//GIBT ES NOCH NICHT //WHERE Auftragsverteilung.Rechner_seriennummer = '"+pSeriennr+"'
+			Date pBearbeitungsdatum = rs.getDate("Auftragsverteilung.Datum");	//WHERE Auftragsverteilung.Rechner_seriennummer = '"+pSeriennr+"'
 			String Firmenname = null;
 			String PrivatName = null;
-			if( rs.getString("Kunde.Firmenname") != null) {
+			if( rs.getString("Kunde.Firmenname") != null) {		//WHERE Auftrag.Kunde_idKunde = Kunde.idKundennummer
 				Firmenname = rs.getString("Kunde.Firmenname");
 				}else {
-					PrivatName = rs.getString("Kunde.Name");
+					PrivatName = rs.getString("Kunde.Name");	//WHERE Auftrag.Kunde_idKunde = Kunde.idKundennummer
 				}
-			
+			System.out.println(auftragsNr);
 //			Geschaeftskunde gk;
 //			Privatkunde pk;
-			fr = new FA_Rechner(lieferdatum, Firmenname, PrivatName, pSeriennr, auftragsNr, pStatus, pBearbeitungsdatum, pTeile);
+//			fr = new FA_Rechner(lieferdatum, Firmenname, PrivatName, pSeriennr,//KundenId fehlt noch, auftragsNr, pStatus, pBearbeitungsdatum, pTeile); 
 
 		}
-		return fr;
+//		return fr;
 	}
 
 	/** Bearbeitungsdatum */
