@@ -26,7 +26,7 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-//		launch(args);
+		launch(args);
 		
 		Datenbank db = new Datenbank();
 		db.openConnection();
@@ -35,7 +35,7 @@ public class Main extends Application {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		db.closeConnection();
+//		db.closeConnection();
 
 	}
 }

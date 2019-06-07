@@ -73,7 +73,7 @@ public class Datenbank {
 		Statement stmt = connection.createStatement();
 		ResultSet rs = stmt.executeQuery("SELECT Name FROM Kunde");
 		while (rs.next()) {
-			System.out.println(rs.getString("name"));
+			System.out.println(rs.getString("Name"));
 		}
 	}
 
