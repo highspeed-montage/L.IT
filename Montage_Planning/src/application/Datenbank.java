@@ -212,30 +212,33 @@ public class Datenbank {
 
 		Statement stmt = connection.createStatement();
 		String query = "SELECT Rechner.Auftrag_idAuftragsnummer, Auftrag.Kunde_idKunde, Status.Bezeichnung, "
-								+ "Teile.Bezeichnung, Auftragsverteilung.Datum, Kunde.Firmenname, Kunde.Name"
+								+ "Teile.Bezeichnung, Auftragsverteilung.Datum, Kunde.Firmenname, Kunde.Name, Kunde.EMail"
 					+ "FROM Auftragsverteilung, Auftrag, Status, Teile, Rechner, Kunde "
-					+ "WHERE (Rechner.Auftrag_idAuftragsnummer='"+pSeriennr+"') AND (Rechner.Auftrag_idAuftragsnummer=Auftrag.idAuftragsnummer) "
-							+ "AND (Status.idStatus = Rechner.Status_idStatus) AND (Teile.idTeilenummer = Rechner_Teile.Teile_idTeilenummer) "
-							+ "AND (WHERE Auftragsverteilung.Rechner_seriennummer = '"+pSeriennr+"') AND (Auftrag.Kunde_idKunde = Kunde.idKundennummer)";
+					+ "WHERE (Rechner.idSeriennummer = '\"+pSeriennr+\"') "
+							+ "AND (Auftrag.idAuftragsnummer = (SELECT Rechner.Auftrag_idAuftragsnummer FROM Rechner WHERE Rechner.idSeriennummer = '"+pSeriennr+"') ) "
+							+ "AND (Status.idStatus = (SELECT Rechner.Status_idStatus FROM Rechner WHERE  Rechner.idSeriennummer = '"+pSeriennr+"')) "
+							+ "AND (Teile.idTeilenummer = (SELECT Rechner_Teile.Teile_idTeilenummer FROM Rechner_Teile WHERE Rechner_Teile.Rechner_idSeriennummer = '"+pSeriennr+"')) "
+							+ "AND (Auftragsverteilung.Rechner_seriennummer = '"+pSeriennr+"') "
+							+ "AND (Kunde.idKundennummer = (SELECT Auftrag.Kunde_idKunde FROM Auftrag WHERE Auftrag.idAuftragsnummer = (SELECT Rechner.Auftrag_idAuftragsnummer FROM Rechner WHERE Rechner.idSeriennummer = '\"+pSeriennr+\"')))";
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
-			int auftragsNr = Integer.parseInt(rs.getString("Rechner.Auftrag_idAuftragsnummer")); //xWHERE Rechner.Auftrag_idAuftragsnummer = '"+pSeriennr+"'
-			int kundenId = Integer.parseInt(rs.getString("Auftrag.Kunde_idKunde")); //xWHERE Rechner.Auftrag_idAuftragsnummer=Auftrag.idAuftragsnummer
-			String pStatus = rs.getString("Status.Bezeichnung"); //WHERE Status.idStatus = Rechner.Status_idStatus
-			Teile pTeile = (Teile) rs.getObject("Teile.Bezeichnung");	//Teile.idTeilenummer = Rechner_Teile.Teile_idTeilenummer
-			Date lieferdatum = rs.getDate("Auftragsverteilung.Datum");	//GIBT ES NOCH NICHT //WHERE Auftragsverteilung.Rechner_seriennummer = '"+pSeriennr+"'
+			int pAuftragsNr = Integer.parseInt(rs.getString("Rechner.Auftrag_idAuftragsnummer")); //WHERE Rechner.idSeriennummer = '"+pSeriennr+"'
+			int pKundenId = Integer.parseInt(rs.getString("Auftrag.Kunde_idKunde")); // WHERE Auftrag.idAuftragsnummer = (SELECT Rechner.Auftrag_idAuftragsnummer FROM Rechner WHERE Rechner.idSeriennummer = '"+pSeriennr+"') 
+			String pStatus = rs.getString("Status.Bezeichnung"); //WHERE Status.idStatus = (SELECT Rechner.Status_idStatus FROM Rechner WHERE  Rechner.idSeriennummer = '"+pSeriennr+"')
+			Teile pTeile = (Teile) rs.getObject("Teile.Bezeichnung");	// WHERE Teile.idTeilenummer = (SELECT Rechner_Teile.Teile_idTeilenummer FROM Rechner_Teile WHERE Rechner_Teile.Rechner_idSeriennummer = '"++pSeriennr"')
+			Date pLieferdatum = rs.getDate("Auftragsverteilung.Datum");	//GIBT ES NOCH NICHT //WHERE Auftragsverteilung.Rechner_seriennummer = '"+pSeriennr+"'
 			Date pBearbeitungsdatum = rs.getDate("Auftragsverteilung.Datum");	//WHERE Auftragsverteilung.Rechner_seriennummer = '"+pSeriennr+"'
-			String Firmenname = null;
-			String PrivatName = null;
-			if( rs.getString("Kunde.Firmenname") != null) {		//WHERE Auftrag.Kunde_idKunde = Kunde.idKundennummer
-				Firmenname = rs.getString("Kunde.Firmenname");
+			String pFirmenname = null;
+			String pPrivatname = null;
+			String pEMail = rs.getString("Kunde.EMail");
+			if( rs.getString("Kunde.Firmenname") != null) {		//WHERE Kunde.idKundennummer = (SELECT Auftrag.Kunde_idKunde FROM Auftrag WHERE Auftrag.idAuftragsnummer = (SELECT Rechner.Auftrag_idAuftragsnummer FROM Rechner WHERE Rechner.idSeriennummer = '"+pSeriennr+"'))
+				pFirmenname = rs.getString("Kunde.Firmenname");
 				}else {
-					PrivatName = rs.getString("Kunde.Name");	//WHERE Auftrag.Kunde_idKunde = Kunde.idKundennummer
+					pPrivatname = rs.getString("Kunde.Name");	//WHERE Kunde.idKundennummer = (SELECT Auftrag.Kunde_idKunde FROM Auftrag WHERE Auftrag.idAuftragsnummer = (SELECT Rechner.Auftrag_idAuftragsnummer FROM Rechner WHERE Rechner.idSeriennummer = '"+pSeriennr+"'))
 				}
-			System.out.println(auftragsNr);
 //			Geschaeftskunde gk;
 //			Privatkunde pk;
-			fr = new FA_Rechner(lieferdatum, Firmenname, PrivatName, pSeriennr,//KundenId fehlt noch, auftragsNr, pStatus, pBearbeitungsdatum, pTeile); 
+			fr = new FA_Rechner(pSeriennr, pAuftragsNr, pStatus, pBearbeitungsdatum, pLieferdatum, pFirmenname, pPrivatname, pKundenId, pEMail, pTeile);
 
 		}
 		return fr;

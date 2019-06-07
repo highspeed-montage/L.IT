@@ -1,8 +1,11 @@
 package controllers;
 
 import java.net.URL;
+import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ResourceBundle;
 
+import application.Datenbank;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -12,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import models.FA_Rechner;
 
 public class FA_RechnerinfoController implements EventHandler, Initializable {
 	/** Rechnerinfo */
@@ -33,10 +37,13 @@ public class FA_RechnerinfoController implements EventHandler, Initializable {
 	private ComboBox<String> comboBox_FAI_Status = null;
 	/** Einzelteiltabelle */
 	@FXML
-	private TableColumn<?, ?> TableColumn_FAI_einzelteile;
+	private TableColumn<String,String> TableColumn_FAI_einzelteile;
+
+	private Datenbank db = new Datenbank();
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		db.openConnection();
 		lbl_FAI_status = new Label();
 		lbl_FAI_lieferdatum = new Label();
 		lbl_FAI_bearbeitungsdatum = new Label();
@@ -44,7 +51,7 @@ public class FA_RechnerinfoController implements EventHandler, Initializable {
 		lbl_FAI_kundenNr = new Label();
 		lbl_FAI_kundenEMail = new Label();
 		lbl_FAI_Seriennummer = new Label();
-//		TableColumn_FAI_einzelteile = new TableColumn<S, T>();
+		TableColumn_FAI_einzelteile = new TableColumn<String,String>();
 		String stsBearb = "in Bearbeitung";
 		String stsFertig = "erledigt";
 		String stsImLager = "im Lager";
@@ -53,7 +60,45 @@ public class FA_RechnerinfoController implements EventHandler, Initializable {
 
 		comboBox_FAI_Status.setItems(status);
 
-//		TableColumn_FAI_einzelteile.setCellValueFactory(new PropertyValueFactory<>("einzelteile"));
+		FA_RechnerInfo_fuellen();
+
+	}
+
+	/**
+	 * Labels der FA_RECHNERINFO Ansicht werden befüllt mit Werten aus der Datenbank
+	 */
+	public void FA_RechnerInfo_fuellen() {
+		int serienNr = 0;
+
+		FA_Rechner fr;
+		try {
+			serienNr = Integer.parseInt(lbl_FAI_Seriennummer.getText());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		try {
+			fr = db.getFARechnerInfo(serienNr);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// hier die einzelnen Labels befüllen
+		if (fr.getFirmenname() != null) {
+			lbl_FAI_kunde.setText(fr.getFirmenname());
+		} else {
+			lbl_FAI_kunde.setText(fr.getPrivatName());
+		}
+		String bearbeitungsdatum = fr.getBearbeitungsdatum().toString();
+		lbl_FAI_bearbeitungsdatum.setText(bearbeitungsdatum);
+		lbl_FAI_kundenEMail.setText(fr.geteMail());
+		lbl_FAI_kundenNr.setText(fr.getKundenId().toString());
+		lbl_FAI_lieferdatum.setText();// gibt es nochnicht
+		lbl_FAI_Seriennummer.setText(fr.getSeriennr().toString());
+		lbl_FAI_status.setText(fr.getStatus());
+		//Einzelteile:
+		TableColumn_FAI_einzelteile.
 	}
 
 	@Override

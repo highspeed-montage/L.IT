@@ -14,12 +14,18 @@ public abstract class Rechner {
 	private boolean montiert;
 	private boolean installiert;
 	private boolean getestet;
+	
 //	private Fertigungsauftrag fa;
-	private int auftragsNr;
+	private Integer auftragsNr;
 	private Date bearbeitungsdatum;
+	private Date lieferdatum;
+	private String firmenname;
+	private String privatName;
+	private Integer kundenId;
+	private String eMail;
 	
 	
-	
+
 
 	public Rechner(int pSeriennr, Auftrag pAuftrag, String pStatus, Teile... pTeile)
 	{
@@ -29,12 +35,17 @@ public abstract class Rechner {
 		this.teile = new ArrayList<Teile>(Arrays.asList(pTeile));
 	}
 	//KOnstruktor für FA_REchner
-	public Rechner(int pSeriennr, int auftragsNr, String pStatus,Date pBearbeitungsdatum, Teile...pTeile )
+	public Rechner(int pSeriennr, int auftragsNr, String pStatus,Date pBearbeitungsdatum,Date pLieferdatum, String pFirmenname, String pPrivatname, int pKundenId, String pEMail, Teile...pTeile )
 	{
 		setSeriennr(pSeriennr);
 		this.auftragsNr = auftragsNr;
 		status = pStatus;
 		this.bearbeitungsdatum = pBearbeitungsdatum;
+		this.lieferdatum = pLieferdatum;
+		this.firmenname = pFirmenname;
+		this.privatName = pPrivatname;
+		this.kundenId = pKundenId;
+		this.eMail = pEMail;
 		this.teile = new ArrayList<Teile>(Arrays.asList(pTeile));
 		
 	}
@@ -66,7 +77,7 @@ public abstract class Rechner {
 	{
 		status = "im Lager";
 	}
-	public int getSeriennr() {
+	public Integer getSeriennr() {
 		return seriennr;
 	}
 	public void setSeriennr(int seriennr) {
@@ -121,6 +132,28 @@ public abstract class Rechner {
 		getestet = pGetestet;
 	}
 	
+	//Getter speziell für DB-Abfrage FA_Rechner
+	public Integer getAuftragsNr() {
+		return auftragsNr;
+	}
+	public Date getBearbeitungsdatum() {
+		return bearbeitungsdatum;
+	}
+	public Date getLieferdatum() {
+		return lieferdatum;
+	}
+	public String getFirmenname() {
+		return firmenname;
+	}
+	public String getPrivatName() {
+		return privatName;
+	}
+	public Integer getKundenId() {
+		return kundenId;
+	}
+	public String geteMail() {
+		return eMail;
+	}
 	
 	
 }
