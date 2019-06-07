@@ -15,7 +15,9 @@ import java.util.List;
 import com.mysql.cj.jdbc.result.ResultSetMetaData;
 import models.Auftragsverteilung;
 import models.Mitarbeiter;
+import models.Privatkunde;
 import models.FA_Rechner;
+import models.Geschaeftskunde;
 import models.Rechner;
 import models.Teile;
 
@@ -204,25 +206,37 @@ public class Datenbank {
 	// Teile erstmal vorweg..: Teile (...SELECT id_rechnerteile WHERE REchner.id_snr
 	// = Rechner_Teile.REchner_idsnr)
 
-	public List<FA_Rechner> getFARechnerInfo(/**   */
-	) throws SQLException {
+	// INFO FÜR FA_RECHNER ANSICHT
+	public FA_Rechner getFARechnerInfo(int pSeriennr) throws SQLException {
 
-		List<FA_Rechner> rechnerinfo = new ArrayList<>();
+//		List<FA_Rechner> rechnerinfo = new ArrayList<>();
+		FA_Rechner fr;
+
 		Statement stmt = connection.createStatement();
 		String query = "SELECT Auftragsverteilung.Rechner_seriennummer, Rechner.Status_idStatus, Auftragsverteilung.Datum, Kunde.EMail, Kunde.Name, Kunde.idKundennummer "
 				+ "FROM Auftragsverteilung, Rechner, Kunde "
 				+ "WHERE (Auftragsverteilung.Rechner_seriennummer = Rechner.idSeriennummer) OR ((SELECT Auftrag.Kunde_idKunde FROM Auftrag WHERE Rechner.Auftrag_idAuftragsnummer = Auftrag.idAuftragsnummer) = Kunde.idKundennummer )";
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
-			// rechnerinfo.add(new
-			// FA_Rechner(rs.getInt("Auftragsverteilung.Rechner_seriennummer"),
-			// rs.getString("Rechner.Status_idStatus"),
-			// rs.getDate("Auftragsverteilung.Datum"),
-			// rs.getDate("Auftragsverteilung.Datum"), rs.getString("Kunde.EMail"),
-			// rs.getString("Kunde.Name"), rs.getInt("Kunde.idKundennummer")));
+			int auftragsNr; //REcner.Auftrag_idAuftragsnummer
+			String pStatus; //Rechner_Status_idStatus -> Status_Bezeichnung
+			Teile pTeile;	//In auftragsVert und Rechner gibts die Seriennummer, die in der Teile Klasse benötigt wurde-> Such dir die praktischere aus
+			Date lieferdatum;	//GIBT ES NOCH NICHT
+			Date pBearbeitungsdatum; //Auftragsverteilung.Datum
+			String Firmenname = null;
+			String PrivatName = null;
+			if( rs.getString("Kunde.Firmenname") != null) {
+				Firmenname = rs.getString("Kunde.Firmenname");
+				}else {
+					PrivatName = rs.getString("Kunde.Name");
+				}
+			
+//			Geschaeftskunde gk;
+//			Privatkunde pk;
+			fr = new FA_Rechner(lieferdatum, Firmenname, PrivatName, pSeriennr, auftragsNr, pStatus, pBearbeitungsdatum, pTeile);
 
 		}
-		return rechnerinfo;
+		return fr;
 	}
 
 	/** Bearbeitungsdatum */
@@ -265,12 +279,12 @@ public class Datenbank {
 		Statement stmt = connection.createStatement();
 		String query1 = "SELECT Rechner.Auftrag_idAuftragsnummer, Auftrag.Auftragsart_idAuftragsart FROM Rechner, Auftrag "
 				+ "WHERE Rechner.idSeriennummer = '" + seriennr + "' "
-						+ "AND Rechner.Auftrag_idAuftragsnummer = Auftrag.idAuftragsnummer";
+				+ "AND Rechner.Auftrag_idAuftragsnummer = Auftrag.idAuftragsnummer";
 		ResultSet rs1 = stmt.executeQuery(query1);
 		while (rs1.next()) {
 			idAuftragsart = rs1.getInt("Auftrag.Auftragsart_idAuftragsart");
 		}
 		return idAuftragsart;
 	}
-	
+
 }

@@ -14,7 +14,9 @@ public abstract class Rechner {
 	private boolean montiert;
 	private boolean installiert;
 	private boolean getestet;
-	private Fertigungsauftrag fa;
+//	private Fertigungsauftrag fa;
+	private int auftragsNr;
+	private Date bearbeitungsdatum;
 	
 	
 	
@@ -27,12 +29,14 @@ public abstract class Rechner {
 		this.teile = new ArrayList<Teile>(Arrays.asList(pTeile));
 	}
 	//KOnstruktor für FA_REchner
-	public Rechner(int pSeriennr, Fertigungsauftrag fa, String pStatus, Teile... pTeile)
+	public Rechner(int pSeriennr, int auftragsNr, String pStatus,Date pBearbeitungsdatum, Teile...pTeile )
 	{
 		setSeriennr(pSeriennr);
-		this.fa = fa;
+		this.auftragsNr = auftragsNr;
 		status = pStatus;
+		this.bearbeitungsdatum = pBearbeitungsdatum;
 		this.teile = new ArrayList<Teile>(Arrays.asList(pTeile));
+		
 	}
 	
 	
