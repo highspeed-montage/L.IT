@@ -5,7 +5,7 @@ import java.util.Date;
 public class FA_Rechner extends Rechner {
 
 
-	private static final double arbeitsaufwand = 4;
+	private static final double ARBEITSAUFWAND = 4;
 
 	//DB Abfrage:
 		private Date lieferdatum;
@@ -19,7 +19,7 @@ public class FA_Rechner extends Rechner {
 		// Auftragsverteilung.Rechner_seriennummer, Rechner.Status_idStatus, Auftragsverteilung.Datum, Kunde.EMail, Kunde.Name, Kunde.idKundennummer
 		
 		
-//	//hier KOnstruktor für DB Abfrage //OHNE TEILE
+//	//hier KOnstruktor fuer DB Abfrage //OHNE TEILE
 //		public FA_Rechner(int pSeriennr, String pStatus,  Date lieferdatum, Date bearbeitungsdatum, String emailKunde, String nameKunde, Integer idKunde) {
 //			super(pSeriennr, pStatus);
 //			//this.teile = teile;
@@ -31,6 +31,6 @@ public class FA_Rechner extends Rechner {
 //		}
 //	
 	public double getArbeitsaufwand() {
-		return arbeitsaufwand;
+		return ARBEITSAUFWAND;
 	}
 }

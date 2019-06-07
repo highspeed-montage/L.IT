@@ -5,7 +5,12 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;  
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import com.mysql.cj.jdbc.result.ResultSetMetaData;
 import models.Auftragsverteilung;
@@ -93,7 +98,7 @@ public class Datenbank {
 	// ResultSet rs = stmt.executeQuery("SELECT name FROM Mitarbeiter"); // Abfrage
 	// wie Mitarbeiter heissen
 	//
-	// ResultSetMetaData rsmd = rs.getMetaData(); // Grroesse der Tabelle
+	// ResultSetMetaData rsmd = rs.getMetaData(); // Groesse der Tabelle
 	// int columnCount = rsmd.getColumnCount(); //
 	// ArrayList<String> list = new ArrayList(columnCount); // Erstellt ArrayList
 	//
@@ -107,7 +112,7 @@ public class Datenbank {
 	// }
 
 	/** Rechner - Listenansicht Daten fuer Tabelleninhalt */
-	public List<Auftragsverteilung> listRechnerAusAuftragsverteilungListe(/* Mitarbeiter user */) throws SQLException {
+	public List<Auftragsverteilung> getRechnerAusAuftragsverteilungListe(/* Mitarbeiter user */) throws SQLException {
 
 		List<Auftragsverteilung> tabelleninhalt = new ArrayList<>();
 		Statement stmt = connection.createStatement();
@@ -127,19 +132,30 @@ public class Datenbank {
 	}
 
 	/** Rechner - Wochenansicht Daten fuer Tabelleninhalt */
-	public List<Auftragsverteilung> listRechnerAusAuftragsverteilungWoche(/* Mitarbeiter user */) throws SQLException {
-
+	public List<Auftragsverteilung> getRechnerAusAuftragsverteilungWoche(String startdatum, String enddatum/* Mitarbeiter user, */ ) throws SQLException {
+		
+		/*
+		DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		Date start = new SimpleDateFormat("yyyy-MM-dd").parse(startdatum);
+		Date ende = (Date) f.parse(enddatum);
+		*/
+		
+				
+		
+	    
 		List<Auftragsverteilung> tabelleninhalt = new ArrayList<>();
 		Statement stmt = connection.createStatement();
-		String query = "SELECT Rechner_seriennummer, Datum FROM Auftragsverteilung";
-		// + "WHERE Auftragsverteilung.Mitarbeiter_idPersonalnummer =
-		// '"+user.benutzername+"'";
+		String query = "SELECT * FROM Auftragsverteilung WHERE Datum BETWEEN '"+startdatum+"' AND '"+enddatum+"'";
+		
+		System.out.println(query);
+		// + "WHERE Mitarbeiter_idPersonalnummer = '"+user.benutzername+"'";
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
 			tabelleninhalt.add(new Auftragsverteilung(rs.getInt("Rechner_seriennummer"), rs.getDate("Datum")));
 		}
 		return tabelleninhalt;
 	}
+	
 
 	// Hier die Abfragen fuer die Rechnerinformationscontroller
 	/** Seriennummer */
