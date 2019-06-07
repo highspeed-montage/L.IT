@@ -5,20 +5,12 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;  
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import com.mysql.cj.jdbc.result.ResultSetMetaData;
 import models.Auftragsverteilung;
-import models.Mitarbeiter;
-import models.Privatkunde;
 import models.FA_Rechner;
-import models.Geschaeftskunde;
-import models.Rechner;
 import models.Teile;
 
 public class Datenbank {
@@ -28,8 +20,7 @@ public class Datenbank {
 	// private static final String DB_USER = "aj9s-montage";
 	// private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
 
-	// NICHT LoeSCHEN: Datenbankverbindung GABBY LOKAL fuers testen, weil VPN nicht
-	// geht (ich habe mir die Datenbank geklont)
+	// NICHT LOESCHEN: Datenbankverbindung GABBY LOKAL
 	// private static final String DB_CONNECTION =
 	// "jdbc:mysql://localhost:3306/aj9s-montage?serverTimezone=UTC"; //fuer jan
 	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage?serverTimezone=UTC";
@@ -135,21 +126,10 @@ public class Datenbank {
 
 	/** Rechner - Wochenansicht Daten fuer Tabelleninhalt */
 	public List<Auftragsverteilung> getRechnerAusAuftragsverteilungWoche(String startdatum, String enddatum/* Mitarbeiter user, */ ) throws SQLException {
-		
-		/*
-		DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		Date start = new SimpleDateFormat("yyyy-MM-dd").parse(startdatum);
-		Date ende = (Date) f.parse(enddatum);
-		*/
-		
-				
-		
 	    
 		List<Auftragsverteilung> tabelleninhalt = new ArrayList<>();
 		Statement stmt = connection.createStatement();
 		String query = "SELECT * FROM Auftragsverteilung WHERE Datum BETWEEN '"+startdatum+"' AND '"+enddatum+"'";
-		
-		System.out.println(query);
 		// + "WHERE Mitarbeiter_idPersonalnummer = '"+user.benutzername+"'";
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
@@ -162,11 +142,11 @@ public class Datenbank {
 	// Hier die Abfragen fuer die Rechnerinformationscontroller
 	/** Seriennummer */
 	// FRAGE: wenn man den Hyperlink Seriennummer in der Rechner Listenansicht
-	// anklickt -> dann muss die Seriennummer irgendwo zwischengespeichert werden!
+	// anklickt -> dann muss die Seriennummer irgendwo zwischengespeichert werden! --> SIEHE RECHNERINFOCONTROLLER METHODE CLICKRECHNER!
 	// Dieser Schritt entfaellt deshalb
 	// Die Seriennummer ist fuer viele der folgenden Methoden notwendig
 
-	/** Kunde */
+	/** Kunde */ 
 	public String getKunde(int serienNummer) throws SQLException {
 		Statement stmt = connection.createStatement();
 		String query = "SELECT Kunde FROM Auftrag WHERE idAuftragsnummer = (SELECT Auftrag_idAuftragsnummer FROM Rechner_Teile WHERE Bezeichnung = '"
@@ -206,7 +186,7 @@ public class Datenbank {
 	// Teile erstmal vorweg..: Teile (...SELECT id_rechnerteile WHERE REchner.id_snr
 	// = Rechner_Teile.REchner_idsnr)
 
-	// INFO FÜR FA_RECHNER ANSICHT
+	// INFO FUER FA_RECHNER ANSICHT  
 	public FA_Rechner getFARechnerInfo(int pSeriennr) throws SQLException {
 
 //		List<FA_Rechner> rechnerinfo = new ArrayList<>();
@@ -220,7 +200,7 @@ public class Datenbank {
 		while (rs.next()) {
 			int auftragsNr; //REcner.Auftrag_idAuftragsnummer
 			String pStatus; //Rechner_Status_idStatus -> Status_Bezeichnung
-			Teile pTeile;	//In auftragsVert und Rechner gibts die Seriennummer, die in der Teile Klasse benötigt wurde-> Such dir die praktischere aus
+			Teile pTeile;	//In auftragsVert und Rechner gibts die Seriennummer, die in der Teile Klasse benï¿½tigt wurde-> Such dir die praktischere aus
 			Date lieferdatum;	//GIBT ES NOCH NICHT
 			Date pBearbeitungsdatum; //Auftragsverteilung.Datum
 			String Firmenname = null;
