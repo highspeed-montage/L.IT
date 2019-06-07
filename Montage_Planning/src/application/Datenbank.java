@@ -205,7 +205,7 @@ public class Datenbank {
 	// = Rechner_Teile.REchner_idsnr)
 
 	// INFO FÜR FA_RECHNER ANSICHT
-	public void  getFARechnerInfo(int pSeriennr) throws SQLException { //FA_Rechner
+	public FA_Rechner  getFARechnerInfo(int pSeriennr) throws SQLException { //FA_Rechner
 
 //		List<FA_Rechner> rechnerinfo = new ArrayList<>();
 		FA_Rechner fr = null;
@@ -235,10 +235,10 @@ public class Datenbank {
 			System.out.println(auftragsNr);
 //			Geschaeftskunde gk;
 //			Privatkunde pk;
-//			fr = new FA_Rechner(lieferdatum, Firmenname, PrivatName, pSeriennr,//KundenId fehlt noch, auftragsNr, pStatus, pBearbeitungsdatum, pTeile); 
+			fr = new FA_Rechner(lieferdatum, Firmenname, PrivatName, pSeriennr,//KundenId fehlt noch, auftragsNr, pStatus, pBearbeitungsdatum, pTeile); 
 
 		}
-//		return fr;
+		return fr;
 	}
 
 	/** Bearbeitungsdatum */
