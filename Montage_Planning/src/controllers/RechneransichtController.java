@@ -10,9 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
-
 import javax.swing.JOptionPane;
-
 import application.Datenbank;
 import application.Datenbank_Gabby;
 import javafx.collections.FXCollections;
@@ -104,6 +102,8 @@ public class RechneransichtController implements Initializable {
 
 	ObservableList<String> options;
 	DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	
+	public static int seriennrAktuell;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -137,75 +137,78 @@ public class RechneransichtController implements Initializable {
 		// ComboBox Listener
 		comboBox_RW_Wochenansicht.getSelectionModel().selectedItemProperty().addListener((options) -> {
 			tableRechnerWoche.getItems().clear();
-			String wochenAuswahl = comboBox_RW_Wochenansicht.getSelectionModel().selectedItemProperty().getValue();	// DD.MM.YYYY-DD.MM.YYYY
+			String wochenAuswahl = comboBox_RW_Wochenansicht.getSelectionModel().selectedItemProperty().getValue(); // DD.MM.YYYY-DD.MM.YYYY
 
-			// String spliten 
+			// String spliten
 			String startdatum = wochenAuswahl.substring(0, 10);
 			String enddatum = wochenAuswahl.substring(11, 21);
-			
-			
+
 			try {
 				rechnerWochenansichtTabelle.addAll(db.getRechnerAusAuftragsverteilungWoche(startdatum, enddatum));
 				System.out.println(rechnerWochenansichtTabelle.toString());
 			} catch (SQLException e) {
 				e.printStackTrace();
-				JOptionPane.showMessageDialog(null, e);
+				JOptionPane.showMessageDialog(null, "Fehler", "Datenbankabfrage nicht möglich", 0);
 			}
-			
+
 			int size = rechnerWochenansichtTabelle.size();
 			System.out.println(size);
-			
-			
-			
+
 			for (int i = 0; i < size; i++) {
 
 				Date d = rechnerWochenansichtTabelle.get(i).getBearbeitungsdatum();
-				Integer seriennr = rechnerWochenansichtTabelle.get(i).getSeriennr();		// SERIENNUMER DIE REIN MUSS
+				Integer seriennr = rechnerWochenansichtTabelle.get(i).getSeriennr(); // SERIENNUMER DIE REIN MUSS
 				SimpleDateFormat simpleDateformat = new SimpleDateFormat("EEEE"); // the day of the week abbreviated
-				
+
 				System.out.println(simpleDateformat.format(d));
 				System.out.println(seriennr);
-				
-				
-				// switch case ausprobieren, ist vll übersichtlicher 
-				
-		        if(simpleDateformat.format(d).equals("Montag")) {
-		        	System.out.println("Montag");
-//		        	rechnerWochenansichtTabelle.stream().filter(p -> p.getSeriennr() == seriennr);
-		        	col_RW_Montag.setCellValueFactory(new PropertyValueFactory<>(rechnerWochenansichtTabelle.get(i).getSeriennr().toString()));
 
-		        }
-		        if(simpleDateformat.format(d).equals("Dienstag")) {
-		        	System.out.println("Dienstag");
-//		        	rechnerWochenansichtTabelle.stream().filter(p -> p.getSeriennr() == seriennr);
+				// switch case ausprobieren, ist vll übersichtlicher
 
-		        	
-		        }
-		        if(simpleDateformat.format(d).equals("Mittwoch")) {
-		        	System.out.println("Mittwoch");
-//		        	rechnerWochenansichtTabelle.stream().filter(p -> p.getSeriennr() == seriennr);
-		        	col_RW_Mittwoch.setCellValueFactory(new PropertyValueFactory<>(rechnerWochenansichtTabelle.get(i).getSeriennr().toString()));
-		        	
-		        }
-		        if(simpleDateformat.format(d).equals("Donnerstag")) {
-		        	System.out.println("Donnerstag");
-//		        	rechnerWochenansichtTabelle.stream().filter(p -> p.getSeriennr() == seriennr);
-		        	col_RW_Donnerstag.setCellValueFactory(new PropertyValueFactory<>(rechnerWochenansichtTabelle.get(i).getSeriennr().toString()));
-		        }
-		        if(simpleDateformat.format(d).equals("Freitag")) {
-		        	System.out.println("Freitag");
-//		        	rechnerWochenansichtTabelle.stream().filter(p -> p.getSeriennr() == seriennr);
-		        	col_RW_Freitag.setCellValueFactory(new PropertyValueFactory<>(rechnerWochenansichtTabelle.get(i).getSeriennr().toString()));
-		        	
-		        }
-			
-			} 
-			
-			
+				if (simpleDateformat.format(d).equals("Montag")) {
+					System.out.println("Montag");
+					// rechnerWochenansichtTabelle.stream().filter(p -> p.getSeriennr() ==
+					// seriennr);
+					col_RW_Montag.setCellValueFactory(
+							new PropertyValueFactory<>(rechnerWochenansichtTabelle.get(i).getSeriennr().toString()));
+
+				}
+				if (simpleDateformat.format(d).equals("Dienstag")) {
+					System.out.println("Dienstag");
+					// rechnerWochenansichtTabelle.stream().filter(p -> p.getSeriennr() ==
+					// seriennr);
+
+				}
+				if (simpleDateformat.format(d).equals("Mittwoch")) {
+					System.out.println("Mittwoch");
+					// rechnerWochenansichtTabelle.stream().filter(p -> p.getSeriennr() ==
+					// seriennr);
+					col_RW_Mittwoch.setCellValueFactory(
+							new PropertyValueFactory<>(rechnerWochenansichtTabelle.get(i).getSeriennr().toString()));
+
+				}
+				if (simpleDateformat.format(d).equals("Donnerstag")) {
+					System.out.println("Donnerstag");
+					// rechnerWochenansichtTabelle.stream().filter(p -> p.getSeriennr() ==
+					// seriennr);
+					col_RW_Donnerstag.setCellValueFactory(
+							new PropertyValueFactory<>(rechnerWochenansichtTabelle.get(i).getSeriennr().toString()));
+				}
+				if (simpleDateformat.format(d).equals("Freitag")) {
+					System.out.println("Freitag");
+					// rechnerWochenansichtTabelle.stream().filter(p -> p.getSeriennr() ==
+					// seriennr);
+					col_RW_Freitag.setCellValueFactory(
+							new PropertyValueFactory<>(rechnerWochenansichtTabelle.get(i).getSeriennr().toString()));
+
+				}
+
+			}
+
 		});
-			
+
 		tableRechnerWoche.setItems(rechnerWochenansichtTabelle);
-			
+
 	}
 
 	// Listenansicht Tabelle befüllen
@@ -226,13 +229,12 @@ public class RechneransichtController implements Initializable {
 
 		tableRechnerListe.setItems(rechnerListenansichtTabelle);
 	}
-	
 
 	// Wochenansicht - Klick auf Rechner öffnet Rechnerinfo
 	public void clickRechnerWoche(MouseEvent e) {
 
 		if (e.getClickCount() == 2) {
-			int seriennrAktuell = tableRechnerWoche.getSelectionModel().getSelectedItem().getSeriennr();
+			seriennrAktuell = tableRechnerWoche.getSelectionModel().getSelectedItem().getSeriennr();
 
 			try {
 				int idAuftragsart = db.getRechnerAuftragsart(seriennrAktuell);
@@ -250,13 +252,12 @@ public class RechneransichtController implements Initializable {
 
 		}
 	}
-	
 
 	// Listenansicht - Klick auf Rechner öffnet Rechnerinfo
 	public void clickRechnerListe(MouseEvent e) {
 
 		if (e.getClickCount() == 2) {
-			int seriennrAktuell = tableRechnerListe.getSelectionModel().getSelectedItem().getSeriennr();
+			seriennrAktuell = tableRechnerListe.getSelectionModel().getSelectedItem().getSeriennr();
 
 			// idAuftragsart 501 = Serviceauftrag --> die Angabe irgendwo fest speichern?
 			// idAuftragsart 502 = Fertigungsauftrag
