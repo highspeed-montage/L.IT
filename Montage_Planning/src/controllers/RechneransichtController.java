@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 
 import application.Datenbank;
+import application.Datenbank_Gabby;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -76,7 +77,7 @@ public class RechneransichtController implements Initializable {
 	@FXML
 	private TableColumn<Auftragsverteilung, Integer> col_RW_Freitag;
 
-	private Datenbank db = new Datenbank();
+	private Datenbank_Gabby db = new Datenbank_Gabby();
 
 	// Woche1 03.06.2019-07.06.2019
 	LocalDate woche1_tag1 = LocalDate.of(2019, Month.JUNE, 03);
@@ -177,7 +178,6 @@ public class RechneransichtController implements Initializable {
 		        if(simpleDateformat.format(d).equals("Dienstag")) {
 		        	System.out.println("Dienstag");
 //		        	rechnerWochenansichtTabelle.stream().filter(p -> p.getSeriennr() == seriennr);
-		        	col_RW_Dienstag.setCellValueFactory(new PropertyValueFactory<>("seriennr"));
 
 		        	
 		        }

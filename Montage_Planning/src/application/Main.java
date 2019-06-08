@@ -1,7 +1,4 @@
-
 package application;
-
-import java.sql.SQLException;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -27,16 +24,6 @@ public class Main extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
-		
-//		Datenbank db = new Datenbank();
-//		db.openConnection();
-//		try {
-//			db.listKunde();
-//		} catch(SQLException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		db.closeConnection();
 
 	}
 }
