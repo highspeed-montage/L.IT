@@ -168,7 +168,7 @@ public class Datenbank {
 		String query = "SELECT Rechner.Auftrag_idAuftragsnummer, Auftrag.Kunde_idKunde, Status.Bezeichnung, "
 								+ "Teile.Bezeichnung, Auftragsverteilung.Datum, Kunde.Firmenname, Kunde.Name, Kunde.EMail"
 					+ "FROM Auftragsverteilung, Auftrag, Status, Teile, Rechner, Kunde "
-					+ "WHERE (Rechner.idSeriennummer = '\"+pSeriennr+\"') "
+					+ "WHERE (Rechner.idSeriennummer = '"+pSeriennr+"') "
 							+ "AND (Auftrag.idAuftragsnummer = (SELECT Rechner.Auftrag_idAuftragsnummer FROM Rechner WHERE Rechner.idSeriennummer = '"+pSeriennr+"') ) "
 							+ "AND (Status.idStatus = (SELECT Rechner.Status_idStatus FROM Rechner WHERE  Rechner.idSeriennummer = '"+pSeriennr+"')) "
 							+ "AND (Teile.idTeilenummer = (SELECT Rechner_Teile.Teile_idTeilenummer FROM Rechner_Teile WHERE Rechner_Teile.Rechner_idSeriennummer = '"+pSeriennr+"')) "
@@ -176,16 +176,6 @@ public class Datenbank {
 							+ "AND (Kunde.idKundennummer = (SELECT Auftrag.Kunde_idKunde FROM Auftrag WHERE Auftrag.idAuftragsnummer = (SELECT Rechner.Auftrag_idAuftragsnummer FROM Rechner WHERE Rechner.idSeriennummer = '\"+pSeriennr+\"')))";
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
-
-			int auftragsNr; //REcner.Auftrag_idAuftragsnummer
-			String pStatus; //Rechner_Status_idStatus -> Status_Bezeichnung
-			Teile pTeile;	//In auftragsVert und Rechner gibts die Seriennummer, die in der Teile Klasse ben�tigt wurde-> Such dir die praktischere aus
-			Date lieferdatum;	//GIBT ES NOCH NICHT
-			Date pBearbeitungsdatum; //Auftragsverteilung.Datum
-			String Firmenname = null;
-			String PrivatName = null;
-			if( rs.getString("Kunde.Firmenname") != null) {
-				Firmenname = rs.getString("Kunde.Firmenname");
 
 			int pAuftragsNr = Integer.parseInt(rs.getString("Rechner.Auftrag_idAuftragsnummer")); //WHERE Rechner.idSeriennummer = '"+pSeriennr+"'
 			int pKundenId = Integer.parseInt(rs.getString("Auftrag.Kunde_idKunde")); // WHERE Auftrag.idAuftragsnummer = (SELECT Rechner.Auftrag_idAuftragsnummer FROM Rechner WHERE Rechner.idSeriennummer = '"+pSeriennr+"') 
