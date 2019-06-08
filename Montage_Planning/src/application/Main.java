@@ -15,8 +15,8 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/views/FA_Rechnerinfo.fxml"));
-			Scene scene = new Scene(root, 800, 800);
+			Parent root = FXMLLoader.load(getClass().getResource("/views/Rechneransicht.fxml"));
+			Scene scene = new Scene(root, 800, 400);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
@@ -31,10 +31,12 @@ public class Main extends Application {
 //		Datenbank db = new Datenbank();
 //		db.openConnection();
 //		try {
-//			System.out.println(db.listRechnerAusAuftragsverteilungWoche());
-//		} catch (SQLException e) {
+//			db.listKunde();
+//		} catch(SQLException e) {
 //			e.printStackTrace();
 //		}
+//		
+//		db.closeConnection();
 
 	}
 }

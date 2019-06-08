@@ -9,6 +9,10 @@ import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+
+import javax.swing.JOptionPane;
+
 import application.Datenbank;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -128,7 +132,7 @@ public class RechneransichtController implements Initializable {
 	public void wochenansichtFuellen() {
 
 		ObservableList<Auftragsverteilung> rechnerWochenansichtTabelle = FXCollections.observableArrayList();
-		
+
 		// ComboBox Listener
 		comboBox_RW_Wochenansicht.getSelectionModel().selectedItemProperty().addListener((options) -> {
 			tableRechnerWoche.getItems().clear();
@@ -141,15 +145,18 @@ public class RechneransichtController implements Initializable {
 			
 			try {
 				rechnerWochenansichtTabelle.addAll(db.getRechnerAusAuftragsverteilungWoche(startdatum, enddatum));
-				//System.out.println(rechnerWochenansichtTabelle.toString());
-
+				System.out.println(rechnerWochenansichtTabelle.toString());
 			} catch (SQLException e) {
 				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e);
 			}
 			
+			int size = rechnerWochenansichtTabelle.size();
+			System.out.println(size);
 			
 			
-			for (int i = 0; i < rechnerWochenansichtTabelle.size(); i++) {
+			
+			for (int i = 0; i < size; i++) {
 
 				Date d = rechnerWochenansichtTabelle.get(i).getBearbeitungsdatum();
 				Integer seriennr = rechnerWochenansichtTabelle.get(i).getSeriennr();		// SERIENNUMER DIE REIN MUSS
@@ -158,36 +165,41 @@ public class RechneransichtController implements Initializable {
 				System.out.println(simpleDateformat.format(d));
 				System.out.println(seriennr);
 				
+				
+				// switch case ausprobieren, ist vll übersichtlicher 
+				
 		        if(simpleDateformat.format(d).equals("Montag")) {
 		        	System.out.println("Montag");
-		        	rechnerWochenansichtTabelle.stream().filter(p -> p.getSeriennr() == seriennr).forEach(System.out::println);
-		        	col_RW_Montag.setCellValueFactory(new PropertyValueFactory<>("seriennr"));
-		        	// col_RW_Montag.setCellFactory(cellData -> cellData.getValue().getSeriennr());
-		        	System.out.println(rechnerWochenansichtTabelle.toString());
+//		        	rechnerWochenansichtTabelle.stream().filter(p -> p.getSeriennr() == seriennr);
+		        	col_RW_Montag.setCellValueFactory(new PropertyValueFactory<>(rechnerWochenansichtTabelle.get(i).getSeriennr().toString()));
+
 		        }
 		        if(simpleDateformat.format(d).equals("Dienstag")) {
 		        	System.out.println("Dienstag");
-		        	rechnerWochenansichtTabelle.stream().filter(p -> p.getSeriennr() == seriennr).forEach(System.out::println);
+//		        	rechnerWochenansichtTabelle.stream().filter(p -> p.getSeriennr() == seriennr);
 		        	col_RW_Dienstag.setCellValueFactory(new PropertyValueFactory<>("seriennr"));
+
+		        	
 		        }
 		        if(simpleDateformat.format(d).equals("Mittwoch")) {
 		        	System.out.println("Mittwoch");
-		        	rechnerWochenansichtTabelle.stream().filter(p -> p.getSeriennr() == seriennr).forEach(System.out::println);
-		        	col_RW_Mittwoch.setCellValueFactory(new PropertyValueFactory<>("seriennr"));
+//		        	rechnerWochenansichtTabelle.stream().filter(p -> p.getSeriennr() == seriennr);
+		        	col_RW_Mittwoch.setCellValueFactory(new PropertyValueFactory<>(rechnerWochenansichtTabelle.get(i).getSeriennr().toString()));
+		        	
 		        }
 		        if(simpleDateformat.format(d).equals("Donnerstag")) {
 		        	System.out.println("Donnerstag");
-		        	rechnerWochenansichtTabelle.stream().filter(p -> p.getSeriennr() == seriennr).forEach(System.out::println);
-		        	col_RW_Donnerstag.setCellValueFactory(new PropertyValueFactory<>("seriennr"));
+//		        	rechnerWochenansichtTabelle.stream().filter(p -> p.getSeriennr() == seriennr);
+		        	col_RW_Donnerstag.setCellValueFactory(new PropertyValueFactory<>(rechnerWochenansichtTabelle.get(i).getSeriennr().toString()));
 		        }
 		        if(simpleDateformat.format(d).equals("Freitag")) {
 		        	System.out.println("Freitag");
-		        	rechnerWochenansichtTabelle.stream().filter(p -> p.getSeriennr() == seriennr).forEach(System.out::println);
-		        	col_RW_Freitag.setCellValueFactory(new PropertyValueFactory<>("seriennr"));
+//		        	rechnerWochenansichtTabelle.stream().filter(p -> p.getSeriennr() == seriennr);
+		        	col_RW_Freitag.setCellValueFactory(new PropertyValueFactory<>(rechnerWochenansichtTabelle.get(i).getSeriennr().toString()));
+		        	
 		        }
-		        
-		        
-			}
+			
+			} 
 			
 			
 		});
