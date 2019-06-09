@@ -2,9 +2,8 @@ package controllers;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.text.ParseException;
+import java.util.List;
 import java.util.ResourceBundle;
-
 import application.Datenbank;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,7 +14,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import models.Auftragsverteilung;
 import models.FA_Rechner;
+import models.Teile;
 
 public class FA_RechnerinfoController implements EventHandler, Initializable {
 	/** Rechnerinfo */
@@ -35,28 +38,36 @@ public class FA_RechnerinfoController implements EventHandler, Initializable {
 	private Label lbl_FAI_Seriennummer;
 	@FXML
 	private ComboBox<String> comboBox_FAI_Status = null;
+	
 	/** Einzelteiltabelle */
 	@FXML
-	private TableColumn<String,String> TableColumn_FAI_einzelteile;
+	private TableView<Teile> tableFARechnerInfo;
+	
+	@FXML
+	private TableColumn<Teile, String> TableColumn_FAI_einzelteile;
 
 	private Datenbank db = new Datenbank();
+	
+	// ComboBox Inhalte
+	ObservableList<String> status;
+	
+	// ZUM TESTEN, kommt dann aus RechneransichtController clickRechner()
+	int seriennr = 10001;
+
+	
+	
+	FA_Rechner fr = null;
+	
+	String stsBearb, stsFertig, stsImLager;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		db.openConnection();
-		lbl_FAI_status = new Label();
-		lbl_FAI_lieferdatum = new Label();
-		lbl_FAI_bearbeitungsdatum = new Label();
-		lbl_FAI_kunde = new Label();
-		lbl_FAI_kundenNr = new Label();
-		lbl_FAI_kundenEMail = new Label();
-		lbl_FAI_Seriennummer = new Label();
-		TableColumn_FAI_einzelteile = new TableColumn<String,String>();
-		String stsBearb = "in Bearbeitung";
-		String stsFertig = "erledigt";
-		String stsImLager = "im Lager";
+		stsBearb = "in Bearbeitung";
+		stsFertig = "erledigt";
+		stsImLager = "im Lager";
 
-		ObservableList<String> status = FXCollections.observableArrayList(stsBearb, stsFertig, stsImLager);
+		status = FXCollections.observableArrayList(stsBearb, stsFertig, stsImLager);
 
 		comboBox_FAI_Status.setItems(status);
 
@@ -65,40 +76,40 @@ public class FA_RechnerinfoController implements EventHandler, Initializable {
 	}
 
 	/**
-	 * Labels der FA_RECHNERINFO Ansicht werden befüllt mit Werten aus der Datenbank
+	 * Labels der FA_RECHNERINFO Ansicht werden befï¿½llt mit Werten aus der Datenbank
 	 */
 	public void FA_RechnerInfo_fuellen() {
-		int serienNr = 0;
-
-		FA_Rechner fr;
+		
 		try {
-			serienNr = Integer.parseInt(lbl_FAI_Seriennummer.getText());
-		} catch (Exception e) {
-			e.printStackTrace();
+			fr = db.getFARechnerInfo(seriennr);
+			System.out.println(fr.toString());
+		} catch (SQLException e1) {
+			e1.printStackTrace();
 		}
-
-		try {
-			fr = db.getFARechnerInfo(serienNr);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		// hier die einzelnen Labels befüllen
+		
+		lbl_FAI_Seriennummer.setText(String.valueOf(fr.getSeriennr()));
+		
+		// hier die einzelnen Labels befuellen
 		if (fr.getFirmenname() != null) {
 			lbl_FAI_kunde.setText(fr.getFirmenname());
 		} else {
 			lbl_FAI_kunde.setText(fr.getPrivatName());
 		}
-		String bearbeitungsdatum = fr.getBearbeitungsdatum().toString();
-		lbl_FAI_bearbeitungsdatum.setText(bearbeitungsdatum);
+	
+		lbl_FAI_bearbeitungsdatum.setText(String.valueOf(fr.getBearbeitungsdatum()));		
 		lbl_FAI_kundenEMail.setText(fr.geteMail());
-		lbl_FAI_kundenNr.setText(fr.getKundenId().toString());
-		lbl_FAI_lieferdatum.setText();// gibt es nochnicht
-		lbl_FAI_Seriennummer.setText(fr.getSeriennr().toString());
+		lbl_FAI_kundenNr.setText(String.valueOf(fr.getKundenId()));
+		lbl_FAI_lieferdatum.setText(String.valueOf(fr.getLieferdatum()));
 		lbl_FAI_status.setText(fr.getStatus());
-		//Einzelteile:
-		TableColumn_FAI_einzelteile.
+		
+		System.out.println(fr.getTeile().toString());
+		
+		ObservableList<Teile> einzelteile = FXCollections.observableArrayList();
+		einzelteile.addAll(fr.getTeile());
+		System.out.println(einzelteile);
+		
+		TableColumn_FAI_einzelteile.setCellValueFactory(new PropertyValueFactory<>("bezeichnung"));
+		tableFARechnerInfo.setItems(einzelteile);
 	}
 
 	@Override

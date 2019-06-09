@@ -5,15 +5,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import com.mysql.cj.jdbc.result.ResultSetMetaData;
-import models.Auftragsverteilung;
 import models.FA_Rechner;
 import models.Teile;
 
@@ -27,7 +22,7 @@ public class Datenbank {
 	// NICHT LOESCHEN: Datenbankverbindung GABBY LOKAL
 	// private static final String DB_CONNECTION =
 	// "jdbc:mysql://localhost:3306/aj9s-montage?serverTimezone=UTC"; //fuer jan
-	private static final String DB_CONNECTION = "jdbc:mysql://localhost:3306/aj9s-montage?serverTimezone=UTC";
+	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage?serverTimezone=UTC";
 	private static final String DB_USER = "root";
 	private static final String DB_PASSWORD = "root";
 
@@ -108,16 +103,7 @@ public class Datenbank {
 	// return list;
 	// }
 
-
-
-	// Hier die Abfragen fuer die Rechnerinformationscontroller
-	/** Seriennummer */
-	// FRAGE: wenn man den Hyperlink Seriennummer in der Rechner Listenansicht
-	// anklickt -> dann muss die Seriennummer irgendwo zwischengespeichert werden! --> SIEHE RECHNERINFOCONTROLLER METHODE CLICKRECHNER!
-	// Dieser Schritt entfaellt deshalb
-	// Die Seriennummer ist fuer viele der folgenden Methoden notwendig
-
-	/** Kunde */ 
+	/** Kunde */
 	public String getKunde(int serienNummer) throws SQLException {
 		Statement stmt = connection.createStatement();
 		String query = "SELECT Kunde FROM Auftrag WHERE idAuftragsnummer = (SELECT Auftrag_idAuftragsnummer FROM Rechner_Teile WHERE Bezeichnung = '"
@@ -157,44 +143,65 @@ public class Datenbank {
 	// Teile erstmal vorweg..: Teile (...SELECT id_rechnerteile WHERE REchner.id_snr
 	// = Rechner_Teile.REchner_idsnr)
 
-	// INFO FUER FA_RECHNER ANSICHT
-	public FA_Rechner  getFARechnerInfo(int pSeriennr) throws SQLException { //FA_Rechner
-
-
-//		List<FA_Rechner> rechnerinfo = new ArrayList<>();
+	// INFO FUER FA_RECHNER
+	public FA_Rechner getFARechnerInfo(int pSeriennr) throws SQLException {
+		
 		FA_Rechner fr = null;
 
 		Statement stmt = connection.createStatement();
-		String query = "SELECT Rechner.Auftrag_idAuftragsnummer, Auftrag.Kunde_idKunde, Status.Bezeichnung, "
-								+ "Teile.Bezeichnung, Auftragsverteilung.Datum, Kunde.Firmenname, Kunde.Name, Kunde.EMail"
-					+ "FROM Auftragsverteilung, Auftrag, Status, Teile, Rechner, Kunde "
-					+ "WHERE (Rechner.idSeriennummer = '"+pSeriennr+"') "
-							+ "AND (Auftrag.idAuftragsnummer = (SELECT Rechner.Auftrag_idAuftragsnummer FROM Rechner WHERE Rechner.idSeriennummer = '"+pSeriennr+"') ) "
-							+ "AND (Status.idStatus = (SELECT Rechner.Status_idStatus FROM Rechner WHERE  Rechner.idSeriennummer = '"+pSeriennr+"')) "
-							+ "AND (Teile.idTeilenummer = (SELECT Rechner_Teile.Teile_idTeilenummer FROM Rechner_Teile WHERE Rechner_Teile.Rechner_idSeriennummer = '"+pSeriennr+"')) "
-							+ "AND (Auftragsverteilung.Rechner_seriennummer = '"+pSeriennr+"') "
-							+ "AND (Kunde.idKundennummer = (SELECT Auftrag.Kunde_idKunde FROM Auftrag WHERE Auftrag.idAuftragsnummer = (SELECT Rechner.Auftrag_idAuftragsnummer FROM Rechner WHERE Rechner.idSeriennummer = '\"+pSeriennr+\"')))";
-		ResultSet rs = stmt.executeQuery(query);
-		while (rs.next()) {
+		
+		List<Teile> rechnerEinzelteile = new ArrayList<>();
+		String queryTeile = "SELECT Teile.Bezeichnung, RechnerTeile.Rechner_idSeriennummer FROM Teile, RechnerTeile "
+				+ "WHERE RechnerTeile.Rechner_idSeriennummer = '"+pSeriennr+"' "
+				+ "AND RechnerTeile.Teile_idTeilenummer = Teile.idTeilenummer";
+		ResultSet rsTeile = stmt.executeQuery(queryTeile);
 
-			int pAuftragsNr = Integer.parseInt(rs.getString("Rechner.Auftrag_idAuftragsnummer")); //WHERE Rechner.idSeriennummer = '"+pSeriennr+"'
-			int pKundenId = Integer.parseInt(rs.getString("Auftrag.Kunde_idKunde")); // WHERE Auftrag.idAuftragsnummer = (SELECT Rechner.Auftrag_idAuftragsnummer FROM Rechner WHERE Rechner.idSeriennummer = '"+pSeriennr+"') 
-			String pStatus = rs.getString("Status.Bezeichnung"); //WHERE Status.idStatus = (SELECT Rechner.Status_idStatus FROM Rechner WHERE  Rechner.idSeriennummer = '"+pSeriennr+"')
-			Teile pTeile = (Teile) rs.getObject("Teile.Bezeichnung");	// WHERE Teile.idTeilenummer = (SELECT Rechner_Teile.Teile_idTeilenummer FROM Rechner_Teile WHERE Rechner_Teile.Rechner_idSeriennummer = '"++pSeriennr"')
-			Date pLieferdatum = rs.getDate("Auftragsverteilung.Datum");	//GIBT ES NOCH NICHT //WHERE Auftragsverteilung.Rechner_seriennummer = '"+pSeriennr+"'
-			Date pBearbeitungsdatum = rs.getDate("Auftragsverteilung.Datum");	//WHERE Auftragsverteilung.Rechner_seriennummer = '"+pSeriennr+"'
+		while (rsTeile.next()) {
+
+			rechnerEinzelteile.add(new Teile(rsTeile.getString("Teile.Bezeichnung")));
+		}
+
+		String queryInfo = "SELECT Auftragsverteilung.Rechner_seriennummer, Status.Bezeichnung, Auftrag.Lieferzeit, "
+				+ "Auftragsverteilung.Datum, Kunde.Firmenname, Kunde.idKundennummer, Kunde.Name, Kunde.EMail, "
+				+ "Rechner.Auftrag_idAuftragsnummer, Auftrag.Kunde_idKunde "
+				+ "FROM Auftragsverteilung, Status, Auftrag, Kunde, Rechner "
+				+ "WHERE Auftragsverteilung.Rechner_seriennummer = '"+pSeriennr+"' "
+				+ "AND Rechner.idSeriennummer = Auftragsverteilung.Rechner_seriennummer "
+				+ "AND Auftragsverteilung.Rechner_seriennummer = Rechner.idSeriennummer "
+				+ "AND Rechner.Status_idStatus = Status.idStatus "
+				+ "AND Rechner.Auftrag_idAuftragsnummer = Auftrag.idAuftragsnummer "
+				+ "AND Auftrag.Kunde_idKunde = Kunde.idKundennummer ";
+
+		ResultSet rsInfo = stmt.executeQuery(queryInfo);
+		
+		
+		
+		while (rsInfo.next()) {
+
+			int seriennr = rsInfo.getInt("Auftragsverteilung.Rechner_seriennummer");
+			int pAuftragsNr = rsInfo.getInt("Rechner.Auftrag_idAuftragsnummer");
+			int pKundenId = rsInfo.getInt("Auftrag.Kunde_idKunde"); 
+			String pStatus = rsInfo.getString("Status.Bezeichnung");
+			// Lieferzeit zu Lieferdatum in Datenbank ändern
+			Date pLieferdatum = rsInfo.getDate("Auftragsverteilung.Datum");
+			Date pBearbeitungsdatum = rsInfo.getDate("Auftragsverteilung.Datum");
 			String pFirmenname = null;
 			String pPrivatname = null;
-			String pEMail = rs.getString("Kunde.EMail");
-			if( rs.getString("Kunde.Firmenname") != null) {		//WHERE Kunde.idKundennummer = (SELECT Auftrag.Kunde_idKunde FROM Auftrag WHERE Auftrag.idAuftragsnummer = (SELECT Rechner.Auftrag_idAuftragsnummer FROM Rechner WHERE Rechner.idSeriennummer = '"+pSeriennr+"'))
-				pFirmenname = rs.getString("Kunde.Firmenname");
+			String pEMail = rsInfo.getString("Kunde.EMail");
+			if (rsInfo.getString("Kunde.Firmenname") != null) {
+				pFirmenname = rsInfo.getString("Kunde.Firmenname");
 
-				}else {
-					pPrivatname = rs.getString("Kunde.Name");	//WHERE Kunde.idKundennummer = (SELECT Auftrag.Kunde_idKunde FROM Auftrag WHERE Auftrag.idAuftragsnummer = (SELECT Rechner.Auftrag_idAuftragsnummer FROM Rechner WHERE Rechner.idSeriennummer = '"+pSeriennr+"'))
-				}
-//			Geschaeftskunde gk;
-//			Privatkunde pk;
-			fr = new FA_Rechner(pSeriennr, pAuftragsNr, pStatus, pBearbeitungsdatum, pLieferdatum, pFirmenname, pPrivatname, pKundenId, pEMail, pTeile);
+			} else {
+				pPrivatname = rsInfo.getString("Kunde.Name");
+			}
+			// Geschaeftskunde gk;
+			// Privatkunde pk;
+			
+			System.out.println(rechnerEinzelteile); 
+			fr = new FA_Rechner(seriennr, pAuftragsNr, pStatus, pBearbeitungsdatum, pLieferdatum, pFirmenname,
+					pPrivatname, pKundenId, pEMail, rechnerEinzelteile);
+			
+			System.out.println(fr.toString());
 
 		}
 		return fr;
@@ -205,17 +212,17 @@ public class Datenbank {
 	/** Lieferdatum */
 
 	/** Einzelteile */
-	public List<String> getRechnerEinzelteile(int serienNummer) throws SQLException {
+	public List<Teile> getRechnerEinzelteile(int serienNummer) throws SQLException {
+		List<Teile> rechnerEinzelteile = new ArrayList<>();
 		Statement stmt = connection.createStatement();
-		String query = "SELECT Bezeichnung FROM Teile WHERE idTeilenummer = (SELECT Teile_idTeilenummer FROM Rechner_Teile WHERE Rechner_idSeriennummer = '"
-				+ serienNummer + "')";
+		String query = "SELECT Teile.Bezeichnung, RechnerTeile.Rechner_idSeriennummer FROM Teile, RechnerTeile "
+				+ "WHERE RechnerTeile.Rechner_idSeriennummer = '"+serienNummer+"' "
+				+ "AND RechnerTeile.Teile_idTeilenummer = Teile.idTeilenummer";
 		ResultSet rs = stmt.executeQuery(query);
-
-		List<String> rechnerEinzelteile = new ArrayList<>();
 
 		while (rs.next()) {
 
-			rechnerEinzelteile.add(rs.getString("Bezeichnung"));
+			rechnerEinzelteile.add(new Teile(rs.getString("Teile.Bezeichnung")));
 		}
 		return rechnerEinzelteile;
 	}

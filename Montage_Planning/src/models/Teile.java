@@ -12,13 +12,10 @@ public class Teile {
 		kategorie = pKategorie; 
 		lagerbestand = pLagerbestand;
 	}
-	//Konstruktor für Db Abfrage (FA)
+	//Konstruktor fuer Db Abfrage getFARechnerInfo()
 	public Teile(String bezeichnung) {
 		this.bezeichnung = bezeichnung;
 	}
-	
-
-	
 	
 	public void setKategorie(String pKategorie)
 	{
@@ -42,6 +39,11 @@ public class Teile {
 
 	public String getBezeichnung() {
 		return bezeichnung;
+	}
+	@Override
+	public String toString() {
+		return "Teile [teilenr=" + teilenr + ", kategorie=" + kategorie + ", lagerbestand=" + lagerbestand
+				+ ", bezeichnung=" + bezeichnung + "]";
 	}
 
 	

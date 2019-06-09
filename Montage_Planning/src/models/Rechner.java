@@ -10,12 +10,10 @@ public abstract class Rechner {
 	private Auftrag auftrag;
 	private String status;
 	private Monteur monteur;
-	private List <Teile> teile ;
+	private List <Teile> teile = new ArrayList<Teile>();
 	private boolean montiert;
 	private boolean installiert;
 	private boolean getestet;
-	
-//	private Fertigungsauftrag fa;
 	private Integer auftragsNr;
 	private Date bearbeitungsdatum;
 	private Date lieferdatum;
@@ -23,8 +21,6 @@ public abstract class Rechner {
 	private String privatName;
 	private Integer kundenId;
 	private String eMail;
-	
-	
 
 
 	public Rechner(int pSeriennr, Auftrag pAuftrag, String pStatus, Teile... pTeile)
@@ -34,8 +30,8 @@ public abstract class Rechner {
 		status = pStatus;
 		this.teile = new ArrayList<Teile>(Arrays.asList(pTeile));
 	}
-	//KOnstruktor für FA_REchner
-	public Rechner(int pSeriennr, int auftragsNr, String pStatus,Date pBearbeitungsdatum,Date pLieferdatum, String pFirmenname, String pPrivatname, int pKundenId, String pEMail, Teile...pTeile )
+	//KOnstruktor fuer FA_REchner
+	public Rechner(int pSeriennr, int auftragsNr, String pStatus,Date pBearbeitungsdatum,Date pLieferdatum, String pFirmenname, String pPrivatname, int pKundenId, String pEMail, List<Teile> pTeile )
 	{
 		setSeriennr(pSeriennr);
 		this.auftragsNr = auftragsNr;
@@ -46,7 +42,7 @@ public abstract class Rechner {
 		this.privatName = pPrivatname;
 		this.kundenId = pKundenId;
 		this.eMail = pEMail;
-		this.teile = new ArrayList<Teile>(Arrays.asList(pTeile));
+		this.teile = pTeile;
 		
 	}
 	
@@ -101,12 +97,6 @@ public abstract class Rechner {
 	{
 		monteur = pMonteur;
 	}
-	public Teile getTeile() {
-		return teile;
-	}
-	public void setTeile(Teile pTeile) {
-		teile = pTeile;
-	}
 	public boolean isMontiert() 
 	{
 		return montiert;
@@ -132,7 +122,7 @@ public abstract class Rechner {
 		getestet = pGetestet;
 	}
 	
-	//Getter speziell für DB-Abfrage FA_Rechner
+	//Getter speziell fï¿½r DB-Abfrage FA_Rechner
 	public Integer getAuftragsNr() {
 		return auftragsNr;
 	}
@@ -154,6 +144,48 @@ public abstract class Rechner {
 	public String geteMail() {
 		return eMail;
 	}
+	public List<Teile> getTeile() {
+		return teile;
+	}
+	public void setTeile(List<Teile> teile) {
+		this.teile = teile;
+	}
+	public void setSeriennr(Integer seriennr) {
+		this.seriennr = seriennr;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public void setAuftragsNr(Integer auftragsNr) {
+		this.auftragsNr = auftragsNr;
+	}
+	public void setBearbeitungsdatum(Date bearbeitungsdatum) {
+		this.bearbeitungsdatum = bearbeitungsdatum;
+	}
+	public void setLieferdatum(Date lieferdatum) {
+		this.lieferdatum = lieferdatum;
+	}
+	public void setFirmenname(String firmenname) {
+		this.firmenname = firmenname;
+	}
+	public void setPrivatName(String privatName) {
+		this.privatName = privatName;
+	}
+	public void setKundenId(Integer kundenId) {
+		this.kundenId = kundenId;
+	}
+	public void seteMail(String eMail) {
+		this.eMail = eMail;
+	}
+	@Override
+	public String toString() {
+		return "Rechner [seriennr=" + seriennr + ", auftrag=" + auftrag + ", status=" + status + ", monteur=" + monteur
+				+ ", teile=" + teile + ", montiert=" + montiert + ", installiert=" + installiert + ", getestet="
+				+ getestet + ", auftragsNr=" + auftragsNr + ", bearbeitungsdatum=" + bearbeitungsdatum
+				+ ", lieferdatum=" + lieferdatum + ", firmenname=" + firmenname + ", privatName=" + privatName
+				+ ", kundenId=" + kundenId + ", eMail=" + eMail + "]";
+	}
+	
 	
 	
 }

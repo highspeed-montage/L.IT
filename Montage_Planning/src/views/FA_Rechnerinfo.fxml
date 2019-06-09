@@ -14,8 +14,8 @@
 					<children>
 						<HBox alignment="TOP_CENTER" prefHeight="0.0" prefWidth="450.0" spacing="5.0" BorderPane.alignment="CENTER">
 							<children>
-								<Label text="Rechner" />
-								<Label fx:id="lbl_FAI_Seriennummer" text="Label" />
+								<Label text="Rechner: " />
+								<Label fx:id="lbl_FAI_Seriennummer" prefHeight="17.0" prefWidth="92.0" text="Seriennummer" />
 							</children>
 							<BorderPane.margin>
 								<Insets bottom="2.0" top="1.0" />
@@ -28,19 +28,19 @@
 										<HBox>
 											<children>
 												<Label text="Status:               " />
-												<Label fx:id="lbl_FAI_status" text="Label" />
+												<Label fx:id="lbl_FAI_status" prefHeight="17.0" prefWidth="115.0" text="Label" />
 											</children>
 										</HBox>
 										<HBox>
 											<children>
 												<Label text="Lieferdatum:      " />
-												<Label fx:id="lbl_FAI_lieferdatum" text="Label" />
+												<Label fx:id="lbl_FAI_lieferdatum" prefHeight="17.0" prefWidth="115.0" text="Label" />
 											</children>
 										</HBox>
 										<HBox>
 											<children>
 												<Label text="Bearb.datum:     " />
-												<Label fx:id="lbl_FAI_bearbeitungsdatum" text="Label" />
+												<Label fx:id="lbl_FAI_bearbeitungsdatum" prefHeight="17.0" prefWidth="115.0" text="Label" />
 											</children>
 										</HBox>
 									</children>
@@ -50,20 +50,20 @@
 										<HBox>
 											<children>
 												<Label text="Kunde:              " />
-												<Label fx:id="lbl_FAI_kunde" text="Label" />
+												<Label fx:id="lbl_FAI_kunde" prefHeight="17.0" prefWidth="115.0" text="Label" />
 											</children>
 										</HBox>
 										<HBox />
 										<HBox>
 											<children>
 												<Label text="KundenNr:        " />
-												<Label fx:id="lbl_FAI_kundenNr" text="Label" />
+												<Label fx:id="lbl_FAI_kundenNr" prefHeight="17.0" prefWidth="115.0" text="Label" />
 											</children>
 										</HBox>
 										<HBox>
 											<children>
 												<Label text="EMail:                " />
-												<Label fx:id="lbl_FAI_kundenEMail" text="Label" />
+												<Label fx:id="lbl_FAI_kundenEMail" prefHeight="17.0" prefWidth="115.0" text="Label" />
 											</children>
 										</HBox>
 									</children>
@@ -78,7 +78,7 @@
 					<children>
 						<ComboBox fx:id="comboBox_FAI_Status" prefWidth="150.0" promptText="Bearbeitungstatus" />
 							
-						<TableView prefHeight="201.0" prefWidth="426.0">
+						<TableView fx:id="tableFARechnerInfo" prefHeight="201.0" prefWidth="426.0">
 							<columns>
 								<TableColumn fx:id="TableColumn_FAI_einzelteile" minWidth="-Infinity" prefWidth="250.0" text="Einzelteile" />
 							</columns>
