@@ -83,7 +83,7 @@
                   </HBox>
                   <RadioButton fx:id="rbtn_SAI_Hardware" mnemonicParsing="false" onAction="#setStatus" text="Hardware">
                      <toggleGroup>
-                        <ToggleGroup fx:id="dokumentation" />
+                        <ToggleGroup fx:id="toggleDokumentation" />
                      </toggleGroup>
                   </RadioButton>
                   <HBox alignment="CENTER" prefHeight="20.0" prefWidth="200.0" spacing="5.0">
