@@ -1,10 +1,13 @@
 package controllers;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import application.Datenbank;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -14,6 +17,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 public class SA_RechnerinfoController implements EventHandler, Initializable {
 	/** Rechnerinfo */
@@ -50,15 +55,19 @@ public class SA_RechnerinfoController implements EventHandler, Initializable {
 	@FXML
 	private Button btn_SAI_pdf;
 
+	private Datenbank db = new Datenbank();
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
-		lbl_SAI_status = new Label();
-		 lbl_SAI_lieferdatum = new Label();
 
-lbl_SAI_bearbeitungsdatum = new Label();
+		db.openConnection();
+
+		lbl_SAI_status = new Label();
+		lbl_SAI_lieferdatum = new Label();
+
+		lbl_SAI_bearbeitungsdatum = new Label();
 		lbl_SAI_kunde = new Label();
-		 lbl_SAI_kundenNr = new Label();
+		lbl_SAI_kundenNr = new Label();
 		lbl_SAI_kundenEMail = new Label();
 		lbl_SAI_Seriennummer = new Label();
 
@@ -68,19 +77,66 @@ lbl_SAI_bearbeitungsdatum = new Label();
 
 		txt_SAI_Einzelteilsuche = new TextField();
 
-		rbtn_SAI_Hardware= new RadioButton();
+		rbtn_SAI_Hardware = new RadioButton();
 		rbtn_SAI_Software = new RadioButton();
 		rbtn_SAI_Kunde = new RadioButton();
 		btn_SAI_pdf = new Button();
-		
+
 		String stsBearb = "in Bearbeitung";
 		String stsFertig = "erledigt";
 		String stsImLager = "im Lager";
 
-
 		ObservableList<String> status = FXCollections.observableArrayList(stsBearb, stsFertig, stsImLager);
 		comboBox_SAI_Bearbeitungsstatus.setItems(status);
 		
+		txt_SAI_Einzelteilsuche.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent ke) {
+				if(ke.getCode().equals(KeyCode.ENTER)) {
+					String eingabe = txt_SAI_Einzelteilsuche.getText();
+					if (eingabe.isEmpty()) {
+						lbl_SAI_SuchStatus.setText("leere Eingabe");
+					}
+					if (.arg0....arg0...eingabe.equalsIgnoreCase("")|eingabe.equalsIgnoreCase("")...){ //hier die Teilebezichnungen
+						int lagrbestand = db.getEinzelteilLagerbestand(eingabe);			
+					}else {
+						lbl_SAI_SuchStatus.setText("kein ET mit diser Bezeichnung");
+					}
+					
+				}
+				
+			}
+		});
+		
+
+	}
+
+	/**
+	 * Reagiert auf RadioButton Doku des Problems
+	 * (Hardware/Software/Kundenverschulet) schreib Problem in DB
+	 */
+	// WO WIRD DAS ALLES IN DB GESCHRIEBEN???
+	// Entsprechende DB Methode muss erstellt werden
+	@FXML
+	public void dokuRdbtn(ActionEvent event) {
+		if (rbtn_SAI_Hardware.isSelected()) {
+
+		} else if (rbtn_SAI_Software.isSelected()) {
+
+		} else if (rbtn_SAI_Kunde.isSelected()) {
+
+		}
+	}
+
+	/**
+	 * Bekommt gewähltes Element der ComboBox Aktualisiert dementsprechend den
+	 * Rechnerstatus
+	 */
+	@FXML
+	public void setStatus(ActionEvent event) { 	//welches ActionEvent (awt oder fxml)
+		String selection = comboBox_SAI_Bearbeitungsstatus.getSelectionModel().getSelectedItem();
+		db.//hier in die DB, Rechner aktualisieren
 	}
 
 	@Override
@@ -88,6 +144,5 @@ lbl_SAI_bearbeitungsdatum = new Label();
 		// TODO Auto-generated method stub
 
 	}
-
 
 }
