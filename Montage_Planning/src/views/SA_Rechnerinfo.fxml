@@ -81,7 +81,7 @@
                         <ComboBox fx:id="comboBox_SAI_Bearbeitungsstatus" prefWidth="150.0" promptText="Bearbeitungsstatus" />
                      </children>
                   </HBox>
-                  <RadioButton fx:id="rbtn_SAI_Hardware" mnemonicParsing="false" text="Hardware">
+                  <RadioButton fx:id="rbtn_SAI_Hardware" mnemonicParsing="false" onAction="#setStatus" text="Hardware">
                      <toggleGroup>
                         <ToggleGroup fx:id="dokumentation" />
                      </toggleGroup>
@@ -95,8 +95,8 @@
                         <Insets />
                      </VBox.margin>
                   </HBox>
-                  <RadioButton fx:id="rbtn_SAI_Software" mnemonicParsing="false" text="Software" toggleGroup="$dokumentation" />
-                  <RadioButton fx:id="rbtn_SAI_Kunde" mnemonicParsing="false" text="Kunde" toggleGroup="$dokumentation" />
+                  <RadioButton fx:id="rbtn_SAI_Software" mnemonicParsing="false" onAction="#setStatus" text="Software" toggleGroup="$dokumentation" />
+                  <RadioButton fx:id="rbtn_SAI_Kunde" mnemonicParsing="false" onAction="#setStatus" text="Kunde" toggleGroup="$dokumentation" />
                   <HBox alignment="TOP_CENTER">
                      <children>
                         <Button mnemonicParsing="false" text="PDF Generieren" textAlignment="CENTER" />
