@@ -103,7 +103,10 @@ public class Datenbank {
 	// return list;
 	// }
 
-	/** Kunde */
+	/**
+	 * @deprecated nicht mehr benötigt, da Kunde in Datenbank.getFARechnerInfo
+	 *             geladen
+	 */
 	public String getKunde(int serienNummer) throws SQLException {
 		Statement stmt = connection.createStatement();
 		String query = "SELECT Kunde FROM Auftrag WHERE idAuftragsnummer = (SELECT Auftrag_idAuftragsnummer FROM Rechner_Teile WHERE Bezeichnung = '"
@@ -118,41 +121,17 @@ public class Datenbank {
 		return kunde;
 	}
 
-	// /** KundenEMail */
-	// public String getKundenMail(int serienNummer) throws SQLException {
-	// // Auftrag holen
-	// // Kunde des jwlg Auftrags holen
-	// // Kundenid + name auf davon holen
-	// Statement stmt = connection.createStatement();
-	// String query = "SELECT EMail FROM Kunde WHERE idKundennummer = (SELECT
-	// Kunde_idKunde FROM Auftrag WHERE idAuftragsnummer = (SELECT
-	// Auftrag_idAuftragsnummer FROM Rechner_Teile WHERE Bezeichnung = '"
-	// + serienNummer + "'))";
-	// ResultSet rs = stmt.executeQuery(query);
-	// String kundenEMail = null;
-	//
-	// while (rs.next()) {
-	//
-	// kundenEMail = rs.getString("EMail");
-	// }
-	// return kundenEMail;
-	// }
-	/** Rechnerinfo */
-	// Konstutor Rechner: (Integer seriennr, String status, Date lieferdatum, Date
-	// bearbeitungsdatum, String emailKunde, String nameKunde, Integer idKunde)
-	// Teile erstmal vorweg..: Teile (...SELECT id_rechnerteile WHERE REchner.id_snr
-	// = Rechner_Teile.REchner_idsnr)
-
-	// INFO FUER FA_RECHNER
+	/** holt info für FA_Rechner nach Seriennummer 
+	 * @throws SQLException*/
 	public FA_Rechner getFARechnerInfo(int pSeriennr) throws SQLException {
-		
+
 		FA_Rechner fr = null;
 
 		Statement stmt = connection.createStatement();
-		
+
 		List<Teile> rechnerEinzelteile = new ArrayList<>();
 		String queryTeile = "SELECT Teile.Bezeichnung, RechnerTeile.Rechner_idSeriennummer FROM Teile, RechnerTeile "
-				+ "WHERE RechnerTeile.Rechner_idSeriennummer = '"+pSeriennr+"' "
+				+ "WHERE RechnerTeile.Rechner_idSeriennummer = '" + pSeriennr + "' "
 				+ "AND RechnerTeile.Teile_idTeilenummer = Teile.idTeilenummer";
 		ResultSet rsTeile = stmt.executeQuery(queryTeile);
 
@@ -165,7 +144,7 @@ public class Datenbank {
 				+ "Auftragsverteilung.Datum, Kunde.Firmenname, Kunde.idKundennummer, Kunde.Name, Kunde.EMail, "
 				+ "Rechner.Auftrag_idAuftragsnummer, Auftrag.Kunde_idKunde "
 				+ "FROM Auftragsverteilung, Status, Auftrag, Kunde, Rechner "
-				+ "WHERE Auftragsverteilung.Rechner_seriennummer = '"+pSeriennr+"' "
+				+ "WHERE Auftragsverteilung.Rechner_seriennummer = '" + pSeriennr + "' "
 				+ "AND Rechner.idSeriennummer = Auftragsverteilung.Rechner_seriennummer "
 				+ "AND Auftragsverteilung.Rechner_seriennummer = Rechner.idSeriennummer "
 				+ "AND Rechner.Status_idStatus = Status.idStatus "
@@ -173,14 +152,12 @@ public class Datenbank {
 				+ "AND Auftrag.Kunde_idKunde = Kunde.idKundennummer ";
 
 		ResultSet rsInfo = stmt.executeQuery(queryInfo);
-		
-		
-		
+
 		while (rsInfo.next()) {
 
 			int seriennr = rsInfo.getInt("Auftragsverteilung.Rechner_seriennummer");
 			int pAuftragsNr = rsInfo.getInt("Rechner.Auftrag_idAuftragsnummer");
-			int pKundenId = rsInfo.getInt("Auftrag.Kunde_idKunde"); 
+			int pKundenId = rsInfo.getInt("Auftrag.Kunde_idKunde");
 			String pStatus = rsInfo.getString("Status.Bezeichnung");
 			// Lieferzeit zu Lieferdatum in Datenbank Ã¤ndern
 			Date pLieferdatum = rsInfo.getDate("Auftragsverteilung.Datum");
@@ -196,27 +173,39 @@ public class Datenbank {
 			}
 			// Geschaeftskunde gk;
 			// Privatkunde pk;
-			
-			System.out.println(rechnerEinzelteile); 
+
+			System.out.println(rechnerEinzelteile);
 			fr = new FA_Rechner(seriennr, pAuftragsNr, pStatus, pBearbeitungsdatum, pLieferdatum, pFirmenname,
 					pPrivatname, pKundenId, pEMail, rechnerEinzelteile);
-			
+
 			System.out.println(fr.toString());
 
 		}
 		return fr;
 	}
 
-	/** Bearbeitungsdatum */
+	/** Bearbeitungsstatus von FA_R/SA_R wird in db aktualisiert 
+	 * @throws SQLException */
+	public boolean setRechnerStatus(int pSerienNr, String pStatus) throws SQLException {
+		Statement stmt = connection.createStatement();
+		String query = "UPDATE Status "
+				+ "		SET Bezeichnung = '" + pStatus + "' "
+				+ "		WHERE Auftragsverteilung.Rechner_seriennummer = '" + pSerienNr + "'"
+						+ "AND Rechner.idSeriennummer = Auftragsverteilung.Rechner_seriennummer"
+						+ "AND Rechner.Status_idStatus = Status.idStatus";
+		int updatedRows = stmt.executeUpdate(query);
+		return updatedRows == 1;
+	}
 
-	/** Lieferdatum */
-
-	/** Einzelteile */
+	/**
+	 * @deprecated nicht mehr verwendet, ET werden in DAtenbank.getFAREchnerInfo
+	 *             geladen
+	 */
 	public List<Teile> getRechnerEinzelteile(int serienNummer) throws SQLException {
 		List<Teile> rechnerEinzelteile = new ArrayList<>();
 		Statement stmt = connection.createStatement();
 		String query = "SELECT Teile.Bezeichnung, RechnerTeile.Rechner_idSeriennummer FROM Teile, RechnerTeile "
-				+ "WHERE RechnerTeile.Rechner_idSeriennummer = '"+serienNummer+"' "
+				+ "WHERE RechnerTeile.Rechner_idSeriennummer = '" + serienNummer + "' "
 				+ "AND RechnerTeile.Teile_idTeilenummer = Teile.idTeilenummer";
 		ResultSet rs = stmt.executeQuery(query);
 
@@ -227,9 +216,11 @@ public class Datenbank {
 		return rechnerEinzelteile;
 	}
 
-	/** Einzelteil Suche im Servicauftrag */
+	/**
+	 * Frägt ET Lagerbestand ab. Benötigt für ET Suche bei SA_Rechner
+	 */
 	public int getEinzelteilLagerbestand(String eingabe) throws SQLException {
-		// Hier muss noch gecheckt werden, dass die eingabe ueberhaupt sinnvoll ist.
+		// in der ET Suche in SA_REchner wurde die Eingabe schon überprüft
 		Statement stmt = connection.createStatement();
 		String query = "SELECT Lagerbestand FROM Rechner_Teile WHERE Bezeichnung = '" + eingabe + "'";
 		ResultSet rs = stmt.executeQuery(query);
