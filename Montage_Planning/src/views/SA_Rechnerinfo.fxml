@@ -14,7 +14,7 @@
                <children>
                   <HBox alignment="TOP_CENTER" spacing="5.0">
                      <children>
-                        <Label text="Rechner" />
+                        <Label text="SA_Rechner" />
                         <Label fx:id="lbl_SAI_Seriennummer" text="Label" />
                      </children>
                   </HBox>

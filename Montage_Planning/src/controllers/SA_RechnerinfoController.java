@@ -2,6 +2,7 @@ package controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import application.Datenbank;
@@ -96,20 +97,31 @@ public class SA_RechnerinfoController implements EventHandler, Initializable {
 		comboBox_SAI_Bearbeitungsstatus.setItems(status);
 		
 		txt_SAI_Einzelteilsuche.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
+		
 			@Override
 			public void handle(KeyEvent ke) {
+				int lagerbestand = 0;
 				if(ke.getCode().equals(KeyCode.ENTER)) {
 					String eingabe = txt_SAI_Einzelteilsuche.getText();
 					if (eingabe.isEmpty()) {
 						lbl_SAI_SuchStatus.setText("leere Eingabe");
 					}
-					if (.arg0....arg0...eingabe.equalsIgnoreCase("")|eingabe.equalsIgnoreCase("")...){ //hier die Teilebezichnungen
-						int lagrbestand = db.getEinzelteilLagerbestand(eingabe);			
+					else if (eingabe.contains("prozessor")|eingabe.equalsIgnoreCase("prozessor")|eingabe.equalsIgnoreCase("hauptspeicher")|eingabe.equalsIgnoreCase("festplatte")|eingabe.equalsIgnoreCase("laufwerk")){ 
+						try {
+							lagerbestand = db.getEinzelteilLagerbestand(eingabe);
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}			
 					}else {
 						lbl_SAI_SuchStatus.setText("kein ET mit diser Bezeichnung");
 					}
-					
+					if (lagerbestand > 0) {
+						lbl_SAI_SuchStatus.setText("auf Lager: " + lagerbestand);
+					}else if (lagerbestand == 0) {
+						lbl_SAI_SuchStatus.setText("nicht auf Lager");
+					} {
+						lbl_SAI_SuchStatus.setText("ungültige Eingabe");
+					}	
 				}
 				
 			}
@@ -157,8 +169,9 @@ public class SA_RechnerinfoController implements EventHandler, Initializable {
 	 */
 	@FXML
 	public void setStatus(ActionEvent event) { 	//welches ActionEvent (awt oder fxml)
-		String selection = comboBox_SAI_Bearbeitungsstatus.getSelectionModel().getSelectedItem();
-		db.//hier in die DB, Rechner aktualisieren
+		String selectedSatus = comboBox_SAI_Bearbeitungsstatus.getSelectionModel().getSelectedItem();
+		
+		db.setRechnerStatus(pSerienNr, selectedSatus);//pSeriennummer aus SA_Rechner sr (sr.getSNr..);
 	}
 
 	@Override
