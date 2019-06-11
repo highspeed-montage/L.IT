@@ -248,7 +248,7 @@ public class Datenbank {
 		  *                      aufgerufen werden soll.
 		  * @throws SQLException
 		  */
-		 public void lagerbestandPruefen(int pSeriennummer) throws SQLException {
+		 public int lagerbestandPruefen(int pSeriennummer) throws SQLException {
 			 Statement stmt = connection.createStatement();
 			 ResultSet rs = stmt.executeQuery("SELECT Lagerbestand FROM RechnerTeile, Teile, Rechner "
 			 		+ "WHERE Rechner.idSeriennummer=RechnerTeile.Rechner_idSeriennummer "
@@ -262,6 +262,10 @@ public class Datenbank {
 			 if (teilenichtvorhanden > 0) {
 				 System.out.println("Es sind nicht alle Teile vorhanden. Auftrag wird an den Einkauf geschickt");
 				 ResultSet rs2 = stmt.executeQuery("UPDATE Rechner SET Status_idStatus = '7' WHERE idSeriennummer = pSeriennummer");
+				 return 1;
+			 }
+			 else {
+				 return 0;
 			 }
 		 }
 }
