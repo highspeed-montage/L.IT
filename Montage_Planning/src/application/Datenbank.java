@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import com.mysql.cj.jdbc.result.ResultSetMetaData;
 import models.FA_Rechner;
+import models.SA_Rechner;
 import models.Teile;
 
 public class Datenbank {
@@ -121,8 +122,11 @@ public class Datenbank {
 		return kunde;
 	}
 
-	/** holt info für FA_Rechner nach Seriennummer 
-	 * @throws SQLException*/
+	/**
+	 * holt info für FA_Rechner nach Seriennummer
+	 * 
+	 * @throws SQLException
+	 */
 	public FA_Rechner getFARechnerInfo(int pSeriennr) throws SQLException {
 
 		FA_Rechner fr = null;
@@ -184,15 +188,73 @@ public class Datenbank {
 		return fr;
 	}
 
-	/** Bearbeitungsstatus von FA_R/SA_R wird in db aktualisiert 
-	 * @throws SQLException */
+	/** holt info für SA_Rechner nach Seriennummer 
+	 * @throws SQLException*/
+	public SA_Rechner getSARechnerInfo(int pSeriennr) throws SQLException {
+
+		SA_Rechner sr = null;
+
+		Statement stmt = connection.createStatement();
+
+//in queryinfo noch die ganzen Booleans... die boolean variablen fehlen noch in der DB
+		String queryInfo = "SELECT Auftragsverteilung.Rechner_seriennummer, Status.Bezeichnung, Auftrag.Lieferzeit, "
+				+ "Auftragsverteilung.Datum, Kunde.Firmenname, Kunde.idKundennummer, Kunde.Name, Kunde.EMail, "
+				+ "Rechner.Auftrag_idAuftragsnummer, Auftrag.Kunde_idKunde "
+				+ "FROM Auftragsverteilung, Status, Auftrag, Kunde, Rechner "
+				+ "WHERE Auftragsverteilung.Rechner_seriennummer = '" + pSeriennr + "' "
+				+ "AND Rechner.idSeriennummer = Auftragsverteilung.Rechner_seriennummer "
+				+ "AND Auftragsverteilung.Rechner_seriennummer = Rechner.idSeriennummer "
+				+ "AND Rechner.Status_idStatus = Status.idStatus "
+				+ "AND Rechner.Auftrag_idAuftragsnummer = Auftrag.idAuftragsnummer "
+				+ "AND Auftrag.Kunde_idKunde = Kunde.idKundennummer ";
+
+		ResultSet rsInfo = stmt.executeQuery(queryInfo);
+
+		while (rsInfo.next()) {
+
+			int seriennr = rsInfo.getInt("Auftragsverteilung.Rechner_seriennummer");
+			int pAuftragsNr = rsInfo.getInt("Rechner.Auftrag_idAuftragsnummer");
+			int pKundenId = rsInfo.getInt("Auftrag.Kunde_idKunde");
+			String pStatus = rsInfo.getString("Status.Bezeichnung");
+			// Lieferzeit zu Lieferdatum in Datenbank Ã¤ndern
+			Date pLieferdatum = rsInfo.getDate("Auftragsverteilung.Datum");
+			Date pBearbeitungsdatum = rsInfo.getDate("Auftragsverteilung.Datum");
+			String pFirmenname = null;
+			String pPrivatname = null;
+			String pEMail = rsInfo.getString("Kunde.EMail");
+			if (rsInfo.getString("Kunde.Firmenname") != null) {
+				pFirmenname = rsInfo.getString("Kunde.Firmenname");
+
+			} else {
+				pPrivatname = rsInfo.getString("Kunde.Name");
+			}
+			boolean pKundenverschuldet; //= rsInfo.getBoolean("")
+			boolean pHardwareverschuldet;
+			boolean pSoftwareverschuldet;
+			boolean pProzessor_kaputt;
+			boolean pGrafikkarte_kaputt;
+			boolean pFestplatte_kaputt;
+			boolean pDvd_Laufwerk_kaputt;
+			sr = new SA_Rechner(pSeriennr, pAuftragsNr, pStatus, pBearbeitungsdatum, pLieferdatum, pFirmenname, pPrivatname, pKundenId, pEMail, 
+								pKundenverschuldet, pHardwareverschuldet, pSoftwareverschuldet, pProzessor_kaputt,pGrafikkarte_kaputt, pFestplatte_kaputt, pDvd_Laufwerk_kaputt);
+
+			System.out.println(sr.toString());
+
+		}
+		return sr;
+	}
+
+	/**
+	 * Bearbeitungsstatus von FA_R/SA_R wird in db aktualisiert
+	 * 
+	 * @throws SQLException
+	 */
 	public boolean setRechnerStatus(int pSerienNr, String pStatus) throws SQLException {
 		Statement stmt = connection.createStatement();
-		String query = "UPDATE Status "
-				+ "		SET Bezeichnung = '" + pStatus + "' "
+		String query = "UPDATE Status " + "		SET Bezeichnung = '" + pStatus + "' "
 				+ "		WHERE Auftragsverteilung.Rechner_seriennummer = '" + pSerienNr + "'"
-						+ "AND Rechner.idSeriennummer = Auftragsverteilung.Rechner_seriennummer"
-						+ "AND Rechner.Status_idStatus = Status.idStatus";
+				+ "AND Rechner.idSeriennummer = Auftragsverteilung.Rechner_seriennummer"
+				+ "AND Rechner.Status_idStatus = Status.idStatus";
 		int updatedRows = stmt.executeUpdate(query);
 		return updatedRows == 1;
 	}
@@ -214,60 +276,61 @@ public class Datenbank {
 			rechnerEinzelteile.add(new Teile(rs.getString("Teile.Bezeichnung")));
 		}
 	}
-		
-		 /**
-		  * Diese Methode listet die Bezeichnung der Teile eines Rechners auf.
-		  * 
-		  * @param pSeriennummer Die Seriennummer des Rechners, dessen Teile aufgelistet
-		  *                      werden sollen.
-		  * @throws SQLException
-		  * 
-		  * @return Die Methode gibt eine Liste von Teilen aus, die für den jeweiligen Auftrag benötigt werden. 
-		  */
-		 public List<Teile> listTeileAuftrag(int pSeriennummer) throws SQLException {
-			 List<Teile> teileAuflistung = new ArrayList<>();
-			 Statement stmt = connection.createStatement();
-			 ResultSet rs = stmt.executeQuery("SELECT idTeilenummer, Teile.Bezeichnung, Teilekategorie.Bezeichnung, Lagerbestand FROM RechnerTeile, Teile, Rechner, Teilekategorie "
-				  							+ "WHERE Rechner.idSeriennummer=RechnerTeile.Rechner_idSeriennummer AND "
-				  							+ "RechnerTeile.Teile_idTeilenummer=Teile.idTeilenummer "
-				  							+ "AND Teilekategorie.idTeilekategorie=Teile.Teilekategorie_idTeilekategorie "
-				  							+ "AND idSeriennummer=pSeriennummer");
-			 while (rs.next()) {
-				 teileAuflistung.add(new Teile(rs.getInt("idTeilenummer"), rs.getString("Teile.Bezeichnung"), rs.getString("Teilekategorie.Bezeichung"),
-						 rs.getInt("Lagerbestand")));
-				 			}
-			return teileAuflistung;
-		  }
-		 
-		 /**
-		  * Diese Methode prüft ob alle Teile des Rechners im Lager sind
-		  * (Serviceauftrag).
-		  * 
-		  * @param pSeriennummer Die Seriennummer des Rechners, dessen Lagerbestand
-		  *                      aufgerufen werden soll.
-		  * @throws SQLException
-		  */
-		 public int lagerbestandPruefen(int pSeriennummer) throws SQLException {
-			 Statement stmt = connection.createStatement();
-			 ResultSet rs = stmt.executeQuery("SELECT Lagerbestand FROM RechnerTeile, Teile, Rechner "
-			 		+ "WHERE Rechner.idSeriennummer=RechnerTeile.Rechner_idSeriennummer "
-			 		+ "AND RechnerTeile.Teile_idTeilenummer=Teile.idTeilenummer"
-			 		+ "AND idSeriennummer=pSeriennummer");
-			 int teilenichtvorhanden = 0;
-			 while (rs.next()) {
-				 if (rs.getInt("Lagerbestand")== 0) {
-					 teilenichtvorhanden++;
-				 } 
-			 }
-			 if (teilenichtvorhanden > 0) {
-				 System.out.println("Es sind nicht alle Teile vorhanden. Auftrag wird an den Einkauf geschickt");
-				 ResultSet rs2 = stmt.executeQuery("UPDATE Rechner SET Status_idStatus = '7' WHERE idSeriennummer = pSeriennummer");
-				 return 1;//hier ein rs für update verwendet?
-			 }
-			 else {
-				 return 0;
-			 }
-		 }
+
+	/**
+	 * Diese Methode listet die Bezeichnung der Teile eines Rechners auf.
+	 * 
+	 * @param pSeriennummer Die Seriennummer des Rechners, dessen Teile aufgelistet
+	 *                      werden sollen.
+	 * @throws SQLException
+	 * 
+	 * @return Die Methode gibt eine Liste von Teilen aus, die für den jeweiligen
+	 *         Auftrag benötigt werden.
+	 */
+	public List<Teile> listTeileAuftrag(int pSeriennummer) throws SQLException {
+		List<Teile> teileAuflistung = new ArrayList<>();
+		Statement stmt = connection.createStatement();
+		ResultSet rs = stmt.executeQuery(
+				"SELECT idTeilenummer, Teile.Bezeichnung, Teilekategorie.Bezeichnung, Lagerbestand FROM RechnerTeile, Teile, Rechner, Teilekategorie "
+						+ "WHERE Rechner.idSeriennummer=RechnerTeile.Rechner_idSeriennummer AND "
+						+ "RechnerTeile.Teile_idTeilenummer=Teile.idTeilenummer "
+						+ "AND Teilekategorie.idTeilekategorie=Teile.Teilekategorie_idTeilekategorie "
+						+ "AND idSeriennummer=pSeriennummer");
+		while (rs.next()) {
+			teileAuflistung.add(new Teile(rs.getInt("idTeilenummer"), rs.getString("Teile.Bezeichnung"),
+					rs.getString("Teilekategorie.Bezeichung"), rs.getInt("Lagerbestand")));
+		}
+		return teileAuflistung;
+	}
+
+	/**
+	 * Diese Methode prüft ob alle Teile des Rechners im Lager sind
+	 * (Serviceauftrag).
+	 * 
+	 * @param pSeriennummer Die Seriennummer des Rechners, dessen Lagerbestand
+	 *                      aufgerufen werden soll.
+	 * @throws SQLException
+	 */
+	public int lagerbestandPruefen(int pSeriennummer) throws SQLException {
+		Statement stmt = connection.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT Lagerbestand FROM RechnerTeile, Teile, Rechner "
+				+ "WHERE Rechner.idSeriennummer=RechnerTeile.Rechner_idSeriennummer "
+				+ "AND RechnerTeile.Teile_idTeilenummer=Teile.idTeilenummer" + "AND idSeriennummer=pSeriennummer");
+		int teilenichtvorhanden = 0;
+		while (rs.next()) {
+			if (rs.getInt("Lagerbestand") == 0) {
+				teilenichtvorhanden++;
+			}
+		}
+		if (teilenichtvorhanden > 0) {
+			System.out.println("Es sind nicht alle Teile vorhanden. Auftrag wird an den Einkauf geschickt");
+			ResultSet rs2 = stmt
+					.executeQuery("UPDATE Rechner SET Status_idStatus = '7' WHERE idSeriennummer = pSeriennummer");
+			return 1;// hier ein rs für update verwendet?
+		} else {
+			return 0;
+		}
+	}
 
 	/**
 	 * Frägt ET Lagerbestand ab. Benötigt für ET Suche bei SA_Rechner
