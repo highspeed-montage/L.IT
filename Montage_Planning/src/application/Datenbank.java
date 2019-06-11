@@ -213,7 +213,7 @@ public class Datenbank {
 
 			rechnerEinzelteile.add(new Teile(rs.getString("Teile.Bezeichnung")));
 		}
-<<<<<<< HEAD
+	}
 		
 		 /**
 		  * Diese Methode listet die Bezeichnung der Teile eines Rechners auf.
@@ -251,7 +251,8 @@ public class Datenbank {
 			 Statement stmt = connection.createStatement();
 			 ResultSet rs = stmt.executeQuery("SELECT Lagerbestand FROM RechnerTeile, Teile, Rechner "
 			 		+ "WHERE Rechner.idSeriennummer=RechnerTeile.Rechner_idSeriennummer "
-			 		+ "AND RechnerTeile.Teile_idTeilenummer=Teile.idTeilenummer AND idSeriennummer=pSeriennummer");
+			 		+ "AND RechnerTeile.Teile_idTeilenummer=Teile.idTeilenummer"
+			 		+ "AND idSeriennummer=pSeriennummer");
 			 int teilenichtvorhanden = 0;
 			 while (rs.next()) {
 				 if (rs.getInt("Lagerbestand")== 0) {
@@ -261,15 +262,12 @@ public class Datenbank {
 			 if (teilenichtvorhanden > 0) {
 				 System.out.println("Es sind nicht alle Teile vorhanden. Auftrag wird an den Einkauf geschickt");
 				 ResultSet rs2 = stmt.executeQuery("UPDATE Rechner SET Status_idStatus = '7' WHERE idSeriennummer = pSeriennummer");
-				 return 1;
+				 return 1;//hier ein rs für update verwendet?
 			 }
 			 else {
 				 return 0;
 			 }
 		 }
-=======
-		return rechnerEinzelteile;
-	}
 
 	/**
 	 * Frägt ET Lagerbestand ab. Benötigt für ET Suche bei SA_Rechner
@@ -287,5 +285,4 @@ public class Datenbank {
 		return lagerbestand;
 	}
 
->>>>>>> parent of 80f95b3... Datenbankabfragen
 }
