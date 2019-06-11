@@ -1,5 +1,9 @@
 package controllers;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
@@ -39,22 +43,24 @@ public class FA_RechnerinfoController implements EventHandler, Initializable {
 	private Label lbl_FAI_Seriennummer;
 	@FXML
 	private ComboBox<String> comboBox_FAI_Status = null;
-	
+
 	/** Einzelteiltabelle */
 	@FXML
 	private TableView<Teile> tableFARechnerInfo;
-	
+
 	@FXML
 	private TableColumn<Teile, String> TableColumn_FAI_einzelteile;
 
 	private Datenbank db = new Datenbank();
-	
+
 	// ComboBox Inhalte
-	ObservableList<String> status;
-	
+	ObservableList<String> status = FXCollections.observableArrayList();
+
 	FA_Rechner fr = null;
-	
+
 	String stsBearb, stsFertig, stsImLager;
+
+	ObservableList<Teile> einzelteile = FXCollections.observableArrayList();
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -63,54 +69,51 @@ public class FA_RechnerinfoController implements EventHandler, Initializable {
 		stsFertig = "erledigt";
 		stsImLager = "im Lager";
 
-		status = FXCollections.observableArrayList(stsBearb, stsFertig, stsImLager);
+		status.addAll(stsBearb, stsFertig, stsImLager);
 
 		comboBox_FAI_Status.setItems(status);
 
 		FA_RechnerInfo_fuellen();
-		
-		
-
 	}
 
 	/**
-	 * Labels der FA_RECHNERINFO Ansicht werden befuellt mit Werten aus der Datenbank
+	 * Labels der FA_RECHNERINFO Ansicht werden befuellt mit Werten aus der
+	 * Datenbank
 	 */
 	public void FA_RechnerInfo_fuellen() {
-		
+
 		try {
 			fr = db.getFARechnerInfo(RechneransichtController.seriennrAktuell);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		lbl_FAI_Seriennummer.setText(String.valueOf(fr.getSeriennr()));
-		
+
 		if (fr.getFirmenname() != null) {
 			lbl_FAI_kunde.setText(fr.getFirmenname());
 		} else {
 			lbl_FAI_kunde.setText(fr.getPrivatName());
 		}
-	
-		lbl_FAI_bearbeitungsdatum.setText(String.valueOf(fr.getBearbeitungsdatum()));		
+
+		lbl_FAI_bearbeitungsdatum.setText(String.valueOf(fr.getBearbeitungsdatum()));
 		lbl_FAI_kundenEMail.setText(fr.geteMail());
 		lbl_FAI_kundenNr.setText(String.valueOf(fr.getKundenId()));
 		lbl_FAI_lieferdatum.setText(String.valueOf(fr.getLieferdatum()));
 		lbl_FAI_status.setText(fr.getStatus());
 		
-		ObservableList<Teile> einzelteile = FXCollections.observableArrayList();
 		einzelteile.addAll(fr.getTeile());
-		
+
 		TableColumn_FAI_einzelteile.setCellValueFactory(new PropertyValueFactory<>("bezeichnung"));
 		tableFARechnerInfo.setItems(einzelteile);
 	}
 
 	/**
-	 * Bekommt gewähltes Element der ComboBox Aktualisiert dementsprechend den
+	 * Bekommt gewï¿½hltes Element der ComboBox Aktualisiert dementsprechend den
 	 * Rechnerstatus
 	 */
-	@FXML 
-	public void setFAStatus(ActionEvent event) { 
+	@FXML
+	public void setFAStatus(ActionEvent event) {
 		String selectedSatus = comboBox_FAI_Status.getSelectionModel().getSelectedItem();
 
 		try {
@@ -118,11 +121,31 @@ public class FA_RechnerinfoController implements EventHandler, Initializable {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}// pSeriennummer aus SA_Rechner sr (sr.getSNr..);
+		} // pSeriennummer aus SA_Rechner sr (sr.getSNr..);
 	}
+
 	@Override
 	public void handle(Event arg0) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void createSeriennummerPDF() {
+		
+		// Seriennummer wird in Textdatei geschrieben
+
+		PrintWriter pWriter = null;
+		try {
+			pWriter = new PrintWriter(new BufferedWriter(new FileWriter("src/application/seriennummer.txt")));
+			pWriter.println(RechneransichtController.seriennrAktuell);
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		} finally {
+			if (pWriter != null) {
+				pWriter.flush();
+				pWriter.close();	
+			}
+
+		}
 	}
 }

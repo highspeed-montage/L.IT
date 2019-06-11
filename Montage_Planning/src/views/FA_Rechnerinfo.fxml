@@ -76,7 +76,8 @@
 			<center>
 				<VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
 					<children>
-						<ComboBox fx:id="comboBox_FAI_Status" onAction="#setFAStatus" prefWidth="150.0" promptText="Bearbeitungstatus" />
+                  <Button mnemonicParsing="false" onMouseClicked="#createSeriennummerPDF" text="Seriennummer Drucken" />
+						<ComboBox fx:id="comboBox_FAI_Status" onAction="#setFAStatus" prefHeight="38.0" prefWidth="163.0" promptText="Bearbeitungstatus" />
 							
 						<TableView fx:id="tableFARechnerInfo" prefHeight="201.0" prefWidth="426.0">
 							<columns>
@@ -93,7 +94,7 @@
 				</VBox>
 			</center>
 			<right>
-				<ScrollBar orientation="VERTICAL" BorderPane.alignment="CENTER" />
+      				<ScrollBar orientation="VERTICAL" BorderPane.alignment="CENTER" />
 			</right>
 		</BorderPane>
 	</children>
