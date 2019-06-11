@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import models.Auftragsverteilung;
@@ -83,6 +84,7 @@ public class Datenbank_Gabby {
 		}
 		return tabelleninhalt;
 	}
+
 	
 	/** Rechner Auftragsart holen */
 	public int getRechnerAuftragsart(int seriennr) throws SQLException {
@@ -97,5 +99,15 @@ public class Datenbank_Gabby {
 		}
 		return idAuftragsart;
 	}
-
+	
+	public List<Date> getRechnerBearbeitungsdatum() throws SQLException {
+		List<Date> bearbeitungsdatum = new ArrayList<>();
+		Statement stmt = connection.createStatement();
+		String query = "SELECT DISTINCT Datum FROM Auftragsverteilung";
+		ResultSet rs = stmt.executeQuery(query);
+		while (rs.next()) {
+			bearbeitungsdatum.add(rs.getDate("Datum"));
+		}
+		return bearbeitungsdatum;
+	}
 }

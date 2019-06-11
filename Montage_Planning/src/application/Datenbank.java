@@ -174,8 +174,6 @@ public class Datenbank {
 
 		ResultSet rsInfo = stmt.executeQuery(queryInfo);
 		
-		
-		
 		while (rsInfo.next()) {
 
 			int seriennr = rsInfo.getInt("Auftragsverteilung.Rechner_seriennummer");
@@ -194,15 +192,9 @@ public class Datenbank {
 			} else {
 				pPrivatname = rsInfo.getString("Kunde.Name");
 			}
-			// Geschaeftskunde gk;
-			// Privatkunde pk;
 			
-			System.out.println(rechnerEinzelteile); 
 			fr = new FA_Rechner(seriennr, pAuftragsNr, pStatus, pBearbeitungsdatum, pLieferdatum, pFirmenname,
 					pPrivatname, pKundenId, pEMail, rechnerEinzelteile);
-			
-			System.out.println(fr.toString());
-
 		}
 		return fr;
 	}

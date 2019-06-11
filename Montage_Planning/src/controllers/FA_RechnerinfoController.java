@@ -51,11 +51,6 @@ public class FA_RechnerinfoController implements EventHandler, Initializable {
 	// ComboBox Inhalte
 	ObservableList<String> status;
 	
-	// ZUM TESTEN, kommt dann aus RechneransichtController clickRechner()
-	int seriennr = 10001;
-
-	
-	
 	FA_Rechner fr = null;
 	
 	String stsBearb, stsFertig, stsImLager;
@@ -76,20 +71,18 @@ public class FA_RechnerinfoController implements EventHandler, Initializable {
 	}
 
 	/**
-	 * Labels der FA_RECHNERINFO Ansicht werden bef�llt mit Werten aus der Datenbank
+	 * Labels der FA_RECHNERINFO Ansicht werden befuellt mit Werten aus der Datenbank
 	 */
 	public void FA_RechnerInfo_fuellen() {
 		
 		try {
-			fr = db.getFARechnerInfo(seriennr);
-			System.out.println(fr.toString());
+			fr = db.getFARechnerInfo(RechneransichtController.seriennrAktuell);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		
 		lbl_FAI_Seriennummer.setText(String.valueOf(fr.getSeriennr()));
 		
-		// hier die einzelnen Labels befuellen
 		if (fr.getFirmenname() != null) {
 			lbl_FAI_kunde.setText(fr.getFirmenname());
 		} else {
@@ -102,11 +95,8 @@ public class FA_RechnerinfoController implements EventHandler, Initializable {
 		lbl_FAI_lieferdatum.setText(String.valueOf(fr.getLieferdatum()));
 		lbl_FAI_status.setText(fr.getStatus());
 		
-		System.out.println(fr.getTeile().toString());
-		
 		ObservableList<Teile> einzelteile = FXCollections.observableArrayList();
 		einzelteile.addAll(fr.getTeile());
-		System.out.println(einzelteile);
 		
 		TableColumn_FAI_einzelteile.setCellValueFactory(new PropertyValueFactory<>("bezeichnung"));
 		tableFARechnerInfo.setItems(einzelteile);
