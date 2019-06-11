@@ -25,7 +25,6 @@ public class Teile {
 	{
 		bezeichnung = pBezeichnung;
 	}
-	//Lagerbestand berechnen?
 	public int getTeilenr()
 	{
 		return teilenr;
