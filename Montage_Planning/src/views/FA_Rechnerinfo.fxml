@@ -14,7 +14,7 @@
 					<children>
 						<HBox alignment="TOP_CENTER" prefHeight="0.0" prefWidth="450.0" spacing="5.0" BorderPane.alignment="CENTER">
 							<children>
-								<Label text="Rechner: " />
+								<Label text="FA_Rechner " />
 								<Label fx:id="lbl_FAI_Seriennummer" prefHeight="17.0" prefWidth="92.0" text="Seriennummer" />
 							</children>
 							<BorderPane.margin>
@@ -76,7 +76,7 @@
 			<center>
 				<VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
 					<children>
-						<ComboBox fx:id="comboBox_FAI_Status" prefWidth="150.0" promptText="Bearbeitungstatus" />
+						<ComboBox fx:id="comboBox_FAI_Status" onAction="#setFAStatus" prefWidth="150.0" promptText="Bearbeitungstatus" />
 							
 						<TableView fx:id="tableFARechnerInfo" prefHeight="201.0" prefWidth="426.0">
 							<columns>

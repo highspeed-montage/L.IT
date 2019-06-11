@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import application.Datenbank;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -67,6 +68,8 @@ public class FA_RechnerinfoController implements EventHandler, Initializable {
 		comboBox_FAI_Status.setItems(status);
 
 		FA_RechnerInfo_fuellen();
+		
+		
 
 	}
 
@@ -102,6 +105,21 @@ public class FA_RechnerinfoController implements EventHandler, Initializable {
 		tableFARechnerInfo.setItems(einzelteile);
 	}
 
+	/**
+	 * Bekommt gewähltes Element der ComboBox Aktualisiert dementsprechend den
+	 * Rechnerstatus
+	 */
+	@FXML 
+	public void setFAStatus(ActionEvent event) { 
+		String selectedSatus = comboBox_FAI_Status.getSelectionModel().getSelectedItem();
+
+		try {
+			db.setRechnerStatus(fr.getSeriennr(), selectedSatus);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}// pSeriennummer aus SA_Rechner sr (sr.getSNr..);
+	}
 	@Override
 	public void handle(Event arg0) {
 		// TODO Auto-generated method stub
