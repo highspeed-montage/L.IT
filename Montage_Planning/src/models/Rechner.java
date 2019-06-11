@@ -10,7 +10,7 @@ public abstract class Rechner {
 	private Auftrag auftrag;
 	private String status;
 	private Monteur monteur;
-	private List <Teile> teile = new ArrayList<Teile>();
+	private List<Teile> teile = new ArrayList<Teile>();
 	private boolean montiert;
 	private boolean installiert;
 	private boolean getestet;
@@ -23,12 +23,13 @@ public abstract class Rechner {
 	private String eMail;
 
 
-	public Rechner(int pSeriennr, Auftrag pAuftrag, String pStatus, Teile... pTeile)
+	public Rechner(int pSeriennr, Auftrag pAuftrag, String pStatus, List<Teile> pTeile)
 	{
 		setSeriennr(pSeriennr);
 		setAuftrag(pAuftrag);
 		status = pStatus;
-		this.teile = new ArrayList<Teile>(Arrays.asList(pTeile));
+		//this.teile = new ArrayList<Teile>(Arrays.asList(pTeile));
+		teile = pTeile;
 	}
 	//KOnstruktor fuer FA_REchner
 	public Rechner(int pSeriennr, int auftragsNr, String pStatus,Date pBearbeitungsdatum,Date pLieferdatum, String pFirmenname, String pPrivatname, int pKundenId, String pEMail, List<Teile> pTeile )

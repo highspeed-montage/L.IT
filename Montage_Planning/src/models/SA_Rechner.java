@@ -14,18 +14,18 @@ public class SA_Rechner extends Rechner {
 	private boolean dvd_Laufwerk_kaputt;
 	private boolean neues_Betriebssystem;
 
-	public SA_Rechner(int pSeriennr, Auftrag pAuftrag, String pStatus, Teile pTeile, double pArbeitsaufwand) {
+	public SA_Rechner(int pSeriennr, Auftrag pAuftrag, String pStatus, List<Teile> pTeile, double pArbeitsaufwand) {
 		super(pSeriennr, pAuftrag, pStatus, pTeile);
 		this.arbeitsaufwand = pArbeitsaufwand;
 	}
 //	// Konstruktor fÃ¼r DB Abfrage getSARechnerInfo()
 //			public SA_Rechner(int pSeriennr, int auftragsNr, String pStatus, Date pBearbeitungsdatum, Date pLieferdatum,
-//					String pFirmenname, String pPrivatname, int pKundenId,String pEMail, Teil pTeil) {
+//					String pFirmenname, String pPrivatname, int pKundenId,String pEMail, Teile pTeile) {
 //				super(pSeriennr, auftragsNr, pStatus, pBearbeitungsdatum, pLieferdatum, pFirmenname, pPrivatname, pKundenId, pEMail, pTeil);
 //			
 //			}
 			//Vorschläge:
-			//1.)Teil pTeil, String pProblem (hw/sw/kv),
+			//1.)Teile pTeile, String pProblem (hw/sw/kv),
 			//2.)private static final double ARBEITSAUFWAND = 4;
 			//   public double getArbeitsaufwand() {return ARBEITSAUFWAND;}
 			//3.)ET Suche in SA_RC -> 
