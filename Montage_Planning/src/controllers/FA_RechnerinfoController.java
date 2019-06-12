@@ -8,6 +8,9 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import javax.swing.JOptionPane;
+
 import application.Datenbank;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -138,6 +141,7 @@ public class FA_RechnerinfoController implements EventHandler, Initializable {
 		try {
 			pWriter = new PrintWriter(new BufferedWriter(new FileWriter("src/application/seriennummer.txt")));
 			pWriter.println(RechneransichtController.seriennrAktuell);
+			System.out.println("PDF gedruckt"); // Message Dialog "PDF ist gespeichert."
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		} finally {
