@@ -16,6 +16,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -24,6 +25,7 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import models.SA_Rechner;
 
 public class SA_RechnerinfoController implements EventHandler, Initializable {
 	/** Rechnerinfo */
@@ -62,29 +64,42 @@ public class SA_RechnerinfoController implements EventHandler, Initializable {
 	@FXML
 	private Button btn_SAI_pdf;
 
+	// Teile
+
+	@FXML
+	private CheckBox cBox_SAI_Prozessor;
+	@FXML
+	private CheckBox cBox_SAI_Grafikkarte;
+	@FXML
+	private CheckBox cBox_SAI__Festplatte;
+	@FXML
+	private CheckBox cBox_SAI_Laufwerk;
+
+	// Datenbank
 	private Datenbank db = new Datenbank();
+	private SA_Rechner sr = null;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
 		db.openConnection();
 
-		//String stsGetestet = "getestet";	//Anstelle von stsBearb
+		// String stsGetestet = "getestet"; //Anstelle von stsBearb
 		String stsBearb = "in Bearbeitung";
 		String stsFertig = "erledigt";
 		String stsImLager = "im Lager";
 
 		ObservableList<String> status = FXCollections.observableArrayList(stsBearb, stsFertig, stsImLager);
 		comboBox_SAI_Bearbeitungsstatus.setItems(status);
-		
+
 		SA_RechnerInfo_fuellen();
 
 		txt_SAI_Einzelteilsuche.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
 			@Override
 			public void handle(KeyEvent ke) {
-				//wenn der rbtn_Hwardware ausgewählt ist, DANN per Enter gesucht werden!
-				if (rbtn_SAI_Hardware.isSelected()) {	
+				// wenn der rbtn_Hwardware ausgewählt ist, DANN per Enter gesucht werden!
+				if (rbtn_SAI_Hardware.isSelected()) {
 					int lagerbestand = 0;
 					if (ke.getCode().equals(KeyCode.ENTER)) {
 						String eingabe = txt_SAI_Einzelteilsuche.getText();
@@ -118,6 +133,7 @@ public class SA_RechnerinfoController implements EventHandler, Initializable {
 		 * Radio button toggle Group Doku Problem muss in Rechner gepackt werden ->
 		 * fehlt noch.. WO KOMMT DAS HIN? => SA Konstruktor ändern
 		 */
+
 		toggle_SAI_Dokumentation.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 
 			@Override
@@ -125,9 +141,16 @@ public class SA_RechnerinfoController implements EventHandler, Initializable {
 				RadioButton rb = (RadioButton) toggle.getToggleGroup().getSelectedToggle();
 				System.out.println("(test)Selected rb: " + rb.getText());
 				String problem = rb.getText();
-				// ab in die DB damit
-				//
-				//
+
+				if (problem.equalsIgnoreCase("Hardware")) {
+					sr.setHardwareverschuldet(true);
+
+				} else if (problem.equalsIgnoreCase("Software")) {
+					sr.setSoftwareverschuldet(true);
+
+				} else if (problem.equalsIgnoreCase("Kunde")) {
+					sr.setSoftwareverschuldet(true);
+				}
 			}
 
 		});
@@ -139,16 +162,47 @@ public class SA_RechnerinfoController implements EventHandler, Initializable {
 	 * Rechnerstatus
 	 */
 	@FXML
-	public void setSAStatus(ActionEvent event) { 
+	public void setSAStatus(ActionEvent event) {
 		String selectedSatus = comboBox_SAI_Bearbeitungsstatus.getSelectionModel().getSelectedItem();
 
 		db.setRechnerStatus(pSerienNr, selectedSatus);// pSeriennummer aus SA_Rechner sr (sr.getSNr..);
 	}
 
-	@Override
-	public void handle(Event arg0) {
-		// TODO Auto-generated method stub
+//	CHeckBox HAndler:
+	@FXML
+	private void handleCBoxProzessor() {
+		if (rbtn_SAI_Hardware.isSelected()) {
+			sr.setProzessor_kaputt(true);
+		} else {
+			lbl_SAI_SuchStatus.setText("kein Hardwareproblem");
+		}
+	}
 
+	@FXML
+	private void handleCBoxGrafikkarte() {
+		if (rbtn_SAI_Hardware.isSelected()) {
+			sr.setGrafikkarte_kaputt(true);;
+		} else {
+			lbl_SAI_SuchStatus.setText("kein Hardwareproblem");
+		}
+	}
+
+	@FXML
+	private void handleCBoxFestplatte() {
+		if (rbtn_SAI_Hardware.isSelected()) {
+			sr.setFestplatte_kaputt(true);
+		} else {
+			lbl_SAI_SuchStatus.setText("kein Hardwareproblem");
+		}
+	}
+
+	@FXML
+	private void handleCBoxLaufwerk() {
+		if (rbtn_SAI_Hardware.isSelected()) {
+			sr.setDvd_Laufwerk_kaputt(true);
+		} else {
+			lbl_SAI_SuchStatus.setText("kein Hardwareproblem");
+		}
 	}
 
 }

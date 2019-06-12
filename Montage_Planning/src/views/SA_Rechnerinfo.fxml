@@ -83,20 +83,28 @@
                   </HBox>
                   <RadioButton fx:id="rbtn_SAI_Hardware" mnemonicParsing="false" text="Hardware">
                      <toggleGroup>
-                        <ToggleGroup fx:id="toggleDokumentation" />
+                        <ToggleGroup fx:id="toggle_SAI_Dokumentation" />
                      </toggleGroup>
                   </RadioButton>
-                  <HBox alignment="CENTER" prefHeight="20.0" prefWidth="200.0" spacing="5.0">
+                  <VBox alignment="TOP_CENTER" spacing="5.0">
                      <children>
-                        <TextField fx:id="txt_SAI_Einzelteilsuche" promptText="Einzelteilsuche" />
-                        <Label fx:id="lbl_SAI_SuchStatus" text="Status der Suche" />
+                        <CheckBox fx:id="cBox_SAI_Prozessor" mnemonicParsing="false" onAction="#handleCBoxProzessor" text="Prozessor" textAlignment="CENTER" />
+                        <CheckBox fx:id="cBox_SAI_Grafikkarte" mnemonicParsing="false" onAction="#handleCBoxGrafikkarte" text="Grafikkarte" textAlignment="CENTER" />
+                        <CheckBox fx:id="cBox_SAI__Festplatte" mnemonicParsing="false" onAction="#handleCBoxFestplatte" text="Festplatte" textAlignment="CENTER" />
+                        <CheckBox fx:id="cBox_SAI_Laufwerk" mnemonicParsing="false" onAction="#handleCBoxLaufwerk" text="Laufwerk" textAlignment="CENTER" />
+                        <HBox alignment="CENTER" prefHeight="20.0" prefWidth="200.0" spacing="5.0">
+                           <children>
+                              <TextField fx:id="txt_SAI_Einzelteilsuche" promptText="Einzelteilsuche" />
+                              <Label fx:id="lbl_SAI_SuchStatus" text="Status der Suche" />
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </HBox>
                      </children>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </HBox>
-                  <RadioButton fx:id="rbtn_SAI_Software" mnemonicParsing="false" text="Software" toggleGroup="$dokumentation" />
-                  <RadioButton fx:id="rbtn_SAI_Kunde" mnemonicParsing="false" text="Kunde" toggleGroup="$dokumentation" />
+                  </VBox>
+                  <RadioButton fx:id="rbtn_SAI_Software" mnemonicParsing="false" text="Software" toggleGroup="$toggle_SAI_Dokumentation" />
+                  <RadioButton fx:id="rbtn_SAI_Kunde" mnemonicParsing="false" text="Kunde" toggleGroup="$toggle_SAI_Dokumentation" />
                   <HBox alignment="TOP_CENTER">
                      <children>
                         <Button mnemonicParsing="false" text="PDF Generieren" textAlignment="CENTER" />
