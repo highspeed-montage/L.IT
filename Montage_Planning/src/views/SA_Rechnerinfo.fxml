@@ -105,9 +105,10 @@
                   </VBox>
                   <RadioButton fx:id="rbtn_SAI_Software" mnemonicParsing="false" text="Software" toggleGroup="$toggle_SAI_Dokumentation" />
                   <RadioButton fx:id="rbtn_SAI_Kunde" mnemonicParsing="false" text="Kunde" toggleGroup="$toggle_SAI_Dokumentation" />
-                  <HBox alignment="TOP_CENTER">
+                  <HBox alignment="TOP_CENTER" spacing="5.0">
                      <children>
-                        <Button mnemonicParsing="false" text="PDF Generieren" textAlignment="CENTER" />
+                        <Button fx:id="btn_SAI_pdf" mnemonicParsing="false" prefWidth="100.0" text="PDF Generieren" textAlignment="CENTER" />
+                        <Button fx:id="btn_SAI_Speichern" mnemonicParsing="false" onAction="#handleSpeichernToDb" prefWidth="100.0" text="Speichern" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" />

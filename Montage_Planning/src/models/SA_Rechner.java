@@ -71,9 +71,39 @@ public class SA_Rechner extends Rechner {
 	public void setHardwareverschuldet(boolean pHardware) {
 		this.hardwareverschuldet = pHardware;
 	}
-
+//GETTER
 	public static double getArbeitsaufwandSa() {
 		return ARBEITSAUFWAND_SA;
 	}
+
+	public boolean isKundenverschuldet() {
+		return kundenverschuldet;
+	}
+
+	public boolean isHardwareverschuldet() {
+		return hardwareverschuldet;
+	}
+
+	public boolean isSoftwareverschuldet() {
+		return softwareverschuldet;
+	}
+
+	public boolean isProzessor_kaputt() {
+		return prozessor_kaputt;
+	}
+
+	public boolean isGrafikkarte_kaputt() {
+		return grafikkarte_kaputt;
+	}
+
+	public boolean isFestplatte_kaputt() {
+		return festplatte_kaputt;
+	}
+
+	public boolean isDvd_Laufwerk_kaputt() {
+		return dvd_Laufwerk_kaputt;
+	}
+	
+	
 
 }

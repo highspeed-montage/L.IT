@@ -63,6 +63,8 @@ public class SA_RechnerinfoController implements EventHandler, Initializable {
 	private RadioButton rbtn_SAI_Kunde;
 	@FXML
 	private Button btn_SAI_pdf;
+	@FXML
+	private Button btn_SAI_Speichern;
 
 	// Teile
 
@@ -169,24 +171,34 @@ public class SA_RechnerinfoController implements EventHandler, Initializable {
 	}
 
 //	CHeckBox HAndler:
+	/** handle Checkbox "Prozessor". Falls geklickt: set true */
 	@FXML
 	private void handleCBoxProzessor() {
 		if (rbtn_SAI_Hardware.isSelected()) {
-			sr.setProzessor_kaputt(true);
+			sr.setProzessor_kaputt(true); // Wenn der Wert false war
+//			if(cBox_SAI_Prozessor.isSelected()) {	//BRAUCH ICH DAS FALLS UNSELECTED WIRD??
+//				sr.setProzessor_kaputt(true); 
+//			}else {
+//				sr.setProzessor_kaputt(false);
+//			}
 		} else {
-			lbl_SAI_SuchStatus.setText("kein Hardwareproblem");
+			lbl_SAI_SuchStatus.setText("kein Hardwareproblem");// Falls kein HW Problem, kann dies auch niht ankgekreuzt
+																// werden
 		}
 	}
 
+	/** handle Checkbox "Grafikkarte". Falls geklickt: set true */
 	@FXML
 	private void handleCBoxGrafikkarte() {
 		if (rbtn_SAI_Hardware.isSelected()) {
-			sr.setGrafikkarte_kaputt(true);;
+			sr.setGrafikkarte_kaputt(true);
+			;
 		} else {
 			lbl_SAI_SuchStatus.setText("kein Hardwareproblem");
 		}
 	}
 
+	/** handle Checkbox "Festplatte". Falls geklickt: set true */
 	@FXML
 	private void handleCBoxFestplatte() {
 		if (rbtn_SAI_Hardware.isSelected()) {
@@ -196,12 +208,24 @@ public class SA_RechnerinfoController implements EventHandler, Initializable {
 		}
 	}
 
+	/** handle Checkbox "Laufwerk". Falls geklickt: set true */
 	@FXML
 	private void handleCBoxLaufwerk() {
 		if (rbtn_SAI_Hardware.isSelected()) {
 			sr.setDvd_Laufwerk_kaputt(true);
 		} else {
 			lbl_SAI_SuchStatus.setText("kein Hardwareproblem");
+		}
+	}
+
+	/** SPeichernButton, Änderungen an SA_Rechner Objekt werden in DB geladen */
+	@FXML
+	private void handleSpeichernToDb(ActionEvent event) {
+		try {
+			db.updateSA_Recher(sr);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
