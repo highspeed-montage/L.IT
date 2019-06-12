@@ -373,5 +373,31 @@ public class Datenbank {
 		}
 		return lagerbestand;
 	}
+	public String authenticateUser(String username, String passwort) {
 
+		//String passwort = String.valueOf(passwortInt);
+		Connection con = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
+
+		String userNameDB = "";
+		String passwordDB = "";
+
+		try {
+			Statement stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT Name,idPersonalnummer FROM Mitarbeiter");
+
+			while (rs.next()) {
+				userNameDB = resultSet.getString("idPersonalnummer");
+				passwordDB = resultSet.getString("Name");
+
+				if (username.equals(userNameDB) && passwort.equals(passwordDB)) {
+					return "SUCCESS";
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return "Invalid user credentials";
+	}
 }
