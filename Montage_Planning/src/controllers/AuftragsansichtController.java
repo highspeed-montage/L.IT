@@ -1,5 +1,6 @@
 package controllers;
 
+import application.Datenbank;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -33,12 +34,14 @@ public class AuftragsansichtController {
 	@FXML private TableColumn col_AL_Anzahl;
 	@FXML private TableColumn col_AL_Lieferdatum;
 	
+	private Datenbank db = new Datenbank();
+	
 	@FXML
 	public void filter() {
 		//Liste mit Filtern (erstellen oder laden)
 		//Liste mit Filtern als String in ComboBox laden
 		//Wird eins angeklickt, dann entsprechends filtern
 	}
-
+	
 	
 }
