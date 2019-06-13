@@ -4,20 +4,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-
 import application.Datenbank;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import models.Mitarbeiter;
-import models.Vollzeit_MA;
 
-public class LoginController implements EventHandler, Initializable {
+public class LoginController implements Initializable {
 	@FXML
 	private Label lblMontage;
 
@@ -83,10 +79,5 @@ public class LoginController implements EventHandler, Initializable {
 			lblStatus.setText("Password cannot be blank");
 
 		}
-	}
-
-	@Override
-	public void handle(Event event) {
-
 	}
 }
