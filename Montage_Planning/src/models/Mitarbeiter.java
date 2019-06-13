@@ -1,6 +1,6 @@
 package models;
 
-public abstract class Mitarbeiter {
+public class Mitarbeiter {
 	private int personalnr;
 	private String name;
 	private String vorname;
