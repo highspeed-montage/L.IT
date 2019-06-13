@@ -17,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
 import models.FA_Rechner;
+import models.Mitarbeiter;
 import models.Monteur;
 import models.SA_Rechner;
 import models.Teile;
@@ -196,14 +197,16 @@ public class Datenbank {
 		return fr;
 	}
 
-	/** holt info für SA_Rechner nach Seriennummer 
-	 * @throws SQLException*/
+	/**
+	 * holt info für SA_Rechner nach Seriennummer
+	 * 
+	 * @throws SQLException
+	 */
 	public SA_Rechner getSARechnerInfo(int pSeriennr) throws SQLException {
 
 		SA_Rechner sr = null;
 
 		Statement stmt = connection.createStatement();
-
 
 		String queryInfo = "SELECT Auftragsverteilung.Rechner_seriennummer, Status.Bezeichnung, Auftrag.Lieferzeit, "
 				+ "Auftragsverteilung.Datum, Kunde.Firmenname, Kunde.idKundennummer, Kunde.Name, Kunde.EMail, "
@@ -245,9 +248,10 @@ public class Datenbank {
 			boolean pGrafikkarte_kaputt = rsInfo.getBoolean("Rechner.grafikkarteKaputt");
 			boolean pFestplatte_kaputt = rsInfo.getBoolean("Rechner.festplatteKaputt");
 			boolean pDvd_Laufwerk_kaputt = rsInfo.getBoolean("Rechner.laufwerkKaputt");
-			
-			sr = new SA_Rechner(seriennr, pAuftragsNr, pStatus, pBearbeitungsdatum, pLieferdatum, pFirmenname, pPrivatname, pKundenId, pEMail, 
-								pKundenverschuldet, pHardwareverschuldet, pSoftwareverschuldet, pProzessor_kaputt,pGrafikkarte_kaputt, pFestplatte_kaputt, pDvd_Laufwerk_kaputt);
+
+			sr = new SA_Rechner(seriennr, pAuftragsNr, pStatus, pBearbeitungsdatum, pLieferdatum, pFirmenname,
+					pPrivatname, pKundenId, pEMail, pKundenverschuldet, pHardwareverschuldet, pSoftwareverschuldet,
+					pProzessor_kaputt, pGrafikkarte_kaputt, pFestplatte_kaputt, pDvd_Laufwerk_kaputt);
 
 			System.out.println(sr.toString());
 
@@ -263,11 +267,12 @@ public class Datenbank {
 	public boolean updateSA_Recher(SA_Rechner sr) throws SQLException {
 		Statement stmt = connection.createStatement();
 		String query = "UPDATE Rechner SET Rechner.kundenverschuldet= '" + sr.isKundenverschuldet() + "', "
-				+ "Rechner.hardwareverschuldet ='"+sr.isHardwareverschuldet()+"', Rechner.softwareverschuldet ='"+sr.isSoftwareverschuldet()+"', "
-				+ "Rechner.prozessorKaputt = '"+sr.isProzessor_kaputt()+"', Rechner.grafikkarteKaputt = '"+sr.isGrafikkarte_kaputt()+"', "
-				+ "Rechner.festplatteKaputt = '"+sr.isFestplatte_kaputt()+"' ,Rechner.laufwerkKaputt = '"+sr.isDvd_Laufwerk_kaputt()+"'"
-				+ "	WHERE Auftragsverteilung.Rechner_seriennummer = '" + sr.getSeriennr() + "'"
-				+ "AND Rechner.idSeriennummer = Auftragsverteilung.Rechner_seriennummer";
+				+ "Rechner.hardwareverschuldet ='" + sr.isHardwareverschuldet() + "', Rechner.softwareverschuldet ='"
+				+ sr.isSoftwareverschuldet() + "', " + "Rechner.prozessorKaputt = '" + sr.isProzessor_kaputt()
+				+ "', Rechner.grafikkarteKaputt = '" + sr.isGrafikkarte_kaputt() + "', "
+				+ "Rechner.festplatteKaputt = '" + sr.isFestplatte_kaputt() + "' ,Rechner.laufwerkKaputt = '"
+				+ sr.isDvd_Laufwerk_kaputt() + "'" + "	WHERE Auftragsverteilung.Rechner_seriennummer = '"
+				+ sr.getSeriennr() + "'" + "AND Rechner.idSeriennummer = Auftragsverteilung.Rechner_seriennummer";
 
 		int updatedRows = stmt.executeUpdate(query);
 		return updatedRows == 1;
@@ -309,8 +314,9 @@ public class Datenbank {
 	/**
 	 * Diese Methode listet die Bezeichnung der Teile eines Rechners auf.
 	 * 
-	 * @param pSeriennummer Die Seriennummer des Rechners, dessen Teile aufgelistet
-	 *                      werden sollen.
+	 * @param pSeriennummer
+	 *            Die Seriennummer des Rechners, dessen Teile aufgelistet werden
+	 *            sollen.
 	 * @throws SQLException
 	 * 
 	 * @return Die Methode gibt eine Liste von Teilen aus, die für den jeweiligen
@@ -336,8 +342,9 @@ public class Datenbank {
 	 * Diese Methode prueft ob alle Teile des Rechners im Lager sind
 	 * (Serviceauftrag).
 	 * 
-	 * @param pSeriennummer Die Seriennummer des Rechners, dessen Lagerbestand
-	 *                      aufgerufen werden soll.
+	 * @param pSeriennummer
+	 *            Die Seriennummer des Rechners, dessen Lagerbestand aufgerufen
+	 *            werden soll.
 	 * @throws SQLException
 	 */
 	public int lagerbestandPruefen(int pSeriennummer) throws SQLException {
@@ -376,80 +383,100 @@ public class Datenbank {
 		}
 		return lagerbestand;
 	}
-	public String authenticateUser(String username, String passwort) {
 
-		//String passwort = String.valueOf(passwortInt);
-		Connection con = null;
-		Statement statement = null;
-		ResultSet resultSet = null;
+	public String authenticateUser(String username, String passwort) throws SQLException {
 
-		String userNameDB = "";
-		String passwordDB = "";
+		// String passwort = String.valueOf(passwortInt);
 
-		try {
-			Statement stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT Name,idPersonalnummer FROM Mitarbeiter");
+		int userNameDB = 0; // username = idPersonalnummer
+		String passwordDB = null; // passwort = Name
+		
+		int usernameEingabe = Integer.parseInt(username);
+		
+		System.out.println(username);
+		System.out.println(passwort);
+		
+		Statement stmt = connection.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT Name, idPersonalnummer FROM Mitarbeiter");
 
-			while (rs.next()) {
-				userNameDB = resultSet.getString("idPersonalnummer");
-				passwordDB = resultSet.getString("Name");
-
-				if (username.equals(userNameDB) && passwort.equals(passwordDB)) {
-					return "SUCCESS";
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+		while (rs.next()) {
+			userNameDB = rs.getInt("idPersonalnummer");
+			passwordDB = rs.getString("Name");
 		}
-		return "Invalid user credentials";
+		
+		if (userNameDB == usernameEingabe && passwordDB.equals(passwort)) {
+			return "SUCCESS";
+		} else {
+			return "Invalid user credentials";
+		}
 	}
+	
+	// username = idPersonalnummer, passwort = name
+	public Mitarbeiter authenticateUserNEU (String username, String password) throws SQLException {
+		Statement stmt = connection.createStatement();
+		int usernameZahl = Integer.parseInt(username);
+		Mitarbeiter userVergleich = null;
+		String query = "SELECT Name, idPersonalnummer FROM Mitarbeiter WHERE Name = '"+password+"' AND idPersonalnummer = '"+usernameZahl+"'";
+		ResultSet rs = stmt.executeQuery(query);
+		
+		// nach elegenateren Loesung gucken, wenn zeit
+		int i = 0;		
+		while(rs.next()) {
+			i++;
+			userVergleich = new Mitarbeiter(rs.getInt("idPersonalnummer"), rs.getString("Name"));
+		}
+		if(i == 0) {
+			userVergleich = null;
+		}
+		return userVergleich;
+	}
+	
+
 	/**
 	 * 
 	 * Die Methode berechnet die Anzahl aller Monteure.
+	 * 
 	 * @return Die Anzahl der Monteure
 	 * @throws SQLException
 	 */
-	public int Monteurezaehlen() throws SQLException
-	{
+	public int Monteurezaehlen() throws SQLException {
 		Statement stmt = connection.createStatement();
 		ResultSet rs = stmt.executeQuery("SELECT idPersonalnummer FROM Mitarbeiter");
 		ArrayList<Integer> monteure = new ArrayList<Integer>();
-		
-		while(rs.next())
-		{
+
+		while (rs.next()) {
 			monteure.add(rs.getInt("idPersonalnummer"));
 		}
 		return monteure.size();
 	}
+
 	/**
 	 * Die Methode berechnet die Anzahl der zu verteilenden Rechner
+	 * 
 	 * @return Die Anzahl der Rechner
 	 * @throws SQLException
 	 */
-	public int Rechnerzaehlen() throws SQLException
-	{
+	public int Rechnerzaehlen() throws SQLException {
 		Statement stmt = connection.createStatement();
 		ResultSet rs = stmt.executeQuery("SELECT idSeriennummer FROM Rechner");
 		ArrayList<Integer> rechner = new ArrayList<Integer>();
-		
-		while(rs.next())
-		{
+
+		while (rs.next()) {
 			rechner.add(rs.getInt("idSeriennummer"));
 		}
 		return rechner.size();
 	}
-	
-	//Ist noch nicht dynamisch!
+
+	// Ist noch nicht dynamisch!
 	Monteur monteur1;
 	Monteur monteur2;
 	Monteur monteur3;
 	Monteur monteur4;
 	Monteur monteur5;
-	
-	public void monteureBefuellen() throws SQLException
-	{
+
+	public void monteureBefuellen() throws SQLException {
 		Statement stmt = connection.createStatement();
 		ResultSet rs = stmt.executeQuery("SELECT idPersonalnummer, Name, Vorname, Krankheitstage");
-		
+
 	}
 }

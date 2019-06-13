@@ -6,38 +6,29 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import javax.swing.JOptionPane;
 import application.Datenbank_Gabby;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.PieChart.Data;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
-import javafx.util.Callback;
 import models.Auftragsverteilung;
 
 public class RechneransichtController implements Initializable {
@@ -73,16 +64,6 @@ public class RechneransichtController implements Initializable {
 	private ComboBox<String> comboBox_RW_Wochenansicht;
 	@FXML
 	private TableView<Auftragsverteilung[]> tableRechnerWoche;
-	@FXML
-	private TableColumn<Auftragsverteilung, Integer> col_RW_Montag;
-	@FXML
-	private TableColumn<Auftragsverteilung, Integer> col_RW_Dienstag;
-	@FXML
-	private TableColumn<Auftragsverteilung, Integer> col_RW_Mittwoch;
-	@FXML
-	private TableColumn<Auftragsverteilung, Integer> col_RW_Donnerstag;
-	@FXML
-	private TableColumn<Auftragsverteilung, Integer> col_RW_Freitag;
 
 	private Datenbank_Gabby db = new Datenbank_Gabby();
 
@@ -90,12 +71,11 @@ public class RechneransichtController implements Initializable {
 	private ObservableList<String> options = FXCollections.observableArrayList();
 	private List<Date> bearbeitungsdatum = new ArrayList<>();
 	private List<String> wochen = new ArrayList<>();
-	
-	private SimpleDateFormat simpleDateformat = new SimpleDateFormat("EEEE"); // gibt Wochentag aus (Montag etc)
+
 	private SimpleDateFormat sdf = new SimpleDateFormat("y-MM-dd"); // 2019-03-06
 
 	public static int seriennrAktuell;
-	
+
 	ObservableList<Auftragsverteilung[]> rechnerWochenansichtTabelle = FXCollections.observableArrayList();
 	ObservableList<Auftragsverteilung> rechnerListenansichtTabelle = FXCollections.observableArrayList();
 
@@ -103,21 +83,22 @@ public class RechneransichtController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 
 		db.openConnection();
-		
-		// Liste mit allen Bearbeitungsdaten aus der Datenbank (Auftragsverteilung) 
+
+		// Holt alle Bearbeitungsdaten aus der Datenbank zur dynamischen Befuellung der ComboBox
 		try {
 			bearbeitungsdatum.addAll(db.getRechnerBearbeitungsdatum());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		for (int i = 0; i < bearbeitungsdatum.size(); i ++) {
+
+		// Wochen fuer die ComboBox ermitteln anhand der Bearbeitungsdaten aus der Datenbank
+		for (int i = 0; i < bearbeitungsdatum.size(); i++) {
 			Date date = bearbeitungsdatum.get(i);
 			int kw = getWeekNumberFromDate(date);
 			Date montag = getMondayFromWeekNumber(2019, kw);
 			Date freitag = getFridayFromWeekNumber(2019, kw);
 			String woche = sdf.format(montag) + "-" + sdf.format(freitag);
-			
+
 			if (wochen.contains(woche) == false) {
 				wochen.add(woche);
 			}
@@ -127,25 +108,22 @@ public class RechneransichtController implements Initializable {
 		options.addAll(wochen);
 		comboBox_RW_Wochenansicht.setItems(options.sorted());
 		
-		// ASDASDLKASJDKAJSKDJALKSDJLKASJDLKAJSDKLJALSK //
-		
-	   final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE", Locale.GERMAN);
+		// Spalten für die Wochenansicht 
+		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE", Locale.GERMAN);
 
-	    for (int i = 1; i <= 5; i++) {
-	        final int dayIndex = i-1;
-	        DayOfWeek day = DayOfWeek.of(i);
-	        TableColumn<Auftragsverteilung[], Integer> column = new TableColumn<>(formatter.format(day));
-	        column.setCellValueFactory(cd -> {
-	            Auftragsverteilung auftrag = cd.getValue()[dayIndex];
-	            return new SimpleObjectProperty<>(auftrag == null ? null : auftrag.getSeriennr());
-	            
-	        });
-	       
-	        tableRechnerWoche.getColumns().add(column);
-	        
-	    }
+		for (int i = 1; i <= 5; i++) {
+			final int dayIndex = i - 1;
+			DayOfWeek day = DayOfWeek.of(i);
+			TableColumn<Auftragsverteilung[], Integer> column = new TableColumn<>(formatter.format(day));
+			column.setCellValueFactory(cd -> {
+				Auftragsverteilung auftrag = cd.getValue()[dayIndex];
+				return new SimpleObjectProperty<>(auftrag == null ? null : auftrag.getSeriennr());
+			});
 
-	    tableRechnerWoche.setItems(rechnerWochenansichtTabelle);		
+			tableRechnerWoche.getColumns().add(column);
+		}
+
+		tableRechnerWoche.setItems(rechnerWochenansichtTabelle);
 
 		// Wochen- und Listenansicht Inhalte
 		wochenansichtFuellen();
@@ -155,38 +133,33 @@ public class RechneransichtController implements Initializable {
 
 	// Wochenansicht: Tabelle befüllen
 	public void wochenansichtFuellen() {
-		
+
 		// ComboBox Listener
-		
-	    comboBox_RW_Wochenansicht.valueProperty().addListener((o, oldValue, newValue) -> {
-	        rechnerWochenansichtTabelle.clear();
+		comboBox_RW_Wochenansicht.valueProperty().addListener((o, oldValue, newValue) -> {
+			rechnerWochenansichtTabelle.clear();
 
-	        // String split, first date = monday, last date = friday
-	        String startdatum = newValue.substring(0, 10);
-	        String enddatum = newValue.substring(11, 21);
+			// String split, first date = monday, last date = friday
+			String startdatum = newValue.substring(0, 10);
+			String enddatum = newValue.substring(11, 21);
 
-	        // 
-	        try {
-	            // depending on the return type and order of the elements
-	            // rechnerWochenansichtTabelle.add(db.getRechnerAusAuftragsverteilungWoche(startdatum, enddatum));
-	            // may be sufficient instead of the following code
+			// Befuellen der Wochenansicht Tabelle mit den verteilten Auftraegen aus der Datenbank
+			try {
+				Auftragsverteilung[][] row = new Auftragsverteilung[99][DayOfWeek.FRIDAY.getValue()];
+				for (Auftragsverteilung auftrag : db.getRechnerAusAuftragsverteilungWoche(startdatum, enddatum)) {
+					LocalDate date = auftrag.getBearbeitungsdatum();
+					int i = 0;
+					while (row[i][date.getDayOfWeek().getValue() - 1] != null) {
+						i++;
+					}
+					row[i][date.getDayOfWeek().getValue() - 1] = auftrag;
+				}
+				rechnerWochenansichtTabelle.addAll(row);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		});
 
-	            // store each Auftragsverteilung in array with index corresponding to the day of week of the bearbeitungsdatum
-	        	
-	        	Auftragsverteilung[] row = new Auftragsverteilung[DayOfWeek.FRIDAY.getValue()];
-	            for (Auftragsverteilung auftrag : db.getRechnerAusAuftragsverteilungWoche(startdatum, enddatum)) {
-	                LocalDate date = auftrag.getBearbeitungsdatum();
-	                row[date.getDayOfWeek().getValue() - 1] = auftrag;
-	            }
-
-	            rechnerWochenansichtTabelle.addAll(row);
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    });
-		
 	}
-
 
 	// Listenansicht: Tabelle befüllen
 	public void listenansichtFuellen() {
@@ -208,9 +181,9 @@ public class RechneransichtController implements Initializable {
 	public void clickRechnerWoche(MouseEvent e) {
 
 		if (e.getClickCount() == 2) {
-			
+
 			seriennrAktuell = tableRechnerListe.getSelectionModel().getSelectedItem().getSeriennr();
-			
+
 			try {
 				int idAuftragsart = db.getRechnerAuftragsart(seriennrAktuell);
 				if (idAuftragsart == 502) {
@@ -248,29 +221,29 @@ public class RechneransichtController implements Initializable {
 
 		}
 	}
-	
+
 	// ComboBox: Kalenderwoche holen
 	public static int getWeekNumberFromDate(Date date) {
-	    Calendar cal = Calendar.getInstance();
-	    cal.setTime(date);
-	    return cal.get(Calendar.WEEK_OF_YEAR);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		return cal.get(Calendar.WEEK_OF_YEAR);
 	}
-	
+
 	// ComboBox: Montag der Kalenderwoche holen
 	public static Date getMondayFromWeekNumber(int year, int weekNumber) {
-	    Calendar cal = Calendar.getInstance();
-	    cal.set(Calendar.YEAR, year);
-	    cal.set(Calendar.WEEK_OF_YEAR, weekNumber);
-	    cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-	    return cal.getTime();
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.WEEK_OF_YEAR, weekNumber);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+		return cal.getTime();
 	}
-	
-	// ComboBox: Freitag der Kalenderwoche holen	
+
+	// ComboBox: Freitag der Kalenderwoche holen
 	public static Date getFridayFromWeekNumber(int year, int weekNumber) {
-	    Calendar cal = Calendar.getInstance();
-	    cal.set(Calendar.YEAR, year);
-	    cal.set(Calendar.WEEK_OF_YEAR, weekNumber);
-	    cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-	    return cal.getTime();
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.WEEK_OF_YEAR, weekNumber);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+		return cal.getTime();
 	}
 }

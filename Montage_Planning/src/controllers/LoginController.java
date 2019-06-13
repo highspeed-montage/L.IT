@@ -2,6 +2,7 @@ package controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import application.Datenbank;
@@ -34,57 +35,45 @@ public class LoginController implements EventHandler, Initializable {
 	private String password;
 
 	public static Mitarbeiter user;
-	
+
 	public static Datenbank db = new Datenbank();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+		db.openConnection();
 	}
-	
+
 	public void Login(Event event) throws IOException {
 
-		/*
-		 * @Hendrik: wenn die Daten bei der Anmeldung richtig eingegeben werden, werden
-		 * die Attribute vom Objekt Mitarbeiter user gesetzt Konstruktor:
-		 * Mitarbeiter(int personalnr, String name) --> das ist unser Login-Objekt
-		 * 
-		 */
-		
-		// in der fxml-Datei hat die fx:id gefehlt, deswegen war das Textfeld in der fxml nicht mit dem Textfeld im Controller verbunden
+		// in der fxml-Datei hat die fx:id gefehlt, deswegen war das Textfeld in der
+		// fxml nicht mit dem Textfeld im Controller verbunden
 		username = txtUsername.getText();
 		password = txtPassword.getText();
-	
-		validate(username, password);
-	
-		int intUsername = Integer.parseInt(username);
-		String userValidate = db.authenticateUser(username, password);
 
-		if (userValidate.equals("SUCCESS")) {
-			user = new Mitarbeiter(intUsername, password);
+		validate(username, password);
+
+		Mitarbeiter userVergleich = null;
+
+		try {
+			userVergleich = db.authenticateUserNEU(username, password);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("User nicht gefunden");
+		}
+		
+		if(userVergleich == null) {
+			lblStatus.setText("Eingabe ist inkorrekt, bitte wiederholen Sie!");
+		} else {
+			user = new Mitarbeiter(Integer.parseInt(username), password);
 			lblStatus.setText("Anmelden erfolgreich");
 			btnAnmelden.setText("Wird durchgefuehrt");
-			new FolgeFenster("/views/Auftragsansicht.fxml");
-		} else {
-			lblStatus.setText("Eingabe sind inkorrekt bitte wiederholen Sie!");
-
+			new FolgeFenster("/views/Rechneransicht.fxml"); // --> prüfen welcher Mitarbeiter (ob Monteuer oder Abteilungsleiter)	
 		}
 	}
 
-//			System.out.println("1");
-//		if(txtUsername.getText().equals("") && txtPassword.getText().equals("a")) {
-//			System.out.println("2");
-//			lblStatus.setText("Great Success");
-//			btnAnmelden.setText("Wird durchgefuehrt");
-//			new FolgeFenster("/views/Auftragsansicht.fxml");
-//		} else {
-//			lblStatus.setText("RIP");
-//			btnAnmelden.setText("hier geht gar nix");
-//		}
-//	}
-	
-	
-	// @Hendrik: Strings kann man nicht mit dem Operator == vergleichen, sondern nur mit .equals()
+
+	// @Hendrik: Strings kann man nicht mit dem Operator == vergleichen, sondern nur
+	// mit .equals()  --> hier muss noch abgefragt werden, ob die eingabe username zahlen sind
 	public void validate(String username, String password) {
 
 		if (username.equals("")) {
@@ -93,7 +82,7 @@ public class LoginController implements EventHandler, Initializable {
 		} else if (password.equals("")) {
 			lblStatus.setText("Password cannot be blank");
 
-		} 
+		}
 	}
 
 	@Override

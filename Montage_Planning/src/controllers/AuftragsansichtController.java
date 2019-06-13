@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-
 import application.Datenbank_Gabby;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -50,7 +49,7 @@ public class AuftragsansichtController implements Initializable {
 	@FXML private TableColumn<Auftrag, Integer> col_AL_Anzahl;
 	@FXML private TableColumn<Auftrag, Date> col_AL_Lieferdatum;
 	
-	private Datenbank db = new Datenbank();
+	private Datenbank_Gabby db = new Datenbank_Gabby();
 	
 	@FXML
 	public void filter() {
@@ -59,7 +58,6 @@ public class AuftragsansichtController implements Initializable {
 		//Wird eins angeklickt, dann entsprechends filtern
 	}
 	
-	private Datenbank_Gabby db = new Datenbank_Gabby();
 	
 	ObservableList<Auftrag> auftragListenansichtTabelle = FXCollections.observableArrayList();
 

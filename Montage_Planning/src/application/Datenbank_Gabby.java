@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import models.Auftrag;
 import models.Auftragsverteilung;
+import models.Rechner;
 
 public class Datenbank_Gabby {
 
@@ -19,7 +21,11 @@ public class Datenbank_Gabby {
 
 	private Connection connection;
 
-	// Datenbankverbindung herstellen
+	/**
+	 * Verbindung zur Datenbank
+	 * 
+	 * @return
+	 */
 	private Connection getConnection() {
 		Connection dbConnection = null;
 		try {
@@ -34,12 +40,16 @@ public class Datenbank_Gabby {
 		return dbConnection;
 	}
 
-	// Datenbankverbindung oeffnen
+	/**
+	 * Öffnen der Datenbankverbindung
+	 */
 	public void openConnection() {
 		this.connection = getConnection();
 	}
 
-	// Datenbankverbindung trennen
+	/**
+	 * Trennen der Datenbankverbindung
+	 */
 	public void closeConnection() {
 		try {
 			if (connection != null) {
@@ -49,8 +59,13 @@ public class Datenbank_Gabby {
 			System.out.println("Fehler beim Schließen der Datenbankverbindung.");
 		}
 	}
-	
-	/** Rechner - Listenansicht Daten fuer Tabelleninhalt */
+
+	/**
+	 * Holt alle Rechner aus der Auftragsverteilung
+	 * 
+	 * @return
+	 * @throws SQLException
+	 */
 	public List<Auftragsverteilung> getRechnerAusAuftragsverteilungListe(/* Mitarbeiter user */) throws SQLException {
 
 		List<Auftragsverteilung> tabelleninhalt = new ArrayList<>();
@@ -70,6 +85,14 @@ public class Datenbank_Gabby {
 		return tabelleninhalt;
 	}
 
+	/**
+	 * Holt alle Rechner aus der Auftragsverteilung für die Wochenansicht
+	 * 
+	 * @param startdatum
+	 * @param enddatum
+	 * @return
+	 * @throws SQLException
+	 */
 	public List<Auftragsverteilung> getRechnerAusAuftragsverteilungWoche(String startdatum,
 			String enddatum/* Mitarbeiter user, */ ) throws SQLException {
 
@@ -80,13 +103,19 @@ public class Datenbank_Gabby {
 		// + "WHERE Mitarbeiter_idPersonalnummer = '"+user.benutzername+"'";
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
-			tabelleninhalt.add(new Auftragsverteilung(rs.getInt("Rechner_seriennummer"), rs.getDate("Datum").toLocalDate()));
+			tabelleninhalt
+					.add(new Auftragsverteilung(rs.getInt("Rechner_seriennummer"), rs.getDate("Datum").toLocalDate()));
 		}
 		return tabelleninhalt;
 	}
 
-	
-	/** Rechner Auftragsart holen */
+	/**
+	 * Holt die Auftragsart des Rechners
+	 * 
+	 * @param seriennr
+	 * @return
+	 * @throws SQLException
+	 */
 	public int getRechnerAuftragsart(int seriennr) throws SQLException {
 		int idAuftragsart = 0;
 		Statement stmt = connection.createStatement();
@@ -99,7 +128,13 @@ public class Datenbank_Gabby {
 		}
 		return idAuftragsart;
 	}
-	
+
+	/**
+	 * Holt alle Bearbeitungsdaten aus der Auftragsverteilung
+	 * 
+	 * @return
+	 * @throws SQLException
+	 */
 	public List<Date> getRechnerBearbeitungsdatum() throws SQLException {
 		List<Date> bearbeitungsdatum = new ArrayList<>();
 		Statement stmt = connection.createStatement();
@@ -109,5 +144,32 @@ public class Datenbank_Gabby {
 			bearbeitungsdatum.add(rs.getDate("Datum"));
 		}
 		return bearbeitungsdatum;
+	}
+
+	public List<Auftrag> getAuftrag () throws SQLException {
+		List<Auftrag> auftraege = new ArrayList<>();
+		Statement stmt = connection.createStatement();
+		
+//		Status fehlt in der Datenbank
+		String query = "SELECT idAuftragsnummer, Lieferdatum, FROM Auftrag";
+		ResultSet rs = stmt.executeQuery(query);
+		while (rs.next()) {
+		auftraege.add(new Auftrag(rs.getInt("Auftrag.idAuftragsnummer"), rs.getDate("Auftrag.Lieferdatum")));
+		}
+		
+		
+		return auftraege;		
+	}
+	
+	public List<Rechner> getRechnerZuAuftrag (int auftragsnummer) throws SQLException {
+		List<Rechner> rechner = new ArrayList<>();
+		Statement stmt = connection.createStatement();
+		String query = "SELECT idSeriennummer FROM Rechner "
+				+ "WHERE Rechner.Auftrag_idAuftragsnummer = '"+auftragsnummer+"'";
+		ResultSet rs = stmt.executeQuery(query);
+		while (rs.next()) {
+			rechner.add(new Rechner(rs.getInt("idSeriennummer")));
+		}
+		return rechner;
 	}
 }

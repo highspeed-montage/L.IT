@@ -74,4 +74,12 @@ public class Mitarbeiter {
 	{
 		return vollzeit;
 	}
+
+	@Override
+	public String toString() {
+		return "Mitarbeiter [personalnr=" + personalnr + ", name=" + name + ", vorname=" + vorname + ", urlaubstage="
+				+ urlaubstage + ", krankheitstage=" + krankheitstage + ", vollzeit=" + vollzeit + "]";
+	}
+	
+	
 }
