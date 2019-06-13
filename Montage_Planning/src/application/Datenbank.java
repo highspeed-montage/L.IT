@@ -438,4 +438,18 @@ public class Datenbank {
 		}
 		return rechner.size();
 	}
+	
+	//Ist noch nicht dynamisch!
+	Monteur monteur1;
+	Monteur monteur2;
+	Monteur monteur3;
+	Monteur monteur4;
+	Monteur monteur5;
+	
+	public void monteureBefuellen() throws SQLException
+	{
+		Statement stmt = connection.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT idPersonalnummer, Name, Vorname, Krankheitstage");
+		
+	}
 }

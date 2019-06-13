@@ -50,6 +50,8 @@ public class AuftragsansichtController implements Initializable {
 	@FXML private TableColumn<Auftrag, Integer> col_AL_Anzahl;
 	@FXML private TableColumn<Auftrag, Date> col_AL_Lieferdatum;
 	
+	private Datenbank db = new Datenbank();
+	
 	@FXML
 	public void filter() {
 		//Liste mit Filtern (erstellen oder laden)

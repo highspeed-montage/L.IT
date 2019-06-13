@@ -6,13 +6,15 @@ public class Mitarbeiter {
 	private String vorname;
 	private double urlaubstage;
 	private int krankheitstage;
+	private boolean vollzeit;
 
-	public Mitarbeiter(int pPersonalnr, String pName, String pVorname, double pUrlaubstage, int pKrankheitstage) {
+	public Mitarbeiter(int pPersonalnr, String pName, String pVorname, double pUrlaubstage, int pKrankheitstage, boolean pVollzeit) {
 		personalnr = pPersonalnr;
 		name = pName;
 		vorname = pVorname;
 		urlaubstage = pUrlaubstage;
 		krankheitstage = pKrankheitstage;
+		vollzeit = pVollzeit;
 	}
 
 	public Mitarbeiter(int personalnr, String name) {
@@ -44,6 +46,10 @@ public class Mitarbeiter {
 	public void setKrankheitstage(int pKrankheitstage) {
 		krankheitstage = pKrankheitstage;
 	}
+	public void setVollzeit(boolean pVollzeit)
+	{
+		vollzeit = pVollzeit;
+	}
 
 	public int getPerosnalnr() {
 		return personalnr;
@@ -63,5 +69,9 @@ public class Mitarbeiter {
 
 	public int getKrankheitstage() {
 		return krankheitstage;
+	}
+	public boolean getVollzeit()
+	{
+		return vollzeit;
 	}
 }
