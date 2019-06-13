@@ -1,15 +1,16 @@
 package models;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Auftragsverteilung {
 
-	private Date bearbeitungsdatum;
+	private LocalDate bearbeitungsdatum;
 	private Date lieferdatum;
 	private Integer seriennr;
 	private String status;
 
-	public Auftragsverteilung(Date bearbeitungsdatum, Date lieferdatum, Integer seriennr, String status) {
+	public Auftragsverteilung(LocalDate bearbeitungsdatum, Date lieferdatum, Integer seriennr, String status) {
 		super();
 		this.bearbeitungsdatum = bearbeitungsdatum;
 		this.lieferdatum = lieferdatum;
@@ -18,7 +19,7 @@ public class Auftragsverteilung {
 	}
 
 	// Konstruktor für Datenbankabfrage listRechnerAusAuftragsverteilungWoche()
-	public Auftragsverteilung(Integer seriennr, Date bearbeitungsdatum) {
+	public Auftragsverteilung(Integer seriennr, LocalDate bearbeitungsdatum) {
 		super();
 		this.seriennr = seriennr;
 		this.bearbeitungsdatum = bearbeitungsdatum;
@@ -30,11 +31,11 @@ public class Auftragsverteilung {
 				+ ", seriennr=" + seriennr + ", status=" + status + "]";
 	}
 
-	public Date getBearbeitungsdatum() {
+	public LocalDate getBearbeitungsdatum() {
 		return bearbeitungsdatum;
 	}
 
-	public void setBearbeitungsdatum(Date bearbeitungsdatum) {
+	public void setBearbeitungsdatum(LocalDate bearbeitungsdatum) {
 		this.bearbeitungsdatum = bearbeitungsdatum;
 	}
 

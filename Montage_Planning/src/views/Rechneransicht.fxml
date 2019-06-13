@@ -37,13 +37,6 @@
                            </top>
                            <center>
                               <TableView fx:id="tableRechnerWoche" onMouseClicked="#clickRechnerWoche" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                                <columns>
-                                  <TableColumn fx:id="col_RW_Montag" prefWidth="109.0" text="Montag" />
-                                    <TableColumn fx:id="col_RW_Dienstag" prefWidth="108.0" text="Dienstag" />
-                                    <TableColumn fx:id="col_RW_Mittwoch" prefWidth="125.0" text="Mittwoch" />
-                                    <TableColumn fx:id="col_RW_Donnerstag" prefWidth="109.0" text="Donnerstag" />
-                                    <TableColumn fx:id="col_RW_Freitag" prefWidth="148.0" text="Freitag" />
-                                </columns>
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>

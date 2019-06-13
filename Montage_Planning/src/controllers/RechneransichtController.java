@@ -4,15 +4,20 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.swing.JOptionPane;
 import application.Datenbank_Gabby;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -67,7 +72,7 @@ public class RechneransichtController implements Initializable {
 	@FXML
 	private ComboBox<String> comboBox_RW_Wochenansicht;
 	@FXML
-	private TableView<Auftragsverteilung> tableRechnerWoche;
+	private TableView<Auftragsverteilung[]> tableRechnerWoche;
 	@FXML
 	private TableColumn<Auftragsverteilung, Integer> col_RW_Montag;
 	@FXML
@@ -91,7 +96,7 @@ public class RechneransichtController implements Initializable {
 
 	public static int seriennrAktuell;
 	
-	ObservableList<Auftragsverteilung> rechnerWochenansichtTabelle = FXCollections.observableArrayList();
+	ObservableList<Auftragsverteilung[]> rechnerWochenansichtTabelle = FXCollections.observableArrayList();
 	ObservableList<Auftragsverteilung> rechnerListenansichtTabelle = FXCollections.observableArrayList();
 
 	@Override
@@ -121,6 +126,26 @@ public class RechneransichtController implements Initializable {
 		// ComboBox befüllen
 		options.addAll(wochen);
 		comboBox_RW_Wochenansicht.setItems(options.sorted());
+		
+		// ASDASDLKASJDKAJSKDJALKSDJLKASJDLKAJSDKLJALSK //
+		
+	   final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE", Locale.GERMAN);
+
+	    for (int i = 1; i <= 5; i++) {
+	        final int dayIndex = i-1;
+	        DayOfWeek day = DayOfWeek.of(i);
+	        TableColumn<Auftragsverteilung[], Integer> column = new TableColumn<>(formatter.format(day));
+	        column.setCellValueFactory(cd -> {
+	            Auftragsverteilung auftrag = cd.getValue()[dayIndex];
+	            return new SimpleObjectProperty<>(auftrag == null ? null : auftrag.getSeriennr());
+	            
+	        });
+	       
+	        tableRechnerWoche.getColumns().add(column);
+	        
+	    }
+
+	    tableRechnerWoche.setItems(rechnerWochenansichtTabelle);		
 
 		// Wochen- und Listenansicht Inhalte
 		wochenansichtFuellen();
@@ -132,63 +157,33 @@ public class RechneransichtController implements Initializable {
 	public void wochenansichtFuellen() {
 		
 		// ComboBox Listener
-		comboBox_RW_Wochenansicht.getSelectionModel().selectedItemProperty().addListener((options) -> {
-			tableRechnerWoche.getItems().clear();
-			String wochenAuswahl = comboBox_RW_Wochenansicht.getSelectionModel().selectedItemProperty().getValue(); // DD.MM.YYYY-DD.MM.YYYY
+		
+	    comboBox_RW_Wochenansicht.valueProperty().addListener((o, oldValue, newValue) -> {
+	        rechnerWochenansichtTabelle.clear();
 
-			// String split
-			String startdatum = wochenAuswahl.substring(0, 10);
-			String enddatum = wochenAuswahl.substring(11, 21);
-			
-			System.out.println(startdatum);
-			System.out.println(enddatum);
-			
-			try {
-				rechnerWochenansichtTabelle.addAll(db.getRechnerAusAuftragsverteilungWoche(startdatum, enddatum));
-			} catch (SQLException e) {
-				e.printStackTrace();
-//				JOptionPane.showMessageDialog(null, "Fehler", "Datenbankabfrage nicht möglich", 0);
-			}
+	        // String split, first date = monday, last date = friday
+	        String startdatum = newValue.substring(0, 10);
+	        String enddatum = newValue.substring(11, 21);
 
+	        // 
+	        try {
+	            // depending on the return type and order of the elements
+	            // rechnerWochenansichtTabelle.add(db.getRechnerAusAuftragsverteilungWoche(startdatum, enddatum));
+	            // may be sufficient instead of the following code
 
-			for (int i = 0; i < rechnerWochenansichtTabelle.size(); i++) {
-				
-				Date d = rechnerWochenansichtTabelle.get(i).getBearbeitungsdatum();
-				Integer seriennr = rechnerWochenansichtTabelle.get(i).getSeriennr(); // SERIENNUMER DIE REIN MUSS
-				
-				//System.out.println(simpleDateformat.format(d));
-			
-				
-				switch(simpleDateformat.format(d)) {
-				
-				case "Montag":
-					System.out.println("Montag: " + seriennr);
-					col_RW_Montag.setCellValueFactory(new PropertyValueFactory<>("seriennr"));
-					break;
-				case "Dienstag":
-					System.out.println("Dienstag: " + seriennr);
-					col_RW_Dienstag.setCellValueFactory(new PropertyValueFactory<>("seriennr"));
-					break;
-				case "Mittwoch":
-					System.out.println("Mittwoch: " + seriennr);
-					col_RW_Mittwoch.setCellValueFactory(new PropertyValueFactory<>("seriennr"));
-					break;
-				case "Donnerstag":
-					System.out.println("Donnerstag: " + seriennr);
-					col_RW_Donnerstag.setCellValueFactory(new PropertyValueFactory<>("seriennr"));
-					break;
-				case "Freitag":
-					System.out.println("Freitag: " + seriennr);
-					col_RW_Freitag.setCellValueFactory(new PropertyValueFactory<>("seriennr"));
-					break;
-				default:
-					System.out.println("Kein Tag angegeben");
-					break;			
-				}
-				
-			}
-			tableRechnerWoche.setItems(rechnerWochenansichtTabelle);
-		});
+	            // store each Auftragsverteilung in array with index corresponding to the day of week of the bearbeitungsdatum
+	        	
+	        	Auftragsverteilung[] row = new Auftragsverteilung[DayOfWeek.FRIDAY.getValue()];
+	            for (Auftragsverteilung auftrag : db.getRechnerAusAuftragsverteilungWoche(startdatum, enddatum)) {
+	                LocalDate date = auftrag.getBearbeitungsdatum();
+	                row[date.getDayOfWeek().getValue() - 1] = auftrag;
+	            }
+
+	            rechnerWochenansichtTabelle.addAll(row);
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    });
 		
 	}
 
@@ -213,7 +208,8 @@ public class RechneransichtController implements Initializable {
 	public void clickRechnerWoche(MouseEvent e) {
 
 		if (e.getClickCount() == 2) {
-			seriennrAktuell = tableRechnerWoche.getSelectionModel().getSelectedItem().getSeriennr();
+			
+			seriennrAktuell = tableRechnerListe.getSelectionModel().getSelectedItem().getSeriennr();
 			
 			try {
 				int idAuftragsart = db.getRechnerAuftragsart(seriennrAktuell);

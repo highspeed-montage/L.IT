@@ -63,7 +63,7 @@ public class Datenbank_Gabby {
 		// '"+user.benutzername+"'";
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
-			tabelleninhalt.add(new Auftragsverteilung(rs.getDate("Auftragsverteilung.Datum"),
+			tabelleninhalt.add(new Auftragsverteilung(rs.getDate("Auftragsverteilung.Datum").toLocalDate(),
 					rs.getDate("Auftragsverteilung.Datum"), rs.getInt("Auftragsverteilung.Rechner_seriennummer"),
 					rs.getString("Status.Bezeichnung")));
 		}
@@ -80,7 +80,7 @@ public class Datenbank_Gabby {
 		// + "WHERE Mitarbeiter_idPersonalnummer = '"+user.benutzername+"'";
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
-			tabelleninhalt.add(new Auftragsverteilung(rs.getInt("Rechner_seriennummer"), rs.getDate("Datum")));
+			tabelleninhalt.add(new Auftragsverteilung(rs.getInt("Rechner_seriennummer"), rs.getDate("Datum").toLocalDate()));
 		}
 		return tabelleninhalt;
 	}
