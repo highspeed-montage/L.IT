@@ -1,7 +1,7 @@
 package models;
-
-public class Vollzeit_MA extends Monteur{
-	private static final int arbeitszeit = 8;
+// Kann geloescht werden, da die Art der Beschaeftigung bei der Auftragsverteilung nicht beruecksichtigt wird. 
+public class Vollzeit_MA extends Monteur {
+	private static final int ARBEITSZEIT = 8;
 	
 	public Vollzeit_MA(int pPersonalnr, String pName, String pVorname, double pUrlaubstage, int pKrankheitstage)
 	{
@@ -9,6 +9,6 @@ public class Vollzeit_MA extends Monteur{
 	}
 	public int getArbeitszeit()
 	{
-		return arbeitszeit;
+		return ARBEITSZEIT;
 	}
 }

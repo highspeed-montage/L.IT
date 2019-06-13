@@ -1,5 +1,5 @@
 package models;
-
+// kann geloescht werden, da die Art der Beschaeftigung bei der Auftragsverteilung nicht beruecksichtigt wird. 
 public class Teilzeit_MA extends Monteur {
 	private static final int ARBEITSZEIT = 4;
 	private boolean vormittags;

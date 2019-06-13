@@ -2,14 +2,22 @@ package application;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import com.mysql.cj.jdbc.result.ResultSetMetaData;
+//import com.mysql.cj.jdbc.result.ResultSetMetaData;
+//Ruth: Der obere Import funktioniert so bei mir nicht 
+import java.sql.ResultSetMetaData;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.RadioButton;
 import models.FA_Rechner;
+import models.Monteur;
 import models.SA_Rechner;
 import models.Teile;
 
@@ -196,10 +204,12 @@ public class Datenbank {
 
 		Statement stmt = connection.createStatement();
 
-//in queryinfo noch die ganzen Booleans... die boolean variablen fehlen noch in der DB
+
 		String queryInfo = "SELECT Auftragsverteilung.Rechner_seriennummer, Status.Bezeichnung, Auftrag.Lieferzeit, "
 				+ "Auftragsverteilung.Datum, Kunde.Firmenname, Kunde.idKundennummer, Kunde.Name, Kunde.EMail, "
-				+ "Rechner.Auftrag_idAuftragsnummer, Auftrag.Kunde_idKunde "
+				+ "Rechner.Auftrag_idAuftragsnummer, Auftrag.Kunde_idKunde, Rechner.kundenverschuldet,"
+				+ "Rechner.hardwareverschuldet, Rechner.softwareverschuldet, Rechner.prozessorKaputt, "
+				+ "Rechner.grafikkarteKaputt, Rechner.festplatteKaputt, Rechner.laufwerkKaputt   "
 				+ "FROM Auftragsverteilung, Status, Auftrag, Kunde, Rechner "
 				+ "WHERE Auftragsverteilung.Rechner_seriennummer = '" + pSeriennr + "' "
 				+ "AND Rechner.idSeriennummer = Auftragsverteilung.Rechner_seriennummer "
@@ -228,14 +238,15 @@ public class Datenbank {
 			} else {
 				pPrivatname = rsInfo.getString("Kunde.Name");
 			}
-			boolean pKundenverschuldet; //= rsInfo.getBoolean("")
-			boolean pHardwareverschuldet;
-			boolean pSoftwareverschuldet;
-			boolean pProzessor_kaputt;
-			boolean pGrafikkarte_kaputt;
-			boolean pFestplatte_kaputt;
-			boolean pDvd_Laufwerk_kaputt;
-			sr = new SA_Rechner(pSeriennr, pAuftragsNr, pStatus, pBearbeitungsdatum, pLieferdatum, pFirmenname, pPrivatname, pKundenId, pEMail, 
+			boolean pKundenverschuldet = rsInfo.getBoolean("Rechner.kundenverschuldet");
+			boolean pHardwareverschuldet = rsInfo.getBoolean("Rechner.hardwareverschuldet");
+			boolean pSoftwareverschuldet = rsInfo.getBoolean("Rechner.softwareverschuldet");
+			boolean pProzessor_kaputt = rsInfo.getBoolean("Rechner.prozessorKaputt");
+			boolean pGrafikkarte_kaputt = rsInfo.getBoolean("Rechner.grafikkarteKaputt");
+			boolean pFestplatte_kaputt = rsInfo.getBoolean("Rechner.festplatteKaputt");
+			boolean pDvd_Laufwerk_kaputt = rsInfo.getBoolean("Rechner.laufwerkKaputt");
+			
+			sr = new SA_Rechner(seriennr, pAuftragsNr, pStatus, pBearbeitungsdatum, pLieferdatum, pFirmenname, pPrivatname, pKundenId, pEMail, 
 								pKundenverschuldet, pHardwareverschuldet, pSoftwareverschuldet, pProzessor_kaputt,pGrafikkarte_kaputt, pFestplatte_kaputt, pDvd_Laufwerk_kaputt);
 
 			System.out.println(sr.toString());
@@ -245,13 +256,31 @@ public class Datenbank {
 	}
 
 	/**
+	 * Booleanvariablen der Problemdoku werden aktualisiert
+	 * 
+	 * @throws SQLException
+	 */
+	public boolean updateSA_Recher(SA_Rechner sr) throws SQLException {
+		Statement stmt = connection.createStatement();
+		String query = "UPDATE Rechner SET Rechner.kundenverschuldet= '" + sr.isKundenverschuldet() + "', "
+				+ "Rechner.hardwareverschuldet ='"+sr.isHardwareverschuldet()+"', Rechner.softwareverschuldet ='"+sr.isSoftwareverschuldet()+"', "
+				+ "Rechner.prozessorKaputt = '"+sr.isProzessor_kaputt()+"', Rechner.grafikkarteKaputt = '"+sr.isGrafikkarte_kaputt()+"', "
+				+ "Rechner.festplatteKaputt = '"+sr.isFestplatte_kaputt()+"' ,Rechner.laufwerkKaputt = '"+sr.isDvd_Laufwerk_kaputt()+"'"
+				+ "	WHERE Auftragsverteilung.Rechner_seriennummer = '" + sr.getSeriennr() + "'"
+				+ "AND Rechner.idSeriennummer = Auftragsverteilung.Rechner_seriennummer";
+
+		int updatedRows = stmt.executeUpdate(query);
+		return updatedRows == 1;
+	}
+
+	/**
 	 * Bearbeitungsstatus von FA_R/SA_R wird in db aktualisiert
 	 * 
 	 * @throws SQLException
 	 */
 	public boolean setRechnerStatus(int pSerienNr, String pStatus) throws SQLException {
 		Statement stmt = connection.createStatement();
-		String query = "UPDATE Status " + "		SET Bezeichnung = '" + pStatus + "' "
+		String query = "UPDATE Status SET Bezeichnung = '" + pStatus + "' "
 				+ "		WHERE Auftragsverteilung.Rechner_seriennummer = '" + pSerienNr + "'"
 				+ "AND Rechner.idSeriennummer = Auftragsverteilung.Rechner_seriennummer"
 				+ "AND Rechner.Status_idStatus = Status.idStatus";
@@ -285,7 +314,7 @@ public class Datenbank {
 	 * @throws SQLException
 	 * 
 	 * @return Die Methode gibt eine Liste von Teilen aus, die für den jeweiligen
-	 *         Auftrag benötigt werden.
+	 *         Auftrag benoetigt werden.
 	 */
 	public List<Teile> listTeileAuftrag(int pSeriennummer) throws SQLException {
 		List<Teile> teileAuflistung = new ArrayList<>();
@@ -304,7 +333,7 @@ public class Datenbank {
 	}
 
 	/**
-	 * Diese Methode prüft ob alle Teile des Rechners im Lager sind
+	 * Diese Methode prueft ob alle Teile des Rechners im Lager sind
 	 * (Serviceauftrag).
 	 * 
 	 * @param pSeriennummer Die Seriennummer des Rechners, dessen Lagerbestand
@@ -347,5 +376,66 @@ public class Datenbank {
 		}
 		return lagerbestand;
 	}
+	public String authenticateUser(String username, String passwort) {
 
+		//String passwort = String.valueOf(passwortInt);
+		Connection con = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
+
+		String userNameDB = "";
+		String passwordDB = "";
+
+		try {
+			Statement stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT Name,idPersonalnummer FROM Mitarbeiter");
+
+			while (rs.next()) {
+				userNameDB = resultSet.getString("idPersonalnummer");
+				passwordDB = resultSet.getString("Name");
+
+				if (username.equals(userNameDB) && passwort.equals(passwordDB)) {
+					return "SUCCESS";
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return "Invalid user credentials";
+	}
+	/**
+	 * 
+	 * Die Methode berechnet die Anzahl aller Monteure.
+	 * @return Die Anzahl der Monteure
+	 * @throws SQLException
+	 */
+	public int Monteurezaehlen() throws SQLException
+	{
+		Statement stmt = connection.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT idPersonalnummer FROM Mitarbeiter");
+		ArrayList<Integer> monteure = new ArrayList<Integer>();
+		
+		while(rs.next())
+		{
+			monteure.add(rs.getInt("idPersonalnummer"));
+		}
+		return monteure.size();
+	}
+	/**
+	 * Die Methode berechnet die Anzahl der zu verteilenden Rechner
+	 * @return Die Anzahl der Rechner
+	 * @throws SQLException
+	 */
+	public int Rechnerzaehlen() throws SQLException
+	{
+		Statement stmt = connection.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT idSeriennummer FROM Rechner");
+		ArrayList<Integer> rechner = new ArrayList<Integer>();
+		
+		while(rs.next())
+		{
+			rechner.add(rs.getInt("idSeriennummer"));
+		}
+		return rechner.size();
+	}
 }

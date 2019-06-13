@@ -6,11 +6,12 @@ public class Teile {
 	private int lagerbestand;
 	private String bezeichnung;
 	
-	public Teile(int pTeilenr, String pKategorie, int pLagerbestand)
+	public Teile(int pTeilenr, String pBezeichnung, String pKategorie, int pLagerbestand)
 	{
 		teilenr = pTeilenr;
 		kategorie = pKategorie; 
 		lagerbestand = pLagerbestand;
+		bezeichnung = pBezeichnung;
 	}
 	//Konstruktor fuer Db Abfrage getFARechnerInfo()
 	public Teile(String bezeichnung) {
@@ -21,9 +22,10 @@ public class Teile {
 	{
 		kategorie = pKategorie;
 	}
-	
-
-	//Lagerbestand berechnen?
+	public void setBezeichnung(String pBezeichnung)
+	{
+		bezeichnung = pBezeichnung;
+	}
 	public int getTeilenr()
 	{
 		return teilenr;
