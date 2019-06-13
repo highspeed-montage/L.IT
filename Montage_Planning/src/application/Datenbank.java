@@ -17,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
 import models.FA_Rechner;
+import models.Monteur;
 import models.SA_Rechner;
 import models.Teile;
 
@@ -313,7 +314,7 @@ public class Datenbank {
 	 * @throws SQLException
 	 * 
 	 * @return Die Methode gibt eine Liste von Teilen aus, die für den jeweiligen
-	 *         Auftrag benötigt werden.
+	 *         Auftrag benoetigt werden.
 	 */
 	public List<Teile> listTeileAuftrag(int pSeriennummer) throws SQLException {
 		List<Teile> teileAuflistung = new ArrayList<>();
@@ -332,7 +333,7 @@ public class Datenbank {
 	}
 
 	/**
-	 * Diese Methode prüft ob alle Teile des Rechners im Lager sind
+	 * Diese Methode prueft ob alle Teile des Rechners im Lager sind
 	 * (Serviceauftrag).
 	 * 
 	 * @param pSeriennummer Die Seriennummer des Rechners, dessen Lagerbestand
@@ -401,5 +402,40 @@ public class Datenbank {
 			e.printStackTrace();
 		}
 		return "Invalid user credentials";
+	}
+	/**
+	 * 
+	 * Die Methode berechnet die Anzahl aller Monteure.
+	 * @return Die Anzahl der Monteure
+	 * @throws SQLException
+	 */
+	public int Monteurezaehlen() throws SQLException
+	{
+		Statement stmt = connection.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT idPersonalnummer FROM Mitarbeiter");
+		ArrayList<Integer> monteure = new ArrayList<Integer>();
+		
+		while(rs.next())
+		{
+			monteure.add(rs.getInt("idPersonalnummer"));
+		}
+		return monteure.size();
+	}
+	/**
+	 * Die Methode berechnet die Anzahl der zu verteilenden Rechner
+	 * @return Die Anzahl der Rechner
+	 * @throws SQLException
+	 */
+	public int Rechnerzaehlen() throws SQLException
+	{
+		Statement stmt = connection.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT idSeriennummer FROM Rechner");
+		ArrayList<Integer> rechner = new ArrayList<Integer>();
+		
+		while(rs.next())
+		{
+			rechner.add(rs.getInt("idSeriennummer"));
+		}
+		return rechner.size();
 	}
 }
