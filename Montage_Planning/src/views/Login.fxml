@@ -21,7 +21,7 @@
          <children>
             <HBox alignment="CENTER" prefHeight="58.0" prefWidth="600.0">
                <children>
-                  <TextField promptText="Username">
+                  <TextField fx:id="txtUsername" promptText="Username">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -30,14 +30,14 @@
             </HBox>
             <HBox alignment="TOP_CENTER" prefHeight="37.0" prefWidth="600.0">
                <children>
-                  <PasswordField promptText="Password">
+                  <PasswordField fx:id="txtPassword" promptText="Password">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </PasswordField>
                </children>
             </HBox>
-            <Button fx:id="btnAnmelden" onAction="#Login" mnemonicParsing="false"  text="Anmelden">
+            <Button fx:id="btnAnmelden" mnemonicParsing="false" onAction="#Login" text="Anmelden">
                <font>
                   <Font size="14.0" />
                </font>

@@ -34,18 +34,14 @@ public class LoginController implements EventHandler, Initializable {
 	private String password;
 
 	public static Mitarbeiter user;
+	
+	public static Datenbank db = new Datenbank();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		lblMontage = new Label();
-		lblStatus = new Label();
-		txtUsername = new TextField();
-		txtPassword = new TextField();
-		btnAnmelden = new Button();
-
+		
 	}
-
-	 public static Datenbank db = new Datenbank();
+	
 	public void Login(Event event) throws IOException {
 
 		/*
@@ -54,12 +50,13 @@ public class LoginController implements EventHandler, Initializable {
 		 * Mitarbeiter(int personalnr, String name) --> das ist unser Login-Objekt
 		 * 
 		 */
-
+		
+		// in der fxml-Datei hat die fx:id gefehlt, deswegen war das Textfeld in der fxml nicht mit dem Textfeld im Controller verbunden
 		username = txtUsername.getText();
 		password = txtPassword.getText();
-		
+	
 		validate(username, password);
-		
+	
 		int intUsername = Integer.parseInt(username);
 		String userValidate = db.authenticateUser(username, password);
 
@@ -85,15 +82,18 @@ public class LoginController implements EventHandler, Initializable {
 //			btnAnmelden.setText("hier geht gar nix");
 //		}
 //	}
+	
+	
+	// @Hendrik: Strings kann man nicht mit dem Operator == vergleichen, sondern nur mit .equals()
 	public void validate(String username, String password) {
 
-		if (username == null || username == "") {
+		if (username.equals("")) {
 			lblStatus.setText("Username cannot be blank");
 
-		} else if (password == null || password == "") {
+		} else if (password.equals("")) {
 			lblStatus.setText("Password cannot be blank");
 
-		}
+		} 
 	}
 
 	@Override
