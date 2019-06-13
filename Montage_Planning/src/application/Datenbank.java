@@ -93,44 +93,6 @@ public class Datenbank {
 		return list;
 	}
 
-	// // Abfrage der Passwoerter
-	// public ArrayList Passwortabfrage() throws SQLException {
-	//
-	// Statement stmt = connection.createStatement();
-	// ResultSet rs = stmt.executeQuery("SELECT name FROM Mitarbeiter"); // Abfrage
-	// wie Mitarbeiter heissen
-	//
-	// ResultSetMetaData rsmd = rs.getMetaData(); // Groesse der Tabelle
-	// int columnCount = rsmd.getColumnCount(); //
-	// ArrayList<String> list = new ArrayList(columnCount); // Erstellt ArrayList
-	//
-	// while (rs.next()) {
-	// int i = 1;
-	// while (i <= columnCount) {
-	// list.add(rs.getString(i++));
-	// }
-	// }
-	// return list;
-	// }
-
-	/**
-	 * @deprecated nicht mehr benötigt, da Kunde in Datenbank.getFARechnerInfo
-	 *             geladen
-	 */
-	public String getKunde(int serienNummer) throws SQLException {
-		Statement stmt = connection.createStatement();
-		String query = "SELECT Kunde FROM Auftrag WHERE idAuftragsnummer = (SELECT Auftrag_idAuftragsnummer FROM Rechner_Teile WHERE Bezeichnung = '"
-				+ serienNummer + "')";
-		ResultSet rs = stmt.executeQuery(query);
-		String kunde = null;
-
-		while (rs.next()) {
-
-			kunde = rs.getString("kunde");
-		}
-		return kunde;
-	}
-
 	/**
 	 * holt info für FA_Rechner nach Seriennummer
 	 * 
@@ -291,24 +253,6 @@ public class Datenbank {
 				+ "AND Rechner.Status_idStatus = Status.idStatus";
 		int updatedRows = stmt.executeUpdate(query);
 		return updatedRows == 1;
-	}
-
-	/**
-	 * @deprecated nicht mehr verwendet, ET werden in DAtenbank.getFAREchnerInfo
-	 *             geladen
-	 */
-	public List<Teile> getRechnerEinzelteile(int serienNummer) throws SQLException {
-		List<Teile> rechnerEinzelteile = new ArrayList<>();
-		Statement stmt = connection.createStatement();
-		String query = "SELECT Teile.Bezeichnung, RechnerTeile.Rechner_idSeriennummer FROM Teile, RechnerTeile "
-				+ "WHERE RechnerTeile.Rechner_idSeriennummer = '" + serienNummer + "' "
-				+ "AND RechnerTeile.Teile_idTeilenummer = Teile.idTeilenummer";
-		ResultSet rs = stmt.executeQuery(query);
-
-		while (rs.next()) {
-
-			rechnerEinzelteile.add(new Teile(rs.getString("Teile.Bezeichnung")));
-		}
 	}
 
 	/**
