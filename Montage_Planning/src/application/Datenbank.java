@@ -9,7 +9,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import com.mysql.cj.jdbc.result.ResultSetMetaData;
+//import com.mysql.cj.jdbc.result.ResultSetMetaData;
+//Ruth: Der obere Import funktioniert so bei mir nicht 
+import java.sql.ResultSetMetaData;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
