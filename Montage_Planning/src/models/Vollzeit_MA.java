@@ -1,5 +1,5 @@
 package models;
-// Kann geloeschr werden, da die Art der Beschaeftigung bei der Auftragsverteilung nicht beruecksichtigt wird. 
+// Kann geloescht werden, da die Art der Beschaeftigung bei der Auftragsverteilung nicht beruecksichtigt wird. 
 public class Vollzeit_MA extends Monteur {
 	private static final int ARBEITSZEIT = 8;
 	
