@@ -3,80 +3,106 @@ package models;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
-public abstract class Auftrag {
+public class Auftrag {
 	private int auftragsnr;
 	private String status;
 	private Kunde kunde;
 	private boolean zugewiesen;
-	private ArrayList<Rechner> rechner;
+	private List<Rechner> rechner = new ArrayList<Rechner>();
+	private int anzahlRechner;
 	private double arbeitsaufwand;
 	private static final int lieferzeit = 14;
 	private Date lieferdatum;
-	
-	public Auftrag(int pAuftragsnr, String pStatus, Kunde pKunde, boolean pZugewiesen, Rechner... pRechner)
-	{
+
+	public Auftrag(int pAuftragsnr, String pStatus, Kunde pKunde, boolean pZugewiesen, List<Rechner> pRechner) {
 		auftragsnr = pAuftragsnr;
 		status = pStatus;
 		kunde = pKunde;
 		zugewiesen = pZugewiesen;
-		rechner = new ArrayList<Rechner>(Arrays.asList(pRechner));
+		rechner = pRechner;
+	}
+
+	public Auftrag(int auftragsnr, Date lieferdatum, int anzahlRechner) {
+		super();
+		this.auftragsnr = auftragsnr;
+		this.lieferdatum = lieferdatum;
+		this.anzahlRechner = anzahlRechner;
 	}
 	
-	
-	
-	public Auftrag( Date lieferdatum) {
+	public Auftrag(int auftragsnr, Date lieferdatum) {
+		super();
+		this.auftragsnr = auftragsnr;
 		this.lieferdatum = lieferdatum;
 	}
 
+	public Auftrag(Date lieferdatum) {
+		this.lieferdatum = lieferdatum;
+	}
 
-
-	public void setAngelegt()
-	{
+	public void setAngelegt() {
 		status = "angelegt";
 	}
-	public void disponieren()
-	{
+
+	public void disponieren() {
 		status = "disponiert";
 	}
-	public void inBearbeitung()
-	{
+
+	public void inBearbeitung() {
 		status = "in Bearbeitung";
 	}
-	public void erledigt()
-	{
+
+	public void erledigt() {
 		status = "erledigt";
 	}
-	public void imLager()
-	{
+
+	public void imLager() {
 		status = "im Lager";
 	}
-	public void setZugewiesen(boolean pZugewiesen)
-	{
+
+	public void setZugewiesen(boolean pZugewiesen) {
 		zugewiesen = pZugewiesen;
 	}
-	public int getAuftragsnr()
-	{
+
+	public int getAuftragsnr() {
 		return auftragsnr;
 	}
-	public String getStatus()
-	{
+
+	public String getStatus() {
 		return status;
 	}
-	public Kunde getKunde()
-	{
+
+	public Kunde getKunde() {
 		return kunde;
 	}
-	public boolean getZugewiesen()
-	{
+
+	public boolean getZugewiesen() {
 		return zugewiesen;
 	}
-	public double getArbeitsaufwand()
-	{
+
+	public double getArbeitsaufwand() {
 		return arbeitsaufwand;
 	}
-	public int getLieferzeit()
-	{
+
+	public int getLieferzeit() {
 		return lieferzeit;
 	}
-}	
+
+	public List<Rechner> getRechner() {
+		return rechner;
+	}
+
+	public void setRechner(List<Rechner> rechner) {
+		this.rechner = rechner;
+	}
+
+	public Date getLieferdatum() {
+		return lieferdatum;
+	}
+
+	public void setLieferdatum(Date lieferdatum) {
+		this.lieferdatum = lieferdatum;
+	}
+
+}

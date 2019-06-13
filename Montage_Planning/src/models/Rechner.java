@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public abstract class Rechner {
+public class Rechner {
 	private Integer seriennr;
 	private Auftrag auftrag;
 	private String status;
@@ -29,6 +29,15 @@ public abstract class Rechner {
 		// this.teile = new ArrayList<Teile>(Arrays.asList(pTeile));
 		teile = pTeile;
 	}
+
+	
+	// fuer Datenbank_Gabby Methode getRechnerZuAuftrag
+	public Rechner(Integer seriennr) {
+		super();
+		this.seriennr = seriennr;
+	}
+
+
 
 	// KOnstruktor fuer FA_REchner
 	public Rechner(int pSeriennr, int auftragsNr, String pStatus, Date pBearbeitungsdatum, Date pLieferdatum,
