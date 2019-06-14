@@ -23,6 +23,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import models.SA_Rechner;
@@ -156,6 +157,50 @@ public class SA_RechnerinfoController implements EventHandler, Initializable {
 			}
 
 		});
+
+	}
+
+	private void SA_RechnerInfo_fuellen() {
+		try {
+			sr = db.getSARechnerInfo(RechneransichtController.seriennrAktuell);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
+		lbl_SAI_Seriennummer.setText(String.valueOf(sr.getSeriennr()));
+
+		if (sr.getFirmenname() != null) {
+			lbl_SAI_kunde.setText(sr.getFirmenname());
+		} else {
+			lbl_SAI_kunde.setText(sr.getPrivatName());
+		}
+
+		lbl_SAI_bearbeitungsdatum.setText(String.valueOf(sr.getBearbeitungsdatum()));
+		lbl_SAI_kundenEMail.setText(sr.geteMail());
+		lbl_SAI_kundenNr.setText(String.valueOf(sr.getKundenId()));
+		lbl_SAI_lieferdatum.setText(String.valueOf(sr.getLieferdatum()));
+		lbl_SAI_status.setText(sr.getStatus());
+
+		if (sr.isHardwareverschuldet() == true) {
+			rbtn_SAI_Hardware.setSelected(true);
+			if (sr.isDvd_Laufwerk_kaputt() == true) {
+				cBox_SAI_Laufwerk.setSelected(true);
+			}
+			if (sr.isFestplatte_kaputt() == true) {
+				cBox_SAI__Festplatte.setSelected(true);
+			}
+			if (sr.isGrafikkarte_kaputt() == true) {
+				cBox_SAI_Grafikkarte.setSelected(true);
+			}
+			if (sr.isProzessor_kaputt() == true) {
+				cBox_SAI_Prozessor.setSelected(true);
+			}
+		} else if (sr.isSoftwareverschuldet() == true) {
+			rbtn_SAI_Software.setSelected(true);
+		} else if (sr.isKundenverschuldet() == true) {
+			rbtn_SAI_Kunde.setSelected(true);
+
+		}
 
 	}
 
