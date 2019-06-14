@@ -37,7 +37,20 @@ public class Monteur extends Mitarbeiter{
 	{
 		return anwesend;
 	}
-	
+	public void abwesenheit(Monteur e) 
+	{
+		  if (anwesend == false) 
+		  {
+		//   monteurHinzufuegen(e);
+		//   Methode muss noch implementiert werden, wenn Button vorhanden ist
+		//   abwesenheit.add(e);
+		   System.out.println(e.getName()+ " ist abwesend und wurde in die Liste der Abwesenden hinzugefügt.");
+		  } 
+		  else 
+		  {
+		   System.out.println(e.getName()+ " ist anwesend.");
+		  }
+	}
 	
 }
 

@@ -420,7 +420,9 @@ public class Datenbank {
 
 	public void monteureBefuellen() throws SQLException {
 		Statement stmt = connection.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT idPersonalnummer, Name, Vorname, Krankheitstage");
+		ResultSet rs = stmt.executeQuery("SELECT idPersonalnummer, Name, Vorname, Krankheitstage FROM Mitarbeiter"
+				+ "WHERE MitarbeiterVertragsart_idMitarbeiterVertragsart='301' "
+				+ "OR MitarbeiterVertragsart_idMitarbeiterVertragsart='302'");
 
 	}
 }

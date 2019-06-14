@@ -51,7 +51,7 @@ public class AuftragsansichtController implements Initializable {
 	@FXML private TableColumn<Auftrag, Date> col_AL_Lieferdatum;
 	
 	private Datenbank_Gabby db = new Datenbank_Gabby();
-	private ArrayList<Monteur> abwesenheit = new ArrayList<>();
+	ArrayList<Monteur> anwesenheit = new ArrayList<>();
 	
 	@FXML
 	public void filter() {
@@ -103,7 +103,8 @@ public class AuftragsansichtController implements Initializable {
 		tableAuftragListe.setItems(auftragListenansichtTabelle);
 		
 	}
-	public void Monteurhinzufuegen()
+	
+	public void monteurHinzufuegen()
 	{
 		
 	}
