@@ -6,11 +6,10 @@ public class Teile {
 	private int lagerbestand;
 	private String bezeichnung;
 	
-	public Teile(int pTeilenr, String pBezeichnung, String pKategorie, int pLagerbestand)
+	public Teile(int pTeilenr, String pBezeichnung, String pKategorie)
 	{
 		teilenr = pTeilenr;
-		kategorie = pKategorie; 
-		lagerbestand = pLagerbestand;
+		kategorie = pKategorie;
 		bezeichnung = pBezeichnung;
 	}
 	//Konstruktor fuer Db Abfrage getFARechnerInfo()

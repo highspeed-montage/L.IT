@@ -14,20 +14,20 @@ public class Rechner {
 	private boolean montiert;
 	private boolean installiert;
 	private boolean getestet;
-	private Integer auftragsNr;
+	private int auftragsNr;
 	private Date bearbeitungsdatum;
 	private Date lieferdatum;
 	private String firmenname;
 	private String privatName;
-	private Integer kundenId;
+	private int kundenId;
 	private String eMail;
 
-	public Rechner(int pSeriennr, Auftrag pAuftrag, String pStatus, List<Teile> pTeile) {
+	public Rechner(int pSeriennr, int pAuftragsnummer, String pStatus) {
 		setSeriennr(pSeriennr);
-		setAuftrag(pAuftrag);
+//		setAuftrag(pAuftrag);
+		auftragsNr = pAuftragsnummer;
 		status = pStatus;
 		// this.teile = new ArrayList<Teile>(Arrays.asList(pTeile));
-		teile = pTeile;
 	}
 
 	

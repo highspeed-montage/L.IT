@@ -1,6 +1,6 @@
 package models;
 
-public abstract class Kunde {
+public class Kunde {
 	private String eMail;
 	
 	public Kunde(String pEMail)

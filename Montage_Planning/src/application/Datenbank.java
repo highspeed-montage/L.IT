@@ -16,7 +16,9 @@ import java.sql.ResultSetMetaData;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
+import models.Auftrag;
 import models.FA_Rechner;
+import models.Kunde;
 import models.Mitarbeiter;
 import models.Monteur;
 import models.Rechner;
@@ -375,23 +377,6 @@ public class Datenbank {
 		}
 		return userVergleich;
 	}
-
-	/**
-	 * Die Methode berechnet die Anzahl der zu verteilenden Rechner
-	 * 
-	 * @return Die Anzahl der Rechner
-	 * @throws SQLException
-	 */
-	public int Rechnerzaehlen() throws SQLException {
-		Statement stmt = connection.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT idSeriennummer FROM Rechner");
-		ArrayList<Integer> rechner = new ArrayList<Integer>();
-
-		while (rs.next()) {
-			rechner.add(rs.getInt("idSeriennummer"));
-		}
-		return rechner.size();
-	}
 	
 	public static ArrayList<Monteur> monteure = new ArrayList<>();
 	/**
@@ -410,17 +395,25 @@ public class Datenbank {
 			i++;
 		}
 	}
-	public static ArrayList<FA_Rechner> rechner = new ArrayList<>();
-	
-	public void rechnerFABefuellen() throws SQLException {
+	public static ArrayList<Rechner> rechner = new ArrayList<>();
+	/**
+	 * Die Methode befuellt eine ArrayList mit allen Auftraegen aus der Datenbank
+	 * @throws SQLException
+	 */
+	public void rechnerBefuellen() throws SQLException {
 		Statement stmt = connection.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT idSeriennummer, Status.Bezeichnung, Teile.Bezeichung FROM Rechner, Status, Teile"
-				+ "WHERE Status.idStatus=Rechner.idStatus AND  "
-				+ "OR MitarbeiterVertragsart_idMitarbeiterVertragsart='302'");
+		ResultSet rs = stmt.executeQuery("SELECT idSeriennummer, Auftrag.idAuftragsnummer, Status.Bezeichnung "
+				+ "FROM Rechner, Status, Auftrag"
+				+ "WHERE Status.idStatus=Rechner.Status_idStatus AND Rechner.Auftrag_idAuftragsnummer=Auftrag.idAuftragsnummer");
+		ResultSet rs2 = stmt.executeQuery("SELECT idTeilenummer, Teile.Bezeichnung, Teilkategorie.Bezeichnung"
+				+ "FROM Teile, Teilkategorie, RechnerTeile, Rechner"
+				+ "WHERE Teile.Teilekategorie_idTeilekategorie=Teilkategorie.idTeilekategorie AND RechnerTeile.Teile_idTeilenummer=Teile.idTeilenummer"
+				+ "AND RechnerTeile.Rechner_idSeriennummer=Rechner.idSeriennummer");
 		int i=0;
 		while(rs.next())
 		{
-			monteure.add(new Monteur(rs.getInt("idPersonalnummer"), rs.getString("Name"), rs.getString("Vorname"), rs.getInt("Krankheitstage"))); 
+			ArrayList<Teile> teile = new ArrayList<>();
+			rechner.add(new Rechner(rs.getInt("idSeriennummer"), rs.getInt("idAuftragsnummer"), rs.getString("Status.Bezeichnung")));
 			i++;
 		}
 	}

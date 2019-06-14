@@ -20,8 +20,8 @@ public class SA_Rechner extends Rechner {
 	private boolean festplatte_kaputt;
 	private boolean dvd_Laufwerk_kaputt;
 
-	public SA_Rechner(int pSeriennr, Auftrag pAuftrag, String pStatus, List<Teile> pTeile) {
-		super(pSeriennr, pAuftrag, pStatus, pTeile);
+	public SA_Rechner(int pSeriennr, int pAuftragsnummer, String pStatus, List<Teile> pTeile) {
+		super(pSeriennr, pAuftragsnummer, pStatus, pTeile);
 	}
 
 	/** Konstruktor für DB-Interaktionen */
