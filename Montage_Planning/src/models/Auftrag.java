@@ -16,12 +16,11 @@ public class Auftrag {
 	private static final int lieferzeit = 14;
 	private Date lieferdatum;
 
-	public Auftrag(int pAuftragsnr, String pStatus, Kunde pKunde, boolean pZugewiesen, List<Rechner> pRechner) {
+	public Auftrag(int pAuftragsnr, String pStatus, Kunde pKunde, boolean pZugewiesen) {
 		auftragsnr = pAuftragsnr;
 		status = pStatus;
 		kunde = pKunde;
 		zugewiesen = pZugewiesen;
-		rechner = pRechner;
 	}
 
 	public Auftrag(int auftragsnr, Date lieferdatum, int anzahlRechner) {

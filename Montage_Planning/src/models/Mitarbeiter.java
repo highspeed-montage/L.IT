@@ -7,12 +7,14 @@ public class Mitarbeiter {
 	private double urlaubstage;
 	private int krankheitstage;
 	private boolean vollzeit;
+	private boolean anwesend;
 
-	public Mitarbeiter(int pPersonalnr, String pName, String pVorname, int pKrankheitstage) {
+	public Mitarbeiter(int pPersonalnr, String pName, String pVorname, int pKrankheitstage, boolean pAnwesend) {
 		personalnr = pPersonalnr;
 		name = pName;
 		vorname = pVorname;
 		krankheitstage = pKrankheitstage;
+		anwesend = pAnwesend;
 	}
 
 	public Mitarbeiter(int personalnr, String name) {
@@ -71,6 +73,14 @@ public class Mitarbeiter {
 	public boolean getVollzeit()
 	{
 		return vollzeit;
+	}
+	public void setAnwesend(boolean pAnwesend)
+	{
+		anwesend = pAnwesend;
+	}
+	public boolean getAnwesend()
+	{
+		return anwesend;
 	}
 
 	@Override

@@ -19,6 +19,7 @@ import javafx.scene.control.RadioButton;
 import models.FA_Rechner;
 import models.Mitarbeiter;
 import models.Monteur;
+import models.Rechner;
 import models.SA_Rechner;
 import models.Teile;
 
@@ -310,7 +311,7 @@ public class Datenbank {
 		} else {
 			return 0;
 		}
-	}
+	} // Methode doppelt?
 
 	/**
 	 * Frägt ET Lagerbestand ab. Benötigt für ET Suche bei SA_Rechner
@@ -392,12 +393,29 @@ public class Datenbank {
 		return rechner.size();
 	}
 	
-	public static ArrayList<Monteur> monteure = new ArrayList<Monteur>();
-
+	public static ArrayList<Monteur> monteure = new ArrayList<>();
+	/**
+	 * Die Methode befuellt eine ArrayList mit allen Monteuren
+	 * @throws SQLException
+	 */
 	public void monteureBefuellen() throws SQLException {
 		Statement stmt = connection.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT idPersonalnummer, Name, Vorname, Krankheitstage FROM Mitarbeiter"
+		ResultSet rs = stmt.executeQuery("SELECT idPersonalnummer, Name, Vorname, Krankheitstage, anwesend FROM Mitarbeiter"
 				+ "WHERE MitarbeiterVertragsart_idMitarbeiterVertragsart='301' "
+				+ "OR MitarbeiterVertragsart_idMitarbeiterVertragsart='302'");
+		int i=0;
+		while(rs.next())
+		{
+			monteure.add(new Monteur(rs.getInt("idPersonalnummer"), rs.getString("Name"), rs.getString("Vorname"), rs.getInt("Krankheitstage"), rs.getBoolean("anwesend"))); 
+			i++;
+		}
+	}
+	public static ArrayList<FA_Rechner> rechner = new ArrayList<>();
+	
+	public void rechnerFABefuellen() throws SQLException {
+		Statement stmt = connection.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT idSeriennummer, Status.Bezeichnung, Teile.Bezeichung FROM Rechner, Status, Teile"
+				+ "WHERE Status.idStatus=Rechner.idStatus AND  "
 				+ "OR MitarbeiterVertragsart_idMitarbeiterVertragsart='302'");
 		int i=0;
 		while(rs.next())

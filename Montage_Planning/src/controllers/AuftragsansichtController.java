@@ -105,12 +105,22 @@ public class AuftragsansichtController implements Initializable {
 		tableAuftragListe.setItems(auftragListenansichtTabelle);
 		
 	}
-	
+	/**
+	 * Die Methode fuegt alle anwesenden Monteure einer ArrayList hinzu. Auf die Monteure in der ArrayList werden die Auftraege verteilt.
+	 */
 	public void monteurHinzufuegen()
 	{
 		for(int i=0; i<Datenbank.monteure.size(); i++)
 		{
-			anwesenheit.add(Datenbank.monteure.get(i));
+			if(Datenbank.monteure.get(i).getAnwesend() == true)
+			{
+				anwesenheit.add(Datenbank.monteure.get(i));
+			}
 		}
+	}
+	
+	public void auftraegeVerteilen()
+	{
+		
 	}
 }
