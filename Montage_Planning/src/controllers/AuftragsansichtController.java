@@ -118,9 +118,31 @@ public class AuftragsansichtController implements Initializable {
 			}
 		}
 	}
-	
+	/**
+	 * Die Auftraege werden den einzelnen Monteuren zugewiesen 
+	 */
 	public void auftraegeVerteilen()
 	{
-		
+		int verteilung = (Datenbank.rechner.size() / Datenbank.monteure.size());
+		int rest = (Datenbank.rechner.size() % Datenbank.monteure.size());
+		for(int i=0; i<verteilung; i++)
+		{
+			for(int j=0; j<Datenbank.monteure.size(); j++) 
+			{
+				Datenbank.monteure.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
+			}
+			for(int k=0; k<Datenbank.monteure.size(); k++)
+			{
+				Datenbank.rechner.remove(0);
+			}
+		}
+		for(int i=0; i<rest; i++)
+		{
+			Datenbank.monteure.get(i).rechnerHinzufuegen(Datenbank.rechner.get(i));
+		}
+		for(int k=0; k<rest; k++)
+		{
+			Datenbank.rechner.remove(0);
+		}
 	}
 }

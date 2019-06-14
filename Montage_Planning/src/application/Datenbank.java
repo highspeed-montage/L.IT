@@ -412,4 +412,10 @@ public class Datenbank {
 			i++;
 		}
 	}
+	
+	public void rechenrVerteilung(Monteur pMonteur, Rechner pRechner) throws SQLException
+	{
+		Statement stmt = connection.createStatement();
+//		ResultSet rs = stmt.executeUpdate("UPDATE ");
+	}
 }

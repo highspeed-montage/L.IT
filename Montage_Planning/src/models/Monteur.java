@@ -5,7 +5,7 @@ import java.util.Deque;
 
 public class Monteur extends Mitarbeiter{
 	private boolean verfuegbar;
-	private Deque<Rechner> rechner = new LinkedList<Rechner>();
+	private Deque<Rechner> pipeline = new LinkedList<Rechner>();
 	
 
 	public Monteur(int pPersonalnr, String pName, String pVorname, int pKrankheitstage, boolean pAnwesend)
@@ -16,6 +16,10 @@ public class Monteur extends Mitarbeiter{
 	public Monteur(int personalnr, String name) {
 		super(personalnr, name);
 		// TODO Auto-generated constructor stub
+	}
+	public void rechnerHinzufuegen(Rechner pRechner)
+	{
+		pipeline.add(pRechner);
 	}
 	
 }
