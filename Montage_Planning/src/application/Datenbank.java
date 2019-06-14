@@ -405,14 +405,9 @@ public class Datenbank {
 		ResultSet rs = stmt.executeQuery("SELECT idSeriennummer, Auftrag.idAuftragsnummer, Status.Bezeichnung "
 				+ "FROM Rechner, Status, Auftrag"
 				+ "WHERE Status.idStatus=Rechner.Status_idStatus AND Rechner.Auftrag_idAuftragsnummer=Auftrag.idAuftragsnummer");
-		ResultSet rs2 = stmt.executeQuery("SELECT idTeilenummer, Teile.Bezeichnung, Teilkategorie.Bezeichnung"
-				+ "FROM Teile, Teilkategorie, RechnerTeile, Rechner"
-				+ "WHERE Teile.Teilekategorie_idTeilekategorie=Teilkategorie.idTeilekategorie AND RechnerTeile.Teile_idTeilenummer=Teile.idTeilenummer"
-				+ "AND RechnerTeile.Rechner_idSeriennummer=Rechner.idSeriennummer");
 		int i=0;
 		while(rs.next())
 		{
-			ArrayList<Teile> teile = new ArrayList<>();
 			rechner.add(new Rechner(rs.getInt("idSeriennummer"), rs.getInt("idAuftragsnummer"), rs.getString("Status.Bezeichnung")));
 			i++;
 		}
