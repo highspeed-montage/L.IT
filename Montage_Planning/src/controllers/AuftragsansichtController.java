@@ -21,6 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import models.Auftrag;
 import models.Auftragsverteilung;
+import models.Monteur;
 import models.Rechner;
 
 public class AuftragsansichtController implements Initializable {
@@ -50,6 +51,7 @@ public class AuftragsansichtController implements Initializable {
 	@FXML private TableColumn<Auftrag, Date> col_AL_Lieferdatum;
 	
 	private Datenbank_Gabby db = new Datenbank_Gabby();
+	private ArrayList<Monteur> abwesenheit = new ArrayList<>();
 	
 	@FXML
 	public void filter() {
@@ -101,5 +103,8 @@ public class AuftragsansichtController implements Initializable {
 		tableAuftragListe.setItems(auftragListenansichtTabelle);
 		
 	}
-	
+	public void Monteurhinzufuegen()
+	{
+		
+	}
 }
