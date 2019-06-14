@@ -374,25 +374,6 @@ public class Datenbank {
 		}
 		return userVergleich;
 	}
-	
-
-	/**
-	 * 
-	 * Die Methode berechnet die Anzahl aller Monteure.
-	 * 
-	 * @return Die Anzahl der Monteure
-	 * @throws SQLException
-	 */
-	public int Monteurezaehlen() throws SQLException {
-		Statement stmt = connection.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT idPersonalnummer FROM Mitarbeiter");
-		ArrayList<Integer> monteure = new ArrayList<Integer>();
-
-		while (rs.next()) {
-			monteure.add(rs.getInt("idPersonalnummer"));
-		}
-		return monteure.size();
-	}
 
 	/**
 	 * Die Methode berechnet die Anzahl der zu verteilenden Rechner
@@ -410,19 +391,19 @@ public class Datenbank {
 		}
 		return rechner.size();
 	}
-
-	// Ist noch nicht dynamisch!
-	Monteur monteur1;
-	Monteur monteur2;
-	Monteur monteur3;
-	Monteur monteur4;
-	Monteur monteur5;
+	
+	public static ArrayList<Monteur> monteure = new ArrayList<Monteur>();
 
 	public void monteureBefuellen() throws SQLException {
 		Statement stmt = connection.createStatement();
 		ResultSet rs = stmt.executeQuery("SELECT idPersonalnummer, Name, Vorname, Krankheitstage FROM Mitarbeiter"
 				+ "WHERE MitarbeiterVertragsart_idMitarbeiterVertragsart='301' "
 				+ "OR MitarbeiterVertragsart_idMitarbeiterVertragsart='302'");
-
+		int i=0;
+		while(rs.next())
+		{
+			monteure.add(new Monteur(rs.getInt("idPersonalnummer"), rs.getString("Name"), rs.getString("Vorname"), rs.getInt("Krankheitstage"))); 
+			i++;
+		}
 	}
 }

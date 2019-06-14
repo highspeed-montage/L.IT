@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import application.Datenbank;
 import application.Datenbank_Gabby;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -51,7 +53,7 @@ public class AuftragsansichtController implements Initializable {
 	@FXML private TableColumn<Auftrag, Date> col_AL_Lieferdatum;
 	
 	private Datenbank_Gabby db = new Datenbank_Gabby();
-	ArrayList<Monteur> anwesenheit = new ArrayList<>();
+	private ArrayList<Monteur> anwesenheit = new ArrayList<>();
 	
 	@FXML
 	public void filter() {
@@ -106,6 +108,9 @@ public class AuftragsansichtController implements Initializable {
 	
 	public void monteurHinzufuegen()
 	{
-		
+		for(int i=0; i<Datenbank.monteure.size(); i++)
+		{
+			anwesenheit.add(Datenbank.monteure.get(i));
+		}
 	}
 }

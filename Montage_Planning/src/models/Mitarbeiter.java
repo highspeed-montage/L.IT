@@ -8,13 +8,11 @@ public class Mitarbeiter {
 	private int krankheitstage;
 	private boolean vollzeit;
 
-	public Mitarbeiter(int pPersonalnr, String pName, String pVorname, double pUrlaubstage, int pKrankheitstage, boolean pVollzeit) {
+	public Mitarbeiter(int pPersonalnr, String pName, String pVorname, int pKrankheitstage) {
 		personalnr = pPersonalnr;
 		name = pName;
 		vorname = pVorname;
-		urlaubstage = pUrlaubstage;
 		krankheitstage = pKrankheitstage;
-		vollzeit = pVollzeit;
 	}
 
 	public Mitarbeiter(int personalnr, String name) {
