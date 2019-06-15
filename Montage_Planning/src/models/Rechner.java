@@ -23,11 +23,12 @@ public class Rechner {
 	private String eMail;
 	private int bearbeitungszeit;
 
-	public Rechner(int pSeriennr, int pAuftragsnummer, String pStatus) {
+	public Rechner(int pSeriennr, int pAuftragsnummer, String pStatus, int pBearbeitungszeit) {
 		setSeriennr(pSeriennr);
 //		setAuftrag(pAuftrag);
 		auftragsNr = pAuftragsnummer;
 		status = pStatus;
+		bearbeitungszeit = pBearbeitungszeit;
 		// this.teile = new ArrayList<Teile>(Arrays.asList(pTeile));
 	}
 

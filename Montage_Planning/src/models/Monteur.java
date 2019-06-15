@@ -6,12 +6,13 @@ import java.util.Deque;
 public class Monteur extends Mitarbeiter{
 	private boolean verfuegbar;
 	private Deque<Rechner> pipeline = new LinkedList<Rechner>();
-	private int arbeitszeit;
+	private int wochenstunden;
 	
 
-	public Monteur(int pPersonalnr, String pName, String pVorname, int pKrankheitstage, boolean pAnwesend)
+	public Monteur(int pPersonalnr, String pName, String pVorname, int pKrankheitstage, boolean pAnwesend, int pWochenstunden)
 	{
 		super(pPersonalnr, pName, pVorname, pKrankheitstage, pAnwesend);
+		wochenstunden = pWochenstunden;
 	}
 
 	public Monteur(int personalnr, String name) {
@@ -21,6 +22,14 @@ public class Monteur extends Mitarbeiter{
 	public void rechnerHinzufuegen(Rechner pRechner)
 	{
 		pipeline.add(pRechner);
+	}
+
+	public int getWochenstunden() {
+		return wochenstunden;
+	}
+
+	public void setWochenstunden(int wochenstunden) {
+		this.wochenstunden = wochenstunden;
 	}
 	
 }
