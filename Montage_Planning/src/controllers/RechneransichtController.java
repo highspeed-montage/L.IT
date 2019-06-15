@@ -19,6 +19,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -77,6 +79,8 @@ public class RechneransichtController implements Initializable {
 
 	ObservableList<Auftragsverteilung[]> rechnerWochenansichtTabelle = FXCollections.observableArrayList();
 	ObservableList<Auftragsverteilung> rechnerListenansichtTabelle = FXCollections.observableArrayList();
+	
+	Alert alert = new Alert(AlertType.INFORMATION);
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -155,6 +159,10 @@ public class RechneransichtController implements Initializable {
 				rechnerWochenansichtTabelle.addAll(row);
 			} catch (SQLException e) {
 				e.printStackTrace();
+				alert.setTitle("Information");
+				alert.setHeaderText("Keine Datenbankverbindung");
+				alert.setContentText("Bitte überprüfen Sie Ihre Datenbankverbindung");
+				alert.showAndWait();
 			}
 		});
 

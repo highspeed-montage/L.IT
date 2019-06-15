@@ -70,7 +70,7 @@ public class Datenbank_Gabby {
 
 		List<Auftragsverteilung> tabelleninhalt = new ArrayList<>();
 		Statement stmt = connection.createStatement();
-		String query = "SELECT Auftragsverteilung.Datum, Auftragsverteilung.Rechner_seriennummer, Status.Bezeichnung "
+		String query = "SELECT Auftragsverteilung.Bearbeitungsdatum, Auftragsverteilung.Rechner_seriennummer, Status.Bezeichnung "
 				+ "FROM Auftragsverteilung, Status, Rechner "
 				+ "WHERE Auftragsverteilung.Rechner_seriennummer = Rechner.idSeriennummer "
 				+ "AND Rechner.Status_idStatus = Status.idStatus";
@@ -78,8 +78,8 @@ public class Datenbank_Gabby {
 		// '"+user.benutzername+"'";
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
-			tabelleninhalt.add(new Auftragsverteilung(rs.getDate("Auftragsverteilung.Datum").toLocalDate(),
-					rs.getDate("Auftragsverteilung.Datum"), rs.getInt("Auftragsverteilung.Rechner_seriennummer"),
+			tabelleninhalt.add(new Auftragsverteilung(rs.getDate("Auftragsverteilung.Bearbeitungsdatum").toLocalDate(),
+					rs.getDate("Auftragsverteilung.Bearbeitungsdatum"), rs.getInt("Auftragsverteilung.Rechner_seriennummer"),
 					rs.getString("Status.Bezeichnung")));
 		}
 		return tabelleninhalt;
@@ -98,13 +98,13 @@ public class Datenbank_Gabby {
 
 		List<Auftragsverteilung> tabelleninhalt = new ArrayList<>();
 		Statement stmt = connection.createStatement();
-		String query = "SELECT * FROM Auftragsverteilung WHERE Datum BETWEEN '" + startdatum + "' AND '" + enddatum
+		String query = "SELECT * FROM Auftragsverteilung WHERE Bearbeitungsdatum BETWEEN '" + startdatum + "' AND '" + enddatum
 				+ "'";
 		// + "WHERE Mitarbeiter_idPersonalnummer = '"+user.benutzername+"'";
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
 			tabelleninhalt
-					.add(new Auftragsverteilung(rs.getInt("Rechner_seriennummer"), rs.getDate("Datum").toLocalDate()));
+					.add(new Auftragsverteilung(rs.getInt("Rechner_seriennummer"), rs.getDate("Bearbeitungsdatum").toLocalDate()));
 		}
 		return tabelleninhalt;
 	}
@@ -138,10 +138,10 @@ public class Datenbank_Gabby {
 	public List<Date> getRechnerBearbeitungsdatum() throws SQLException {
 		List<Date> bearbeitungsdatum = new ArrayList<>();
 		Statement stmt = connection.createStatement();
-		String query = "SELECT DISTINCT Datum FROM Auftragsverteilung";
+		String query = "SELECT DISTINCT Bearbeitungsdatum FROM Auftragsverteilung";
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
-			bearbeitungsdatum.add(rs.getDate("Datum"));
+			bearbeitungsdatum.add(rs.getDate("Bearbeitungsdatum"));
 		}
 		return bearbeitungsdatum;
 	}
