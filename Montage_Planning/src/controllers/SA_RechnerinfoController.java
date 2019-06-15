@@ -114,6 +114,7 @@ public class SA_RechnerinfoController implements Initializable {
 								| eingabe.equalsIgnoreCase("laufwerk")) {
 							try {
 								lagerbestand = db.getEinzelteilLagerbestand(eingabe);
+								System.out.println("Lagerbestand: " + lagerbestand);
 							} catch (SQLException e) {
 								e.printStackTrace();
 							}
@@ -137,30 +138,6 @@ public class SA_RechnerinfoController implements Initializable {
 		 * Radio button toggle Group Doku Problem muss in Rechner gepackt werden ->
 		 * fehlt noch.. WO KOMMT DAS HIN? => SA Konstruktor �ndern
 		 */
-
-//		toggle_SAI_Dokumentation.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-//
-//			@Override
-//			public void changed(ObservableValue<? extends Toggle> ov, Toggle toggle, Toggle new_toggle) {
-////				toggle.getToggleGroup().getSelectedToggle();
-////				RadioButton rb = (RadioButton) toggle.getSelectedToggle();
-//				String problem = toggle_SAI_Dokumentation.getSelectedToggle().getUserData().toString();
-//				System.out.println(problem);
-////				System.out.println("(test)Selected rb: " + rb.getText());
-////				String problem = rb.getText();
-//
-////				if (problem.equalsIgnoreCase("Hardware")) {
-////					sr.setHardwareverschuldet(true);
-////
-////				} else if (problem.equalsIgnoreCase("Software")) {
-////					sr.setSoftwareverschuldet(true);
-////
-////				} else if (problem.equalsIgnoreCase("Kunde")) {
-////					sr.setSoftwareverschuldet(true);
-////				}
-//			}
-//
-//		});
 
 		rbtn_SAI_Hardware.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
 				if(rbtn_SAI_Hardware.isSelected()==true) {
@@ -194,14 +171,14 @@ public class SA_RechnerinfoController implements Initializable {
 	
 	private void SA_RechnerInfo_fuellen() {
 		try {
-			sr = db.getSARechnerInfo(10001);// RechneransichtController.seriennrAktuell
+			sr = db.getSARechnerInfo(RechneransichtController.seriennrAktuell);// RechneransichtController.seriennrAktuell
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 
 		System.out.println(sr.toString());
 
-		lbl_SAI_Seriennummer.setText(String.valueOf(10001));// RechneransichtController.seriennrAktuell
+		lbl_SAI_Seriennummer.setText(String.valueOf(RechneransichtController.seriennrAktuell));// RechneransichtController.seriennrAktuell
 
 		if (sr.getFirmenname() != null) {
 			lbl_SAI_kunde.setText(sr.getFirmenname());

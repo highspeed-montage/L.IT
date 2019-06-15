@@ -324,7 +324,6 @@ public class Datenbank {
 	 * Frägt ET Lagerbestand ab. Benötigt für ET Suche bei SA_Rechner
 	 */
 	public int getEinzelteilLagerbestand(String eingabe) throws SQLException {
-		// in der ET Suche in SA_REchner wurde die Eingabe schon überprüft
 		Statement stmt = connection.createStatement();
 		String query = "SELECT Lagerbestand FROM Rechner_Teile WHERE Bezeichnung = '" + eingabe + "'";
 		ResultSet rs = stmt.executeQuery(query);
