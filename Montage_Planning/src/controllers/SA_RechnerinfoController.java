@@ -162,12 +162,14 @@ public class SA_RechnerinfoController implements Initializable {
 
 	private void SA_RechnerInfo_fuellen() {
 		try {
-			sr = db.getSARechnerInfo(RechneransichtController.seriennrAktuell);
+			sr = db.getSARechnerInfo(10001);//RechneransichtController.seriennrAktuell
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
+		
+		System.out.println(sr.toString());
 
-		lbl_SAI_Seriennummer.setText(String.valueOf(sr.getSeriennr()));
+		lbl_SAI_Seriennummer.setText(String.valueOf(10001));//RechneransichtController.seriennrAktuell
 
 		if (sr.getFirmenname() != null) {
 			lbl_SAI_kunde.setText(sr.getFirmenname());

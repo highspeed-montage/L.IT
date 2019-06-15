@@ -20,9 +20,6 @@ public class SA_Rechner extends Rechner {
 	private boolean festplatte_kaputt;
 	private boolean dvd_Laufwerk_kaputt;
 
-	public SA_Rechner(int pSeriennr, int pAuftragsnummer, String pStatus, List<Teile> pTeile) {
-		super(pSeriennr, pAuftragsnummer, pStatus, pTeile);
-	}
 
 	/** Konstruktor für DB-Interaktionen */
 	public SA_Rechner(int pSeriennr, int auftragsNr, String pStatus, Date pBearbeitungsdatum, Date pLieferdatum,
@@ -102,6 +99,14 @@ public class SA_Rechner extends Rechner {
 
 	public boolean isDvd_Laufwerk_kaputt() {
 		return dvd_Laufwerk_kaputt;
+	}
+
+	@Override
+	public String toString() {
+		return "SA_Rechner [kundenverschuldet=" + kundenverschuldet + ", hardwareverschuldet=" + hardwareverschuldet
+				+ ", softwareverschuldet=" + softwareverschuldet + ", prozessor_kaputt=" + prozessor_kaputt
+				+ ", grafikkarte_kaputt=" + grafikkarte_kaputt + ", festplatte_kaputt=" + festplatte_kaputt
+				+ ", dvd_Laufwerk_kaputt=" + dvd_Laufwerk_kaputt + "]";
 	}
 	
 	

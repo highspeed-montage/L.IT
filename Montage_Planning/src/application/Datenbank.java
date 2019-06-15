@@ -27,10 +27,9 @@ import models.Teile;
 
 public class Datenbank {
 
-	 private static final String DB_CONNECTION =
-	 "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
-	 private static final String DB_USER = "aj9s-montage";
-	 private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
+	private static final String DB_CONNECTION = "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
+	private static final String DB_USER = "aj9s-montage";
+	private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
 
 	// NICHT LOESCHEN: Datenbankverbindung GABBY LOKAL
 	// private static final String DB_CONNECTION =
@@ -231,17 +230,16 @@ public class Datenbank {
 	 */
 	public boolean updateSA_Recher(SA_Rechner sr) throws SQLException {
 		Statement stmt = connection.createStatement();
-		String query = "UPDATE Rechner SET Rechner.kundenverschuldet= '" +sr.isKundenverschuldet()+ "', "
-				+ "Rechner.hardwareverschuldet ='" +sr.isHardwareverschuldet()+ "', Rechner.softwareverschuldet ='"
-				+ sr.isSoftwareverschuldet() + "', Rechner.prozessorKaputt = '" +sr.isProzessor_kaputt()+"', "
-						+ "Rechner.grafikkarteKaputt = '" + sr.isGrafikkarte_kaputt() + "', "
-				+ "Rechner.festplatteKaputt = '" + sr.isFestplatte_kaputt() + "', Rechner.laufwerkKaputt = '"
-				+ sr.isDvd_Laufwerk_kaputt() +"' WHERE Auftragsverteilung.Rechner_seriennummer = '"
-				+ sr.getSeriennr() + "' AND Rechner.idSeriennummer = Auftragsverteilung.Rechner_seriennummer";
+		String query = "UPDATE Rechner SET Rechner.kundenverschuldet= '" + sr.isKundenverschuldet() + "', " 
+				+ "Rechner.hardwareverschuldet ='" + sr.isHardwareverschuldet() + "', Rechner.softwareverschuldet ='" 
+				+ sr.isSoftwareverschuldet() + "', Rechner.prozessorKaputt = '" + sr.isProzessor_kaputt() + "', "
+				+ "Rechner.grafikkarteKaputt = '" + sr.isGrafikkarte_kaputt() + "', " + "Rechner.festplatteKaputt = '"
+				+ sr.isFestplatte_kaputt() + "', Rechner.laufwerkKaputt = '" + sr.isDvd_Laufwerk_kaputt()
+				+ "' WHERE Auftragsverteilung.Rechner_seriennummer = '" + sr.getSeriennr()
+				+ "' AND Rechner.idSeriennummer = Auftragsverteilung.Rechner_seriennummer";
 
 		System.out.println(query);
-		
-		
+
 		int updatedRows = stmt.executeUpdate(query);
 		return updatedRows == 1;
 	}
@@ -253,10 +251,16 @@ public class Datenbank {
 	 */
 	public boolean setRechnerStatus(int pSerienNr, String pStatus) throws SQLException {
 		Statement stmt = connection.createStatement();
-		String query = "UPDATE Status SET Bezeichnung = '" + pStatus + "' "
-				+ "		WHERE Auftragsverteilung.Rechner_seriennummer = '" + pSerienNr + "'"
-				+ "AND Rechner.idSeriennummer = Auftragsverteilung.Rechner_seriennummer"
-				+ "AND Rechner.Status_idStatus = Status.idStatus";
+		int statusID = 0;
+		
+		String queryStatusId = "SELECT idStatus FROM Status WHERE Bezeichnung = '" + pStatus + "' ";
+		ResultSet rsInfo = stmt.executeQuery(queryStatusId);
+
+		while (rsInfo.next()) {
+			statusID = rsInfo.getInt("idStatus");
+		}
+		String query = "UPDATE Rechner SET Status_idStatus = '" + statusID + "' "
+				+ "WHERE idSeriennummer = '" + pSerienNr + "'";
 		int updatedRows = stmt.executeUpdate(query);
 		return updatedRows == 1;
 	}
@@ -264,9 +268,8 @@ public class Datenbank {
 	/**
 	 * Diese Methode listet die Bezeichnung der Teile eines Rechners auf.
 	 * 
-	 * @param pSeriennummer
-	 *            Die Seriennummer des Rechners, dessen Teile aufgelistet werden
-	 *            sollen.
+	 * @param pSeriennummer Die Seriennummer des Rechners, dessen Teile aufgelistet
+	 *                      werden sollen.
 	 * @throws SQLException
 	 * 
 	 * @return Die Methode gibt eine Liste von Teilen aus, die für den jeweiligen
@@ -292,9 +295,8 @@ public class Datenbank {
 	 * Diese Methode prueft ob alle Teile des Rechners im Lager sind
 	 * (Serviceauftrag).
 	 * 
-	 * @param pSeriennummer
-	 *            Die Seriennummer des Rechners, dessen Lagerbestand aufgerufen
-	 *            werden soll.
+	 * @param pSeriennummer Die Seriennummer des Rechners, dessen Lagerbestand
+	 *                      aufgerufen werden soll.
 	 * @throws SQLException
 	 */
 	public int lagerbestandPruefen(int pSeriennummer) throws SQLException {
