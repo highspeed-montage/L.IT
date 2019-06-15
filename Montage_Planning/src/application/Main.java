@@ -1,8 +1,11 @@
 package application;
 
+import java.sql.SQLException;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
+import models.SA_Rechner;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
@@ -23,7 +26,16 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-		launch(args);
+//		launch(args);
+		
+		Datenbank db = new Datenbank();
+		db.openConnection();
+		try {
+			SA_Rechner sr = db.getSARechnerInfo(10001);
+			db.updateSA_Recher(sr);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 	}
 }
