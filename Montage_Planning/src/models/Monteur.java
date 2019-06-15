@@ -6,6 +6,7 @@ import java.util.Deque;
 public class Monteur extends Mitarbeiter{
 	private boolean verfuegbar;
 	private Deque<Rechner> pipeline = new LinkedList<Rechner>();
+	private int arbeitszeit;
 	
 
 	public Monteur(int pPersonalnr, String pName, String pVorname, int pKrankheitstage, boolean pAnwesend)

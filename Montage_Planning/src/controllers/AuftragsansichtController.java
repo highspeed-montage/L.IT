@@ -53,7 +53,8 @@ public class AuftragsansichtController implements Initializable {
 	@FXML private TableColumn<Auftrag, Date> col_AL_Lieferdatum;
 	
 	private Datenbank_Gabby db = new Datenbank_Gabby();
-	private ArrayList<Monteur> anwesenheit = new ArrayList<>();
+	private ArrayList<Monteur> anwesenheitVollzeit = new ArrayList<>();
+	private ArrayList<Monteur> anwesenheitTeilzeit = new ArrayList<>();
 	
 	@FXML
 	public void filter() {
@@ -123,22 +124,40 @@ public class AuftragsansichtController implements Initializable {
 	 */
 	public void auftraegeVerteilen()
 	{
-		int verteilung = (Datenbank.rechner.size() / Datenbank.monteure.size());
-		int rest = (Datenbank.rechner.size() % Datenbank.monteure.size());
-		for(int i=0; i<verteilung; i++)
+		int rechnerTeilzeit = (Datenbank.rechner.size() / 3);
+		int rechnerVollzeit = rechnerTeilzeit*2;
+		int rest = (Datenbank.rechner.size() % 3);
+		
+//		Aufträge werden auf Teilzeitmitarbeiter verteilt
+		for(int i=0; i<rechnerTeilzeit; i++)
 		{
-			for(int j=0; j<Datenbank.monteure.size(); j++) 
+			for(int j=0; j<anwesenheitTeilzeit.size(); j++) 
 			{
-				Datenbank.monteure.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
+				anwesenheitTeilzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
 			}
-			for(int k=0; k<Datenbank.monteure.size(); k++)
+			for(int k=0; k<anwesenheitTeilzeit.size(); k++)
 			{
 				Datenbank.rechner.remove(0);
 			}
 		}
+		
+//		Aufträge werden an Vollzeitmitarbeiter verteilt
+		for(int i=0; i<rechnerVollzeit; i++)
+		{
+			for(int j=0; j<anwesenheitVollzeit.size(); j++) 
+			{
+				anwesenheitVollzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
+			}
+			for(int k=0; k<anwesenheitVollzeit.size(); k++)
+			{
+				Datenbank.rechner.remove(0);
+			}
+		}
+		
+//		rest wird auf Vollzeitmitarbeiter verteilt
 		for(int i=0; i<rest; i++)
 		{
-			Datenbank.monteure.get(i).rechnerHinzufuegen(Datenbank.rechner.get(i));
+			anwesenheitVollzeit.get(i).rechnerHinzufuegen(Datenbank.rechner.get(i));
 		}
 		for(int k=0; k<rest; k++)
 		{

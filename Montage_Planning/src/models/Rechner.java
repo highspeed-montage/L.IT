@@ -21,6 +21,7 @@ public class Rechner {
 	private String privatName;
 	private int kundenId;
 	private String eMail;
+	private int bearbeitungszeit;
 
 	public Rechner(int pSeriennr, int pAuftragsnummer, String pStatus) {
 		setSeriennr(pSeriennr);
@@ -226,6 +227,16 @@ public class Rechner {
 				+ getestet + ", auftragsNr=" + auftragsNr + ", bearbeitungsdatum=" + bearbeitungsdatum
 				+ ", lieferdatum=" + lieferdatum + ", firmenname=" + firmenname + ", privatName=" + privatName
 				+ ", kundenId=" + kundenId + ", eMail=" + eMail + "]";
+	}
+
+
+	public int getBearbeitungszeit() {
+		return bearbeitungszeit;
+	}
+
+
+	public void setBearbeitungszeit(int bearbeitungszeit) {
+		this.bearbeitungszeit = bearbeitungszeit;
 	}
 
 }
