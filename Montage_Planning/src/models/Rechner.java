@@ -21,12 +21,14 @@ public class Rechner {
 	private String privatName;
 	private int kundenId;
 	private String eMail;
+	private int bearbeitungszeit;
 
-	public Rechner(int pSeriennr, int pAuftragsnummer, String pStatus) {
+	public Rechner(int pSeriennr, int pAuftragsnummer, String pStatus, int pBearbeitungszeit) {
 		setSeriennr(pSeriennr);
 //		setAuftrag(pAuftrag);
 		auftragsNr = pAuftragsnummer;
 		status = pStatus;
+		bearbeitungszeit = pBearbeitungszeit;
 		// this.teile = new ArrayList<Teile>(Arrays.asList(pTeile));
 	}
 
@@ -226,6 +228,16 @@ public class Rechner {
 				+ getestet + ", auftragsNr=" + auftragsNr + ", bearbeitungsdatum=" + bearbeitungsdatum
 				+ ", lieferdatum=" + lieferdatum + ", firmenname=" + firmenname + ", privatName=" + privatName
 				+ ", kundenId=" + kundenId + ", eMail=" + eMail + "]";
+	}
+
+
+	public int getBearbeitungszeit() {
+		return bearbeitungszeit;
+	}
+
+
+	public void setBearbeitungszeit(int bearbeitungszeit) {
+		this.bearbeitungszeit = bearbeitungszeit;
 	}
 
 }

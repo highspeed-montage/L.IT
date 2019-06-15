@@ -27,9 +27,10 @@ import models.Teile;
 
 public class Datenbank {
 
-//	private static final String DB_CONNECTION = "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
-//	private static final String DB_USER = "aj9s-montage";
-//	private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
+	private static final String DB_CONNECTION = "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
+	private static final String DB_USER = "aj9s-montage";
+	private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
+	
 
 	// NICHT LOESCHEN: Datenbankverbindung GABBY LOKAL
 	// private static final String DB_CONNECTION =
@@ -393,13 +394,16 @@ public class Datenbank {
 	public void monteureBefuellen() throws SQLException {
 		Statement stmt = connection.createStatement();
 		ResultSet rs = stmt
-				.executeQuery("SELECT idPersonalnummer, Name, Vorname, Krankheitstage, anwesend FROM Mitarbeiter"
+				.executeQuery("SELECT idPersonalnummer, Name, Vorname, Krankheitstage, anwesend, Wochenstunden "
+						+ "FROM Mitarbeiter, MitarbeiterVertragsart"
 						+ "WHERE MitarbeiterVertragsart_idMitarbeiterVertragsart='301' "
-						+ "OR MitarbeiterVertragsart_idMitarbeiterVertragsart='302'");
+						+ "AND MitarbeiterVertragsart_idMitarbeiterVertragsart=MitarbeiterVertragsart.idMitarbeiterVertragsart"
+						+ "OR MitarbeiterVertragsart_idMitarbeiterVertragsart='302'"
+						+ "AND MitarbeiterVertragsart_idMitarbeiterVertragsart=MitarbeiterVertragsart.idMitarbeiterVertragsart");
 		int i = 0;
 		while (rs.next()) {
 			monteure.add(new Monteur(rs.getInt("idPersonalnummer"), rs.getString("Name"), rs.getString("Vorname"),
-					rs.getInt("Krankheitstage"), rs.getBoolean("anwesend")));
+					rs.getInt("Krankheitstage"), rs.getBoolean("anwesend"), rs.getInt("Wochenstunden")));
 			i++;
 		}
 	}
@@ -413,17 +417,20 @@ public class Datenbank {
 	 */
 	public void rechnerBefuellen() throws SQLException {
 		Statement stmt = connection.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT idSeriennummer, Auftrag.idAuftragsnummer, Status.Bezeichnung "
-				+ "FROM Rechner, Status, Auftrag"
-				+ "WHERE Status.idStatus=Rechner.Status_idStatus AND Rechner.Auftrag_idAuftragsnummer=Auftrag.idAuftragsnummer");
+		ResultSet rs = stmt.executeQuery("SELECT idSeriennummer, Auftrag.idAuftragsnummer, Status.Bezeichnung, Auftragsart.Arbeitsaufwand"
+				+ "FROM Rechner, Status, Auftrag, Auftragsart"
+				+ "WHERE Status.idStatus=Rechner.Status_idStatus AND Rechner.Auftrag_idAuftragsnummer=Auftrag.idAuftragsnummer"
+				+ "AND Auftragsart.idAuftragsart=Rechner.Auftragsart_idAuftragsart");
 		int i = 0;
 		while (rs.next()) {
 			rechner.add(new Rechner(rs.getInt("idSeriennummer"), rs.getInt("idAuftragsnummer"),
-					rs.getString("Status.Bezeichnung")));
+					rs.getString("Status.Bezeichnung"), rs.getInt("Auftragsart.Arbeitsaufwand")));
 			i++;
 		}
 	}
 
+	
+	
 	public void rechenrVerteilung(Monteur pMonteur, Rechner pRechner) throws SQLException {
 		Statement stmt = connection.createStatement();
 		// ResultSet rs = stmt.executeUpdate("UPDATE ");

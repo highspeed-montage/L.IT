@@ -12,6 +12,13 @@ public class Teile {
 		kategorie = pKategorie;
 		bezeichnung = pBezeichnung;
 	}
+	public Teile(int pTeilenr, String pBezeichnung, String pKategorie, int pLagerbestand)
+	{
+		teilenr = pTeilenr;
+		kategorie = pKategorie;
+		bezeichnung = pBezeichnung;
+		lagerbestand = pLagerbestand;
+	}
 	//Konstruktor fuer Db Abfrage getFARechnerInfo()
 	public Teile(String bezeichnung) {
 		this.bezeichnung = bezeichnung;
