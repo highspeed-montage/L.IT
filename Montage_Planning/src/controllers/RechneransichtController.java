@@ -143,7 +143,7 @@ public class RechneransichtController implements Initializable {
 
 			// Befuellen der Wochenansicht Tabelle mit den verteilten Auftraegen aus der Datenbank
 			try {
-				Auftragsverteilung[][] row = new Auftragsverteilung[99][DayOfWeek.FRIDAY.getValue()];
+				Auftragsverteilung[][] row = new Auftragsverteilung[10][DayOfWeek.FRIDAY.getValue()];
 				for (Auftragsverteilung auftrag : db.getRechnerAusAuftragsverteilungWoche(startdatum, enddatum)) {
 					LocalDate date = auftrag.getBearbeitungsdatum();
 					int i = 0;

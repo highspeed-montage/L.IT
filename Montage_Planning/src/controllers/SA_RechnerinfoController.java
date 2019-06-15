@@ -101,7 +101,7 @@ public class SA_RechnerinfoController implements Initializable {
 
 			@Override
 			public void handle(KeyEvent ke) {
-				// wenn der rbtn_Hwardware ausgewählt ist, DANN per Enter gesucht werden!
+				// wenn der rbtn_Hwardware ausgewï¿½hlt ist, DANN per Enter gesucht werden!
 				if (rbtn_SAI_Hardware.isSelected()) {
 					int lagerbestand = 0;
 					if (ke.getCode().equals(KeyCode.ENTER)) {
@@ -125,7 +125,7 @@ public class SA_RechnerinfoController implements Initializable {
 							lbl_SAI_SuchStatus.setText("nicht auf Lager");
 						}
 						{
-							lbl_SAI_SuchStatus.setText("ungültige Eingabe");
+							lbl_SAI_SuchStatus.setText("ungï¿½ltige Eingabe");
 						}
 					}
 				}
@@ -134,7 +134,7 @@ public class SA_RechnerinfoController implements Initializable {
 		});
 		/**
 		 * Radio button toggle Group Doku Problem muss in Rechner gepackt werden ->
-		 * fehlt noch.. WO KOMMT DAS HIN? => SA Konstruktor ändern
+		 * fehlt noch.. WO KOMMT DAS HIN? => SA Konstruktor ï¿½ndern
 		 */
 
 		toggle_SAI_Dokumentation.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
@@ -205,7 +205,7 @@ public class SA_RechnerinfoController implements Initializable {
 	}
 
 	/**
-	 * Bekommt gewähltes Element der ComboBox Aktualisiert dementsprechend den
+	 * Bekommt gewï¿½hltes Element der ComboBox Aktualisiert dementsprechend den
 	 * Rechnerstatus
 	 */
 	@FXML
@@ -268,7 +268,7 @@ public class SA_RechnerinfoController implements Initializable {
 		}
 	}
 
-	/** SPeichernButton, Änderungen an SA_Rechner Objekt werden in DB geladen */
+	/** SPeichernButton, ï¿½nderungen an SA_Rechner Objekt werden in DB geladen */
 	@FXML
 	private void handleSpeichernToDb(ActionEvent event) {
 		try {
