@@ -214,7 +214,6 @@ public class RechneransichtController implements Initializable {
 
 			try {
 				int idAuftragsart = db.getRechnerAuftragsart(seriennrAktuell);
-				System.out.println(idAuftragsart);
 				if (idAuftragsart == 502) {
 					new FolgeFenster("/views/FA_Rechnerinfo.fxml");
 				} else if (idAuftragsart == 501) {
