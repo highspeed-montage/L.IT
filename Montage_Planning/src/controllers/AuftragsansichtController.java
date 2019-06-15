@@ -14,6 +14,7 @@ import application.Datenbank;
 import application.Datenbank_Gabby;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -189,5 +190,10 @@ public class AuftragsansichtController implements Initializable {
 		{
 			Datenbank.rechner.remove(0);
 		}
+	}
+	
+	public void Logout(Event event) {
+		LoginController Logout =new LoginController();
+		Logout.confirmation();
 	}
 }

@@ -3,12 +3,17 @@ package controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import application.Datenbank;
+import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import models.Mitarbeiter;
@@ -41,8 +46,6 @@ public class LoginController implements Initializable {
 
 	public void Login(Event event) throws IOException {
 
-		// in der fxml-Datei hat die fx:id gefehlt, deswegen war das Textfeld in der
-		// fxml nicht mit dem Textfeld im Controller verbunden
 		username = txtUsername.getText();
 		password = txtPassword.getText();
 
@@ -55,29 +58,68 @@ public class LoginController implements Initializable {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("User nicht gefunden");
+			lblStatus.setText("User nicht gefunden");
 		}
-		
-		if(userVergleich == null) {
+
+		if (userVergleich == null) {
 			lblStatus.setText("Eingabe ist inkorrekt, bitte wiederholen Sie!");
 		} else {
 			user = new Mitarbeiter(Integer.parseInt(username), password);
 			lblStatus.setText("Anmelden erfolgreich");
 			btnAnmelden.setText("Wird durchgefuehrt");
-			new FolgeFenster("/views/Rechneransicht.fxml"); // --> prüfen welcher Mitarbeiter (ob Monteuer oder Abteilungsleiter)	
+			new FolgeFenster("/views/Rechneransicht.fxml"); // --> prüfen welcher Mitarbeiter (ob Monteuer oder
+															// Abteilungsleiter)
 		}
 	}
 
-
-	// @Hendrik: Strings kann man nicht mit dem Operator == vergleichen, sondern nur
-	// mit .equals()  --> hier muss noch abgefragt werden, ob die eingabe username zahlen sind
 	public void validate(String username, String password) {
 
-		if (username.equals("")) {
-			lblStatus.setText("Username cannot be blank");
+		try { // Username == idPersonalnummer sind nur Zahlen
+			Integer.parseInt(username);
+		} catch (NumberFormatException ex) {
+			String zahlenTitle = "Zahlen im Username";
+			String zahlenInfo = "Der Username besteht nur aus Zahlen!";
+			information(zahlenTitle, zahlenInfo);
+		}
 
-		} else if (password.equals("")) {
-			lblStatus.setText("Password cannot be blank");
+		if (username.isEmpty() || username == null) { // null und Empty werden unterschiedlich erkannt --> null!=empty
+			String userTitle = "Username";
+			String userInfo = "Das Username-Feld darf nicht leer sein!";
+			information(userTitle, userInfo);
+
+		} else if (password.isEmpty() || password == null) {
+			String passTitle = "Passwort";
+			String passInfo = "Das Passwort-Feld darf nicht leer sein!";
+			information(passTitle, passInfo);
 
 		}
+
+	}
+
+	public void information(String title, String info) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle(title);
+		alert.setHeaderText(null);
+		alert.setContentText(info);
+		alert.showAndWait();
+
+		txtUsername.clear();
+		txtPassword.clear();
+
+	}
+	
+	public void confirmation() {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Sind Sie sicher?");
+		alert.setHeaderText(null);
+		alert.setContentText("Wenn sie auf OK klicken wird das Programm beendet.");
+		
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK){
+				Platform.exit();
+		} else {
+		    alert.close();
+		}
+		
 	}
 }

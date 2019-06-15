@@ -17,6 +17,7 @@ import application.Datenbank_Gabby;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -227,6 +228,7 @@ public class RechneransichtController implements Initializable {
 
 		}
 	}
+	
 
 	// ComboBox: Kalenderwoche holen
 	public static int getWeekNumberFromDate(Date date) {
@@ -251,5 +253,10 @@ public class RechneransichtController implements Initializable {
 		cal.set(Calendar.WEEK_OF_YEAR, weekNumber);
 		cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
 		return cal.getTime();
+	}
+	
+	public void Logout(Event event) {
+		LoginController Logout =new LoginController();
+		Logout.confirmation();
 	}
 }
