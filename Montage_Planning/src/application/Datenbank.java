@@ -27,17 +27,17 @@ import models.Teile;
 
 public class Datenbank {
 
-	// private static final String DB_CONNECTION =
-	// "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
-	// private static final String DB_USER = "aj9s-montage";
-	// private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
+	 private static final String DB_CONNECTION =
+	 "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
+	 private static final String DB_USER = "aj9s-montage";
+	 private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
 
 	// NICHT LOESCHEN: Datenbankverbindung GABBY LOKAL
 	// private static final String DB_CONNECTION =
 	// "jdbc:mysql://localhost:3306/aj9s-montage?serverTimezone=UTC"; //fuer jan
-	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage?serverTimezone=UTC";
-	private static final String DB_USER = "root";
-	private static final String DB_PASSWORD = "root";
+//	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage?serverTimezone=UTC";
+//	private static final String DB_USER = "root";
+//	private static final String DB_PASSWORD = "root";
 
 	private Connection connection;
 
@@ -118,8 +118,8 @@ public class Datenbank {
 			rechnerEinzelteile.add(new Teile(rsTeile.getString("Teile.Bezeichnung")));
 		}
 
-		String queryInfo = "SELECT Auftragsverteilung.Rechner_seriennummer, Status.Bezeichnung, Auftrag.Lieferzeit, "
-				+ "Auftragsverteilung.Datum, Kunde.Firmenname, Kunde.idKundennummer, Kunde.Name, Kunde.EMail, "
+		String queryInfo = "SELECT Auftragsverteilung.Rechner_seriennummer, Status.Bezeichnung, Auftrag.Lieferdatum, "
+				+ "Auftragsverteilung.Bearbeitungsdatum, Kunde.Firmenname, Kunde.idKundennummer, Kunde.Name, Kunde.EMail, "
 				+ "Rechner.Auftrag_idAuftragsnummer, Auftrag.Kunde_idKunde "
 				+ "FROM Auftragsverteilung, Status, Auftrag, Kunde, Rechner "
 				+ "WHERE Auftragsverteilung.Rechner_seriennummer = '" + pSeriennr + "' "
@@ -138,8 +138,8 @@ public class Datenbank {
 			int pKundenId = rsInfo.getInt("Auftrag.Kunde_idKunde");
 			String pStatus = rsInfo.getString("Status.Bezeichnung");
 			// Lieferzeit zu Lieferdatum in Datenbank Ã¤ndern
-			Date pLieferdatum = rsInfo.getDate("Auftragsverteilung.Datum");
-			Date pBearbeitungsdatum = rsInfo.getDate("Auftragsverteilung.Datum");
+			Date pLieferdatum = rsInfo.getDate("Auftrag.Lieferdatum");
+			Date pBearbeitungsdatum = rsInfo.getDate("Auftragsverteilung.Bearbeitungsdatum");
 			String pFirmenname = null;
 			String pPrivatname = null;
 			String pEMail = rsInfo.getString("Kunde.EMail");
@@ -173,8 +173,8 @@ public class Datenbank {
 
 		Statement stmt = connection.createStatement();
 
-		String queryInfo = "SELECT Auftragsverteilung.Rechner_seriennummer, Status.Bezeichnung, Auftrag.Lieferzeit, "
-				+ "Auftragsverteilung.Datum, Kunde.Firmenname, Kunde.idKundennummer, Kunde.Name, Kunde.EMail, "
+		String queryInfo = "SELECT Auftragsverteilung.Rechner_seriennummer, Status.Bezeichnung, Auftrag.Lieferdatum, "
+				+ "Auftragsverteilung.Bearbeitungsdatum, Kunde.Firmenname, Kunde.idKundennummer, Kunde.Name, Kunde.EMail, "
 				+ "Rechner.Auftrag_idAuftragsnummer, Auftrag.Kunde_idKunde, Rechner.kundenverschuldet,"
 				+ "Rechner.hardwareverschuldet, Rechner.softwareverschuldet, Rechner.prozessorKaputt, "
 				+ "Rechner.grafikkarteKaputt, Rechner.festplatteKaputt, Rechner.laufwerkKaputt   "
@@ -186,6 +186,8 @@ public class Datenbank {
 				+ "AND Rechner.Auftrag_idAuftragsnummer = Auftrag.idAuftragsnummer "
 				+ "AND Auftrag.Kunde_idKunde = Kunde.idKundennummer ";
 
+		System.out.println(queryInfo);
+		
 		ResultSet rsInfo = stmt.executeQuery(queryInfo);
 
 		while (rsInfo.next()) {
@@ -195,8 +197,8 @@ public class Datenbank {
 			int pKundenId = rsInfo.getInt("Auftrag.Kunde_idKunde");
 			String pStatus = rsInfo.getString("Status.Bezeichnung");
 			// Lieferzeit zu Lieferdatum in Datenbank Ã¤ndern
-			Date pLieferdatum = rsInfo.getDate("Auftragsverteilung.Datum");
-			Date pBearbeitungsdatum = rsInfo.getDate("Auftragsverteilung.Datum");
+			Date pLieferdatum = rsInfo.getDate("Auftrag.Lieferdatum");
+			Date pBearbeitungsdatum = rsInfo.getDate("Auftragsverteilung.Bearbeitungsdatum");
 			String pFirmenname = null;
 			String pPrivatname = null;
 			String pEMail = rsInfo.getString("Kunde.EMail");
@@ -235,10 +237,11 @@ public class Datenbank {
 				+ "Rechner.hardwareverschuldet ='" + sr.isHardwareverschuldet() + "', Rechner.softwareverschuldet ='"
 				+ sr.isSoftwareverschuldet() + "', " + "Rechner.prozessorKaputt = '" + sr.isProzessor_kaputt()
 				+ "', Rechner.grafikkarteKaputt = '" + sr.isGrafikkarte_kaputt() + "', "
-				+ "Rechner.festplatteKaputt = '" + sr.isFestplatte_kaputt() + "' ,Rechner.laufwerkKaputt = '"
-				+ sr.isDvd_Laufwerk_kaputt() + "'" + "	WHERE Auftragsverteilung.Rechner_seriennummer = '"
+				+ "Rechner.festplatteKaputt = '" + sr.isFestplatte_kaputt() + "' ,Rechner.laufwerkKaputt = '"+ sr.isDvd_Laufwerk_kaputt() + "'" 
+				+ "	WHERE Auftragsverteilung.Rechner_seriennummer = '"
 				+ sr.getSeriennr() + "'" + "AND Rechner.idSeriennummer = Auftragsverteilung.Rechner_seriennummer";
 
+		System.out.println(query);
 		int updatedRows = stmt.executeUpdate(query);
 		return updatedRows == 1;
 	}

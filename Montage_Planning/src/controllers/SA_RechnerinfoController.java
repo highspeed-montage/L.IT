@@ -28,7 +28,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import models.SA_Rechner;
 
-public class SA_RechnerinfoController implements EventHandler, Initializable {
+public class SA_RechnerinfoController implements Initializable {
 	/** Rechnerinfo */
 	@FXML
 	private Label lbl_SAI_status;
@@ -212,7 +212,12 @@ public class SA_RechnerinfoController implements EventHandler, Initializable {
 	public void setSAStatus(ActionEvent event) {
 		String selectedSatus = comboBox_SAI_Bearbeitungsstatus.getSelectionModel().getSelectedItem();
 
-		db.setRechnerStatus(pSerienNr, selectedSatus);// pSeriennummer aus SA_Rechner sr (sr.getSNr..);
+		try {
+			db.setRechnerStatus(sr.getSeriennr(), selectedSatus);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 //	CHeckBox HAndler:
