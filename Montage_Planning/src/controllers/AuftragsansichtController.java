@@ -132,7 +132,7 @@ public class AuftragsansichtController implements Initializable {
 	}
 	Date currentTime = new Date(); 
 	/**
-	 * Die Auftraege werden den einzelnen Monteuren zugewiesen 
+	 * Die Auftraege werden den einzelnen Monteuren zugewiesen
 	 */
 	public void auftraegeVerteilen()
 	{
@@ -153,7 +153,6 @@ public class AuftragsansichtController implements Initializable {
 				Datenbank.rechner.remove(0);
 			}
 		}
-		
 //		Aufträge werden an Vollzeitmitarbeiter verteilt
 		for(int i=0; i<rechnerVollzeit; i++)
 		{
@@ -167,7 +166,6 @@ public class AuftragsansichtController implements Initializable {
 				Datenbank.rechner.remove(0);
 			}
 		}
-		
 //		rest wird auf Vollzeitmitarbeiter verteilt
 		for(int i=0; i<rest; i++)
 		{
