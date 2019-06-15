@@ -280,13 +280,12 @@ public class SA_RechnerinfoController implements Initializable {
 		}
 	}
 
-	/** SPeichernButton, �nderungen an SA_Rechner Objekt werden in DB geladen */
+	/** Speichern Button, Aenderungen an SA_Rechner Objekt werden in DB geladen */
 	@FXML
 	private void handleSpeichernToDb(ActionEvent event) {
 		try {
 			db.updateSA_Recher(sr);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
