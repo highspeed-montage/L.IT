@@ -2,8 +2,10 @@ package controllers;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -106,8 +108,10 @@ public class AuftragsansichtController implements Initializable {
 		tableAuftragListe.setItems(auftragListenansichtTabelle);
 		
 	}
+	
 	/**
-	 * Die Methode fuegt alle anwesenden Monteure einer ArrayList hinzu. Auf die Monteure in der ArrayList werden die Auftraege verteilt.
+	 * Die Methode fuegt alle anwesenden Monteure einer ArrayList fuer Vollzeit- oder Teilzeitmitarbeiter hinzu. 
+	 * Auf die Monteure in der ArrayList werden die Auftraege verteilt.
 	 */
 	public void monteurHinzufuegen()
 	{
@@ -115,10 +119,18 @@ public class AuftragsansichtController implements Initializable {
 		{
 			if(Datenbank.monteure.get(i).getAnwesend() == true)
 			{
-				anwesenheit.add(Datenbank.monteure.get(i));
+				if(Datenbank.monteure.get(i).getWochenstunden()==40)
+				{
+					anwesenheitVollzeit.add(Datenbank.monteure.get(i));
+				}
+				else
+				{
+					anwesenheitTeilzeit.add(Datenbank.monteure.get(i));
+				}
 			}
 		}
 	}
+	Date currentTime = new Date(); 
 	/**
 	 * Die Auftraege werden den einzelnen Monteuren zugewiesen 
 	 */
@@ -134,6 +146,7 @@ public class AuftragsansichtController implements Initializable {
 			for(int j=0; j<anwesenheitTeilzeit.size(); j++) 
 			{
 				anwesenheitTeilzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
+//				anwesenheitTeilzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(currentTime);
 			}
 			for(int k=0; k<anwesenheitTeilzeit.size(); k++)
 			{
@@ -147,6 +160,7 @@ public class AuftragsansichtController implements Initializable {
 			for(int j=0; j<anwesenheitVollzeit.size(); j++) 
 			{
 				anwesenheitVollzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
+//				anwesenheitVollzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(currentTime);
 			}
 			for(int k=0; k<anwesenheitVollzeit.size(); k++)
 			{
@@ -158,6 +172,7 @@ public class AuftragsansichtController implements Initializable {
 		for(int i=0; i<rest; i++)
 		{
 			anwesenheitVollzeit.get(i).rechnerHinzufuegen(Datenbank.rechner.get(i));
+//			anwesenheitVollzeit.get(i).rechnerAuslesen().setBearbeitungsdatum(currentTime);
 		}
 		for(int k=0; k<rest; k++)
 		{

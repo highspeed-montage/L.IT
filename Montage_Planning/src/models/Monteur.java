@@ -23,6 +23,10 @@ public class Monteur extends Mitarbeiter{
 	{
 		pipeline.add(pRechner);
 	}
+	public Rechner rechnerAuslesen()
+	{
+		return pipeline.getFirst();
+	}
 
 	public int getWochenstunden() {
 		return wochenstunden;
