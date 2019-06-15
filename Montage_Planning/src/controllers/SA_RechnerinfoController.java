@@ -80,12 +80,13 @@ public class SA_RechnerinfoController implements Initializable {
 
 	// Datenbank
 	private Datenbank db = new Datenbank();
-	private SA_Rechner sr = null;
+	private SA_Rechner sr;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
 		db.openConnection();
+		
 
 		// String stsGetestet = "getestet"; //Anstelle von stsBearb
 		String stsBearb = "in Bearbeitung";
@@ -137,39 +138,70 @@ public class SA_RechnerinfoController implements Initializable {
 		 * fehlt noch.. WO KOMMT DAS HIN? => SA Konstruktor �ndern
 		 */
 
-		toggle_SAI_Dokumentation.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+//		toggle_SAI_Dokumentation.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+//
+//			@Override
+//			public void changed(ObservableValue<? extends Toggle> ov, Toggle toggle, Toggle new_toggle) {
+////				toggle.getToggleGroup().getSelectedToggle();
+////				RadioButton rb = (RadioButton) toggle.getSelectedToggle();
+//				String problem = toggle_SAI_Dokumentation.getSelectedToggle().getUserData().toString();
+//				System.out.println(problem);
+////				System.out.println("(test)Selected rb: " + rb.getText());
+////				String problem = rb.getText();
+//
+////				if (problem.equalsIgnoreCase("Hardware")) {
+////					sr.setHardwareverschuldet(true);
+////
+////				} else if (problem.equalsIgnoreCase("Software")) {
+////					sr.setSoftwareverschuldet(true);
+////
+////				} else if (problem.equalsIgnoreCase("Kunde")) {
+////					sr.setSoftwareverschuldet(true);
+////				}
+//			}
+//
+//		});
 
-			@Override
-			public void changed(ObservableValue<? extends Toggle> ov, Toggle toggle, Toggle new_toggle) {
-				RadioButton rb = (RadioButton) toggle.getToggleGroup().getSelectedToggle();
-				System.out.println("(test)Selected rb: " + rb.getText());
-				String problem = rb.getText();
-
-				if (problem.equalsIgnoreCase("Hardware")) {
+		rbtn_SAI_Hardware.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+				if(rbtn_SAI_Hardware.isSelected()==true) {
 					sr.setHardwareverschuldet(true);
-
-				} else if (problem.equalsIgnoreCase("Software")) {
+					sr.setSoftwareverschuldet(false);
+					sr.setKundenverschuldet(false);
+					System.out.println(sr.toString());
+				}			
+		});
+		
+		rbtn_SAI_Software.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+				if(rbtn_SAI_Software.isSelected() == true) {
 					sr.setSoftwareverschuldet(true);
-
-				} else if (problem.equalsIgnoreCase("Kunde")) {
-					sr.setSoftwareverschuldet(true);
+					sr.setHardwareverschuldet(false);
+					sr.setKundenverschuldet(false);
+					System.out.println(sr.toString());
 				}
-			}
-
+			});
+		
+		rbtn_SAI_Kunde.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+				if(rbtn_SAI_Kunde.isSelected()==true) {
+					sr.setKundenverschuldet(true);
+					sr.setHardwareverschuldet(false);
+					sr.setSoftwareverschuldet(false);
+					System.out.println(sr.toString());
+				}
 		});
 
 	}
-
+	
+	
 	private void SA_RechnerInfo_fuellen() {
 		try {
-			sr = db.getSARechnerInfo(10001);//RechneransichtController.seriennrAktuell
+			sr = db.getSARechnerInfo(10001);// RechneransichtController.seriennrAktuell
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		System.out.println(sr.toString());
 
-		lbl_SAI_Seriennummer.setText(String.valueOf(10001));//RechneransichtController.seriennrAktuell
+		lbl_SAI_Seriennummer.setText(String.valueOf(10001));// RechneransichtController.seriennrAktuell
 
 		if (sr.getFirmenname() != null) {
 			lbl_SAI_kunde.setText(sr.getFirmenname());
@@ -222,17 +254,18 @@ public class SA_RechnerinfoController implements Initializable {
 		}
 	}
 
-//	CHeckBox HAndler:
+	// CHeckBox HAndler:
 	/** handle Checkbox "Prozessor". Falls geklickt: set true */
 	@FXML
 	private void handleCBoxProzessor() {
 		if (rbtn_SAI_Hardware.isSelected()) {
 			sr.setProzessor_kaputt(true); // Wenn der Wert false war
-//			if(cBox_SAI_Prozessor.isSelected()) {	//BRAUCH ICH DAS FALLS UNSELECTED WIRD??
-//				sr.setProzessor_kaputt(true); 
-//			}else {
-//				sr.setProzessor_kaputt(false);
-//			}
+			// if(cBox_SAI_Prozessor.isSelected()) { //BRAUCH ICH DAS FALLS UNSELECTED
+			// WIRD??
+			// sr.setProzessor_kaputt(true);
+			// }else {
+			// sr.setProzessor_kaputt(false);
+			// }
 		} else {
 			lbl_SAI_SuchStatus.setText("kein Hardwareproblem");// Falls kein HW Problem, kann dies auch niht ankgekreuzt
 																// werden

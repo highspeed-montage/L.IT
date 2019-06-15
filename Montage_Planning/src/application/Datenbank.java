@@ -27,16 +27,16 @@ import models.Teile;
 
 public class Datenbank {
 
-	private static final String DB_CONNECTION = "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
-	private static final String DB_USER = "aj9s-montage";
-	private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
+//	private static final String DB_CONNECTION = "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
+//	private static final String DB_USER = "aj9s-montage";
+//	private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
 
 	// NICHT LOESCHEN: Datenbankverbindung GABBY LOKAL
 	// private static final String DB_CONNECTION =
 	// "jdbc:mysql://localhost:3306/aj9s-montage?serverTimezone=UTC"; //fuer jan
-//	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage?serverTimezone=UTC";
-//	private static final String DB_USER = "root";
-//	private static final String DB_PASSWORD = "root";
+	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage_neu?serverTimezone=UTC";
+	private static final String DB_USER = "root";
+	private static final String DB_PASSWORD = "root";
 
 	private Connection connection;
 
@@ -285,8 +285,8 @@ public class Datenbank {
 						+ "AND Teilekategorie.idTeilekategorie=Teile.Teilekategorie_idTeilekategorie "
 						+ "AND idSeriennummer=pSeriennummer");
 		while (rs.next()) {
-			teileAuflistung.add(new Teile(rs.getInt("idTeilenummer"), rs.getString("Teile.Bezeichnung"),
-					rs.getString("Teilekategorie.Bezeichung"), rs.getInt("Lagerbestand")));
+//			teileAuflistung.add(new Teile(rs.getInt("idTeilenummer"), rs.getString("Teile.Bezeichnung"),
+//					rs.getString("Teilekategorie.Bezeichung"), rs.getInt("Lagerbestand")));
 		}
 		return teileAuflistung;
 	}
@@ -319,7 +319,6 @@ public class Datenbank {
 			return 0;
 		}
 	} // Methode doppelt?
-
 	/**
 	 * Frägt ET Lagerbestand ab. Benötigt für ET Suche bei SA_Rechner
 	 */
