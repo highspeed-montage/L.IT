@@ -151,7 +151,7 @@ public class AuftragsansichtController implements Initializable {
 		{
 			for(int j=0; j<anwesenheitTeilzeit.size(); j++) 
 			{
-				if(Datenbank.rechner.get(j).getBearbeitungszeit()<(anwesenheitTeilzeit.get(j).getWochenstunden()/5))
+				if(anwesenheitTeilzeit.get(j).getArbeitsaufwand()<(anwesenheitTeilzeit.get(j).getWochenstunden()/5))
 				{
 					switch(calendar.get(Calendar.DAY_OF_WEEK)) {
 					case 1: 
@@ -160,6 +160,7 @@ public class AuftragsansichtController implements Initializable {
 						bearbeitungsdatum = calendar.getTime();
 						anwesenheitTeilzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
 						anwesenheitTeilzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitTeilzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
 						break;
 					case 7:
 						calendar.setTime(bearbeitungsdatum);
@@ -167,10 +168,12 @@ public class AuftragsansichtController implements Initializable {
 						bearbeitungsdatum = calendar.getTime();
 						anwesenheitTeilzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
 						anwesenheitTeilzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitTeilzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
 						break;
 					default:
 						anwesenheitTeilzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
 						anwesenheitTeilzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitTeilzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
 						break;
 					}
 				}
@@ -186,6 +189,7 @@ public class AuftragsansichtController implements Initializable {
 						bearbeitungsdatum = calendar.getTime();
 						anwesenheitTeilzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
 						anwesenheitTeilzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitTeilzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
 						break;
 					case 7:
 						calendar.setTime(bearbeitungsdatum);
@@ -193,10 +197,12 @@ public class AuftragsansichtController implements Initializable {
 						bearbeitungsdatum = calendar.getTime();
 						anwesenheitTeilzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
 						anwesenheitTeilzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitTeilzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
 						break;
 					default:
 						anwesenheitTeilzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
 						anwesenheitTeilzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitTeilzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
 						break;
 					}
 				}
@@ -215,7 +221,7 @@ public class AuftragsansichtController implements Initializable {
 			bearbeitungsdatum = calendar.getTime();
 			for(int j=0; j<anwesenheitVollzeit.size(); j++) 
 			{
-				if(Datenbank.rechner.get(j).getBearbeitungszeit()<(anwesenheitVollzeit.get(j).getWochenstunden()/5))
+				if(anwesenheitVollzeit.get(j).getArbeitsaufwand()<(anwesenheitVollzeit.get(j).getWochenstunden()/5))
 				{
 					switch(calendar.get(Calendar.DAY_OF_WEEK)) {
 					//1 = Sonntag
@@ -225,6 +231,7 @@ public class AuftragsansichtController implements Initializable {
 						bearbeitungsdatum = calendar.getTime();
 						anwesenheitVollzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
 						anwesenheitVollzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitVollzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
 						break;
 					//7 = Samstag
 					case 7:
@@ -233,10 +240,12 @@ public class AuftragsansichtController implements Initializable {
 						bearbeitungsdatum = calendar.getTime();
 						anwesenheitVollzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
 						anwesenheitVollzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitVollzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
 						break;
 					default:
 						anwesenheitVollzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
 						anwesenheitVollzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitVollzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
 						break;
 					}
 				}
@@ -252,6 +261,7 @@ public class AuftragsansichtController implements Initializable {
 						bearbeitungsdatum = calendar.getTime();
 						anwesenheitVollzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
 						anwesenheitVollzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitVollzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
 						break;
 					case 7:
 						calendar.setTime(bearbeitungsdatum);
@@ -259,10 +269,12 @@ public class AuftragsansichtController implements Initializable {
 						bearbeitungsdatum = calendar.getTime();
 						anwesenheitVollzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
 						anwesenheitVollzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitVollzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
 						break;
 					default:
 						anwesenheitVollzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
 						anwesenheitVollzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitVollzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
 						break;
 					}
 				}
@@ -277,7 +289,7 @@ public class AuftragsansichtController implements Initializable {
 //		rest wird auf Vollzeitmitarbeiter verteilt
 		for(int i=0; i<rest; i++)
 		{
-			if(Datenbank.rechner.get(i).getBearbeitungszeit()<(anwesenheitVollzeit.get(i).getWochenstunden()/5))
+			if(anwesenheitVollzeit.get(i).getArbeitsaufwand()<(anwesenheitVollzeit.get(i).getWochenstunden()/5))
 			{
 				switch(calendar.get(Calendar.DAY_OF_WEEK)) {
 				case 1: 
@@ -286,6 +298,7 @@ public class AuftragsansichtController implements Initializable {
 					bearbeitungsdatum = calendar.getTime();
 					anwesenheitVollzeit.get(i).rechnerHinzufuegen(Datenbank.rechner.get(i));
 					anwesenheitVollzeit.get(i).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+					anwesenheitVollzeit.get(i).setArbeitsaufwand(Datenbank.rechner.get(i).getBearbeitungszeit());
 					break;
 				case 7:
 					calendar.setTime(bearbeitungsdatum);
@@ -293,10 +306,12 @@ public class AuftragsansichtController implements Initializable {
 					bearbeitungsdatum = calendar.getTime();
 					anwesenheitVollzeit.get(i).rechnerHinzufuegen(Datenbank.rechner.get(i));
 					anwesenheitVollzeit.get(i).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+					anwesenheitVollzeit.get(i).setArbeitsaufwand(Datenbank.rechner.get(i).getBearbeitungszeit());
 					break;
 				default:
 					anwesenheitVollzeit.get(i).rechnerHinzufuegen(Datenbank.rechner.get(i));
 					anwesenheitVollzeit.get(i).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+					anwesenheitVollzeit.get(i).setArbeitsaufwand(Datenbank.rechner.get(i).getBearbeitungszeit());
 					break;
 				}
 			}
@@ -312,6 +327,7 @@ public class AuftragsansichtController implements Initializable {
 					bearbeitungsdatum = calendar.getTime();
 					anwesenheitVollzeit.get(i).rechnerHinzufuegen(Datenbank.rechner.get(i));
 					anwesenheitVollzeit.get(i).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+					anwesenheitVollzeit.get(i).setArbeitsaufwand(Datenbank.rechner.get(i).getBearbeitungszeit());
 					break;
 				case 7:
 					calendar.setTime(bearbeitungsdatum);
@@ -319,10 +335,12 @@ public class AuftragsansichtController implements Initializable {
 					bearbeitungsdatum = calendar.getTime();
 					anwesenheitVollzeit.get(i).rechnerHinzufuegen(Datenbank.rechner.get(i));
 					anwesenheitVollzeit.get(i).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+					anwesenheitVollzeit.get(i).setArbeitsaufwand(Datenbank.rechner.get(i).getBearbeitungszeit());
 					break;
 				default:
 					anwesenheitVollzeit.get(i).rechnerHinzufuegen(Datenbank.rechner.get(i));
 					anwesenheitVollzeit.get(i).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+					anwesenheitVollzeit.get(i).setArbeitsaufwand(Datenbank.rechner.get(i).getBearbeitungszeit());
 					break;
 				}
 			}
