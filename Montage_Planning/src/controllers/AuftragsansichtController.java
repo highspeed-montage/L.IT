@@ -59,7 +59,7 @@ public class AuftragsansichtController implements Initializable {
 	@FXML private TableColumn<Auftrag, Date> col_AL_Lieferdatum;
 	
 	private Datenbank db = new Datenbank();
-//	private Datenbank_Gabby db = new Datenbank_Gabby();
+	private Datenbank_Gabby dbG = new Datenbank_Gabby();
 	private ArrayList<Monteur> anwesenheitVollzeit = new ArrayList<>();
 	private ArrayList<Monteur> anwesenheitTeilzeit = new ArrayList<>();
 	
@@ -92,7 +92,7 @@ public class AuftragsansichtController implements Initializable {
 	public void listenansichtFuellen() {
 		
 		try {
-			auftragListenansichtTabelle.addAll(db.getAuftrag());
+			auftragListenansichtTabelle.addAll(dbG.getAuftrag());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
