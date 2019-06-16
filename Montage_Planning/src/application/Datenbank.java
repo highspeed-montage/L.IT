@@ -30,7 +30,7 @@ public class Datenbank {
 //	private static final String DB_CONNECTION = "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
 //	private static final String DB_USER = "aj9s-montage";
 //	private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
-
+	
 	// NICHT LOESCHEN: Datenbankverbindung GABBY LOKAL
 	// private static final String DB_CONNECTION =
 	// "jdbc:mysql://localhost:3306/aj9s-montage?serverTimezone=UTC"; //fuer jan

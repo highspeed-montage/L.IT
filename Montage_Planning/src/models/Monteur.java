@@ -35,7 +35,6 @@ public class Monteur extends Mitarbeiter{
 	public void setWochenstunden(int wochenstunden) {
 		this.wochenstunden = wochenstunden;
 	}
-	
 }
 
 
