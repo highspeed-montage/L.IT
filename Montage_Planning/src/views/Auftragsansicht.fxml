@@ -113,7 +113,7 @@
          <top>
             <HBox prefHeight="31.0" prefWidth="780.0" spacing="5.0" style="-fx-background-insets: 5; -fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="btnLogout" mnemonicParsing="false" prefHeight="35.0" prefWidth="48.0">
+                  <Button fx:id="btnLogout" mnemonicParsing="false" onAction="#Logout" prefHeight="35.0" prefWidth="48.0">
                      <graphic>
                         <ImageView fitHeight="18.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
                            <image>

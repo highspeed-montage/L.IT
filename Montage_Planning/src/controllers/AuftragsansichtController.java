@@ -4,6 +4,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -13,8 +14,10 @@ import application.Datenbank;
 import application.Datenbank_Gabby;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -23,6 +26,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import models.Auftrag;
 import models.Auftragsverteilung;
 import models.Monteur;
@@ -130,12 +134,13 @@ public class AuftragsansichtController implements Initializable {
 			}
 		}
 	}
-	Date currentTime = new Date(); 
 	/**
 	 * Die Auftraege werden den einzelnen Monteuren zugewiesen
 	 */
 	public void auftraegeVerteilen()
 	{
+		Date bearbeitungsdatum = new Date(); 
+		Calendar calendar = new GregorianCalendar();
 		int rechnerTeilzeit = (Datenbank.rechner.size() / 3);
 		int rechnerVollzeit = rechnerTeilzeit*2;
 		int rest = (Datenbank.rechner.size() % 3);
@@ -143,38 +148,57 @@ public class AuftragsansichtController implements Initializable {
 //		Aufträge werden auf Teilzeitmitarbeiter verteilt
 		for(int i=0; i<rechnerTeilzeit; i++)
 		{
+			calendar.setTime(bearbeitungsdatum);
+			calendar.add(Calendar.DAY_OF_MONTH, 1); 
+			bearbeitungsdatum = calendar.getTime();
 			for(int j=0; j<anwesenheitTeilzeit.size(); j++) 
 			{
 				anwesenheitTeilzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
-//				anwesenheitTeilzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(currentTime);
+				anwesenheitTeilzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
 			}
 			for(int k=0; k<anwesenheitTeilzeit.size(); k++)
 			{
 				Datenbank.rechner.remove(0);
 			}
 		}
+		bearbeitungsdatum = new Date();
 //		Aufträge werden an Vollzeitmitarbeiter verteilt
 		for(int i=0; i<rechnerVollzeit; i++)
 		{
+			calendar.setTime(bearbeitungsdatum);
+			calendar.add(Calendar.DAY_OF_MONTH, 1); 
+			bearbeitungsdatum = calendar.getTime();
 			for(int j=0; j<anwesenheitVollzeit.size(); j++) 
 			{
 				anwesenheitVollzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
-//				anwesenheitVollzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(currentTime);
+				anwesenheitVollzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
 			}
 			for(int k=0; k<anwesenheitVollzeit.size(); k++)
 			{
 				Datenbank.rechner.remove(0);
 			}
 		}
+		bearbeitungsdatum = new Date();
 //		rest wird auf Vollzeitmitarbeiter verteilt
 		for(int i=0; i<rest; i++)
 		{
+			calendar.setTime(bearbeitungsdatum);
+			calendar.add(Calendar.DAY_OF_MONTH, 1); 
+			bearbeitungsdatum = calendar.getTime();
 			anwesenheitVollzeit.get(i).rechnerHinzufuegen(Datenbank.rechner.get(i));
-//			anwesenheitVollzeit.get(i).rechnerAuslesen().setBearbeitungsdatum(currentTime);
+			anwesenheitVollzeit.get(i).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
 		}
 		for(int k=0; k<rest; k++)
 		{
 			Datenbank.rechner.remove(0);
 		}
+	}
+	
+	public void Logout(Event event) {
+		LoginController Logout =new LoginController();
+		Logout.confirmation();
+	    final Node source = (Node) event.getSource();
+	    final Stage stage = (Stage) source.getScene().getWindow();
+	    stage.close();
 	}
 }
