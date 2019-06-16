@@ -50,11 +50,6 @@ public class Mitarbeiter {
 	{
 		vollzeit = pVollzeit;
 	}
-
-	public int getPerosnalnr() {
-		return personalnr;
-	}
-
 	public String getName() {
 		return name;
 	}

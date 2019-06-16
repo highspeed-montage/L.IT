@@ -299,6 +299,8 @@ public class Datenbank {
 	 *                      aufgerufen werden soll.
 	 * @throws SQLException
 	 */
+	//wird diese Methode ueberhaupt verwendet?
+	//Kombination mit getEinzelteilLagerbestand?
 	public int lagerbestandPruefen(int pSeriennummer) throws SQLException {
 		Statement stmt = connection.createStatement();
 		ResultSet rs = stmt.executeQuery("SELECT Lagerbestand FROM RechnerTeile, Teile, Rechner "
@@ -311,10 +313,8 @@ public class Datenbank {
 			}
 		}
 		if (teilenichtvorhanden > 0) {
-			System.out.println("Es sind nicht alle Teile vorhanden. Auftrag wird an den Einkauf geschickt");
-			ResultSet rs2 = stmt
-					.executeQuery("UPDATE Rechner SET Status_idStatus = '7' WHERE idSeriennummer = pSeriennummer");
-			return 1;// hier ein rs für update verwendet?
+			int updatedRows = stmt.executeUpdate("UPDATE Rechner SET Status_idStatus = '7' WHERE idSeriennummer = pSeriennummer");
+			return 1;
 		} else {
 			return 0;
 		}
@@ -396,8 +396,8 @@ public class Datenbank {
 				.executeQuery("SELECT idPersonalnummer, Name, Vorname, Krankheitstage, anwesend, Wochenstunden "
 						+ "FROM Mitarbeiter, MitarbeiterVertragsart"
 						+ "WHERE MitarbeiterVertragsart_idMitarbeiterVertragsart='301' "
-						+ "AND MitarbeiterVertragsart_idMitarbeiterVertragsart=MitarbeiterVertragsart.idMitarbeiterVertragsart"
-						+ "OR MitarbeiterVertragsart_idMitarbeiterVertragsart='302'"
+						+ "AND MitarbeiterVertragsart_idMitarbeiterVertragsart=MitarbeiterVertragsart.idMitarbeiterVertragsart "
+						+ "OR MitarbeiterVertragsart_idMitarbeiterVertragsart='302' "
 						+ "AND MitarbeiterVertragsart_idMitarbeiterVertragsart=MitarbeiterVertragsart.idMitarbeiterVertragsart");
 		int i = 0;
 		while (rs.next()) {
@@ -417,10 +417,11 @@ public class Datenbank {
 	public void rechnerBefuellen() throws SQLException {
 		Statement stmt = connection.createStatement();
 		ResultSet rs = stmt.executeQuery(
-				"SELECT idSeriennummer, Auftrag.idAuftragsnummer, Status.Bezeichnung, Auftragsart.Arbeitsaufwand"
-						+ "FROM Rechner, Status, Auftrag, Auftragsart"
-						+ "WHERE Status.idStatus=Rechner.Status_idStatus AND Rechner.Auftrag_idAuftragsnummer=Auftrag.idAuftragsnummer"
-						+ "AND Auftragsart.idAuftragsart=Rechner.Auftragsart_idAuftragsart");
+				"SELECT idSeriennummer, Auftrag.idAuftragsnummer, Status.Bezeichnung, Auftragsart.Arbeitsaufwand "
+						+ "FROM Rechner, Status, Auftrag, Auftragsart "
+						+ "WHERE Status.idStatus=Rechner.Status_idStatus AND Rechner.Auftrag_idAuftragsnummer=Auftrag.idAuftragsnummer "
+						+ "AND Auftragsart.idAuftragsart=Rechner.Auftragsart_idAuftragsart "
+						+ "AND Rechner.Status_idStatus='1'");
 		int i = 0;
 		while (rs.next()) {
 			rechner.add(new Rechner(rs.getInt("idSeriennummer"), rs.getInt("idAuftragsnummer"),
@@ -428,10 +429,17 @@ public class Datenbank {
 			i++;
 		}
 	}
-
-	public void rechenrVerteilung(Monteur pMonteur, Rechner pRechner) throws SQLException {
+	/**
+	 * Die Methode uebertraegt die Rechnerverteilung in die Datenbank
+	 * @param idAuftragsverteilung
+	 * @param bearbeitungsdatum
+	 * @param seriennummer
+	 * @param personalnummer
+	 * @throws SQLException
+	 */
+	public void rechnerVerteilung(int idAuftragsverteilung, Date bearbeitungsdatum, int seriennummer, int personalnummer) throws SQLException {
 		Statement stmt = connection.createStatement();
-		// ResultSet rs = stmt.executeUpdate("UPDATE ");
+		stmt.executeUpdate("INSERT INTO Auftragsverteilung" + "VALUES(idAuftragsverteilung, bearbeitungsdatum, seriennummer, personalnummer)");
 	}
 
 	public int getMitarbeiterRolle(Mitarbeiter user) throws SQLException {
