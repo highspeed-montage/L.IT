@@ -6,28 +6,29 @@ import java.util.Date;
 import java.util.List;
 
 public class Auftrag {
-	private int auftragsnr;
+	private Integer auftragsnr;
 	private String status;
 	private Kunde kunde;
 	private boolean zugewiesen;
 	private List<Rechner> rechner = new ArrayList<Rechner>();
-	private int anzahlRechner;
+	private Integer anzahlRechner;
 	private double arbeitsaufwand;
 	private static final int lieferzeit = 14;
 	private Date lieferdatum;
 
-	public Auftrag(int pAuftragsnr) {
+	public Auftrag(Integer pAuftragsnr) {
 		auftragsnr = pAuftragsnr;
 	}
 
-	public Auftrag(int auftragsnr, Date lieferdatum, int anzahlRechner) {
+	public Auftrag(Integer auftragsnr, Date lieferdatum, Integer anzahlRechner, String status) {
 		super();
 		this.auftragsnr = auftragsnr;
 		this.lieferdatum = lieferdatum;
 		this.anzahlRechner = anzahlRechner;
+		this.status = status;
 	}
 	
-	public Auftrag(int auftragsnr, Date lieferdatum) {
+	public Auftrag(Integer auftragsnr, Date lieferdatum) {
 		super();
 		this.auftragsnr = auftragsnr;
 		this.lieferdatum = lieferdatum;
@@ -61,7 +62,7 @@ public class Auftrag {
 		zugewiesen = pZugewiesen;
 	}
 
-	public int getAuftragsnr() {
+	public Integer getAuftragsnr() {
 		return auftragsnr;
 	}
 
@@ -100,5 +101,31 @@ public class Auftrag {
 	public void setLieferdatum(Date lieferdatum) {
 		this.lieferdatum = lieferdatum;
 	}
+
+	public Integer getAnzahlRechner() {
+		return anzahlRechner;
+	}
+
+	public void setAnzahlRechner(Integer anzahlRechner) {
+		this.anzahlRechner = anzahlRechner;
+	}
+
+	public void setAuftragsnr(Integer auftragsnr) {
+		this.auftragsnr = auftragsnr;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public void setKunde(Kunde kunde) {
+		this.kunde = kunde;
+	}
+
+	public void setArbeitsaufwand(double arbeitsaufwand) {
+		this.arbeitsaufwand = arbeitsaufwand;
+	}
+	
+	
 
 }

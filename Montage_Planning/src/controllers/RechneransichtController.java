@@ -162,7 +162,7 @@ public class RechneransichtController implements Initializable {
 				rechnerWochenansichtTabelle.addAll(row);
 			} catch (SQLException e) {
 				e.printStackTrace();
-				alert.setTitle("Information");
+				alert.setTitle("Fehlermeldung");
 				alert.setHeaderText("Keine Datenbankverbindung");
 				alert.setContentText("Bitte überprüfen Sie Ihre Datenbankverbindung");
 				alert.showAndWait();

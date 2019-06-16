@@ -1,11 +1,8 @@
 package application;
 
-import java.sql.SQLException;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
-import models.SA_Rechner;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
@@ -15,7 +12,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/views/Rechneransicht.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/views/Auftragsansicht.fxml"));
 			Scene scene = new Scene(root, 800, 400);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
@@ -27,16 +24,6 @@ public class Main extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
-		
-//		Datenbank db = new Datenbank();
-//		db.openConnection();
-//		try {
-//			SA_Rechner sr = db.getSARechnerInfo(10001);
-////			db.updateSA_Recher(sr);
-//			db.setRechnerStatus(10001, "im Lager");
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
 
 	}
 }

@@ -6,7 +6,8 @@ public class Mitarbeiter {
 	private String vorname;
 	private double urlaubstage;
 	private int krankheitstage;
-	private boolean vollzeit;
+	// Vollzeit, Teilzeit, Abteilungsleiter
+	private String mitarbeitervertragsart;
 	private boolean anwesend;
 
 	public Mitarbeiter(int pPersonalnr, String pName, String pVorname, int pKrankheitstage, boolean pAnwesend) {
@@ -21,6 +22,13 @@ public class Mitarbeiter {
 		super();
 		this.personalnr = personalnr;
 		this.name = name;
+	}
+
+	public Mitarbeiter(int personalnr, String name, String mitarbeitervertragsart) {
+		super();
+		this.personalnr = personalnr;
+		this.name = name;
+		this.mitarbeitervertragsart = mitarbeitervertragsart;
 	}
 
 	public int getPersonalnr() {
@@ -46,10 +54,6 @@ public class Mitarbeiter {
 	public void setKrankheitstage(int pKrankheitstage) {
 		krankheitstage = pKrankheitstage;
 	}
-	public void setVollzeit(boolean pVollzeit)
-	{
-		vollzeit = pVollzeit;
-	}
 
 	public int getPerosnalnr() {
 		return personalnr;
@@ -70,24 +74,28 @@ public class Mitarbeiter {
 	public int getKrankheitstage() {
 		return krankheitstage;
 	}
-	public boolean getVollzeit()
-	{
-		return vollzeit;
-	}
-	public void setAnwesend(boolean pAnwesend)
-	{
+
+	public void setAnwesend(boolean pAnwesend) {
 		anwesend = pAnwesend;
 	}
-	public boolean getAnwesend()
-	{
+
+	public boolean getAnwesend() {
 		return anwesend;
+	}
+
+	public String getMitarbeitervertragsart() {
+		return mitarbeitervertragsart;
+	}
+
+	public void setMitarbeitervertragsart(String mitarbeitervertragsart) {
+		this.mitarbeitervertragsart = mitarbeitervertragsart;
 	}
 
 	@Override
 	public String toString() {
 		return "Mitarbeiter [personalnr=" + personalnr + ", name=" + name + ", vorname=" + vorname + ", urlaubstage="
-				+ urlaubstage + ", krankheitstage=" + krankheitstage + ", vollzeit=" + vollzeit + "]";
+				+ urlaubstage + ", krankheitstage=" + krankheitstage + ", mitarbeitervertragsart="
+				+ mitarbeitervertragsart + ", anwesend=" + anwesend + "]";
 	}
-	
-	
+
 }

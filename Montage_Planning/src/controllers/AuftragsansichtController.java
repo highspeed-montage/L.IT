@@ -83,29 +83,14 @@ public class AuftragsansichtController implements Initializable {
 
 	public void listenansichtFuellen() {
 		
-		// Auftrag (int auftragsnr, String status, ArrayList<Rechner> rechner.size(), Date lieferdatum)
-		
 		try {
 			auftragListenansichtTabelle.addAll(db.getAuftrag());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		
-		List<Rechner> rechner = new ArrayList<>();
-		for (int i = 0; i < auftragListenansichtTabelle.size(); i++) {
-			int auftragsnummer = auftragListenansichtTabelle.get(i).getAuftragsnr();
-			try {
-				rechner.addAll(db.getRechnerZuAuftrag(auftragsnummer));
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		
-		
 		col_AL_Auftragsnummer.setCellValueFactory(new PropertyValueFactory<>("auftragsnr"));
-//		col_AL_Status;
+		col_AL_Status.setCellValueFactory(new PropertyValueFactory<>("status"));
 		col_AL_Anzahl.setCellValueFactory(new PropertyValueFactory<>("anzahlRechner"));;
 		col_AL_Lieferdatum.setCellValueFactory(new PropertyValueFactory<>("lieferdatum"));
 	
@@ -145,7 +130,7 @@ public class AuftragsansichtController implements Initializable {
 		int rechnerVollzeit = rechnerTeilzeit*2;
 		int rest = (Datenbank.rechner.size() % 3);
 		
-//		Aufträge werden auf Teilzeitmitarbeiter verteilt
+//		Auftrï¿½ge werden auf Teilzeitmitarbeiter verteilt
 		for(int i=0; i<rechnerTeilzeit; i++)
 		{
 			calendar.setTime(bearbeitungsdatum);
@@ -162,7 +147,7 @@ public class AuftragsansichtController implements Initializable {
 			}
 		}
 		bearbeitungsdatum = new Date();
-//		Aufträge werden an Vollzeitmitarbeiter verteilt
+//		Auftrï¿½ge werden an Vollzeitmitarbeiter verteilt
 		for(int i=0; i<rechnerVollzeit; i++)
 		{
 			calendar.setTime(bearbeitungsdatum);

@@ -15,7 +15,7 @@ import models.Rechner;
 
 public class Datenbank_Gabby {
 
-	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage?serverTimezone=UTC";
+	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage_neu?serverTimezone=UTC";
 	private static final String DB_USER = "root";
 	private static final String DB_PASSWORD = "root";
 
@@ -119,12 +119,11 @@ public class Datenbank_Gabby {
 	public int getRechnerAuftragsart(int seriennr) throws SQLException {
 		int idAuftragsart = 0;
 		Statement stmt = connection.createStatement();
-		String query1 = "SELECT Rechner.Auftrag_idAuftragsnummer, Auftrag.Auftragsart_idAuftragsart FROM Rechner, Auftrag "
-				+ "WHERE Rechner.idSeriennummer = '" + seriennr + "' "
-				+ "AND Rechner.Auftrag_idAuftragsnummer = Auftrag.idAuftragsnummer";
+		String query1 = "SELECT Auftragsart_idAuftragsart FROM Rechner "
+				+ "WHERE idSeriennummer = '" + seriennr + "' ";
 		ResultSet rs1 = stmt.executeQuery(query1);
 		while (rs1.next()) {
-			idAuftragsart = rs1.getInt("Auftrag.Auftragsart_idAuftragsart");
+			idAuftragsart = rs1.getInt("Auftragsart_idAuftragsart");
 		}
 		return idAuftragsart;
 	}
@@ -149,14 +148,24 @@ public class Datenbank_Gabby {
 	public List<Auftrag> getAuftrag () throws SQLException {
 		List<Auftrag> auftraege = new ArrayList<>();
 		Statement stmt = connection.createStatement();
+		Statement stmtAR = connection.createStatement();
+		int idAuftragsnummer = 0;
+		int anzahlRechner = 0;
 		
 //		Status fehlt in der Datenbank
-		String query = "SELECT idAuftragsnummer, Lieferdatum, FROM Auftrag";
+		String query = "SELECT Auftrag.idAuftragsnummer, Auftrag.Lieferdatum, Status.Bezeichnung "
+				+ "FROM Auftrag, Status WHERE Auftrag.fk_Status_idStatus = Status.idStatus";
 		ResultSet rs = stmt.executeQuery(query);
-		while (rs.next()) {
-		auftraege.add(new Auftrag(rs.getInt("Auftrag.idAuftragsnummer"), rs.getDate("Auftrag.Lieferdatum")));
-		}
 		
+		while (rs.next()) {
+			idAuftragsnummer =rs.getInt("Auftrag.idAuftragsnummer");
+			String queryAnzahlRechner = "SELECT COUNT(Auftrag_idAuftragsnummer) AS count FROM Rechner WHERE Auftrag_idAuftragsnummer = '"+ idAuftragsnummer+"'";
+			ResultSet rsAR = stmtAR.executeQuery(queryAnzahlRechner);
+			while(rsAR.next()) {
+				anzahlRechner = rsAR.getInt("count");
+			}
+			auftraege.add(new Auftrag(idAuftragsnummer, rs.getDate("Auftrag.Lieferdatum"), anzahlRechner, rs.getString("Status.Bezeichnung")));
+		}
 		
 		return auftraege;		
 	}
