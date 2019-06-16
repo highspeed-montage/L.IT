@@ -7,6 +7,7 @@ public class Monteur extends Mitarbeiter{
 	private boolean verfuegbar;
 	private Deque<Rechner> pipeline = new LinkedList<Rechner>();
 	private int wochenstunden;
+	private int arbeitsaufwand;
 	
 
 	public Monteur(int pPersonalnr, String pName, String pVorname, int pKrankheitstage, boolean pAnwesend, int pWochenstunden)
@@ -35,7 +36,14 @@ public class Monteur extends Mitarbeiter{
 	public void setWochenstunden(int wochenstunden) {
 		this.wochenstunden = wochenstunden;
 	}
-	
+
+	public int getArbeitsaufwand() {
+		return arbeitsaufwand;
+	}
+
+	public void setArbeitsaufwand(int pArbeitsaufwand) {
+		arbeitsaufwand = arbeitsaufwand + pArbeitsaufwand;
+	}
 }
 
 

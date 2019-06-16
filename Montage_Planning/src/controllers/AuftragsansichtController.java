@@ -58,7 +58,8 @@ public class AuftragsansichtController implements Initializable {
 	@FXML private TableColumn<Auftrag, Integer> col_AL_Anzahl;
 	@FXML private TableColumn<Auftrag, Date> col_AL_Lieferdatum;
 	
-	private Datenbank_Gabby db = new Datenbank_Gabby();
+	private Datenbank db = new Datenbank();
+//	private Datenbank_Gabby db = new Datenbank_Gabby();
 	private ArrayList<Monteur> anwesenheitVollzeit = new ArrayList<>();
 	private ArrayList<Monteur> anwesenheitTeilzeit = new ArrayList<>();
 	
@@ -74,11 +75,18 @@ public class AuftragsansichtController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
-		db.openConnection();
-		
-		listenansichtFuellen();
-		
+		try 
+		{
+			db.openConnection();
+			
+			listenansichtFuellen();
+			
+			auftraegeVerteilen();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	public void listenansichtFuellen() {
@@ -121,8 +129,9 @@ public class AuftragsansichtController implements Initializable {
 	}
 	/**
 	 * Die Auftraege werden den einzelnen Monteuren zugewiesen
+	 * @throws SQLException 
 	 */
-	public void auftraegeVerteilen()
+	public void auftraegeVerteilen() throws SQLException
 	{
 		Date bearbeitungsdatum = new Date(); 
 		Calendar calendar = new GregorianCalendar();
@@ -130,16 +139,73 @@ public class AuftragsansichtController implements Initializable {
 		int rechnerVollzeit = rechnerTeilzeit*2;
 		int rest = (Datenbank.rechner.size() % 3);
 		
-//		Auftr�ge werden auf Teilzeitmitarbeiter verteilt
+//		Auftraege werden auf Teilzeitmitarbeiter verteilt
 		for(int i=0; i<rechnerTeilzeit; i++)
 		{
-			calendar.setTime(bearbeitungsdatum);
-			calendar.add(Calendar.DAY_OF_MONTH, 1); 
-			bearbeitungsdatum = calendar.getTime();
 			for(int j=0; j<anwesenheitTeilzeit.size(); j++) 
 			{
-				anwesenheitTeilzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
-				anwesenheitTeilzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+				int idAuftragsverteilung = anwesenheitTeilzeit.get(j).getPersonalnr() + anwesenheitTeilzeit.get(j).rechnerAuslesen().getSeriennr();
+				if(anwesenheitTeilzeit.get(j).getArbeitsaufwand()<(anwesenheitTeilzeit.get(j).getWochenstunden()/5))
+				{
+					switch(calendar.get(Calendar.DAY_OF_WEEK)) {
+					case 1: 
+						calendar.setTime(bearbeitungsdatum);
+						calendar.add(Calendar.DAY_OF_MONTH, 1); 
+						bearbeitungsdatum = calendar.getTime();
+						anwesenheitTeilzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
+						anwesenheitTeilzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitTeilzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
+						db.rechnerVerteilung(idAuftragsverteilung, anwesenheitTeilzeit.get(j).rechnerAuslesen().getBearbeitungsdatum(), anwesenheitTeilzeit.get(j).rechnerAuslesen().getSeriennr(), anwesenheitTeilzeit.get(j).getPersonalnr());
+						break;
+					case 7:
+						calendar.setTime(bearbeitungsdatum);
+						calendar.add(Calendar.DAY_OF_MONTH, 2); 
+						bearbeitungsdatum = calendar.getTime();
+						anwesenheitTeilzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
+						anwesenheitTeilzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitTeilzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
+						db.rechnerVerteilung(idAuftragsverteilung, anwesenheitTeilzeit.get(j).rechnerAuslesen().getBearbeitungsdatum(), anwesenheitTeilzeit.get(j).rechnerAuslesen().getSeriennr(), anwesenheitTeilzeit.get(j).getPersonalnr());
+						break;
+					default:
+						anwesenheitTeilzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
+						anwesenheitTeilzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitTeilzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
+						db.rechnerVerteilung(idAuftragsverteilung, anwesenheitTeilzeit.get(j).rechnerAuslesen().getBearbeitungsdatum(), anwesenheitTeilzeit.get(j).rechnerAuslesen().getSeriennr(), anwesenheitTeilzeit.get(j).getPersonalnr());
+						break;
+					}
+				}
+				else
+				{
+					calendar.setTime(bearbeitungsdatum);
+					calendar.add(Calendar.DAY_OF_MONTH, 1); 
+					bearbeitungsdatum = calendar.getTime();
+					switch(calendar.get(Calendar.DAY_OF_WEEK)) {
+					case 1: 
+						calendar.setTime(bearbeitungsdatum);
+						calendar.add(Calendar.DAY_OF_MONTH, 1); 
+						bearbeitungsdatum = calendar.getTime();
+						anwesenheitTeilzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
+						anwesenheitTeilzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitTeilzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
+						db.rechnerVerteilung(idAuftragsverteilung, anwesenheitTeilzeit.get(j).rechnerAuslesen().getBearbeitungsdatum(), anwesenheitTeilzeit.get(j).rechnerAuslesen().getSeriennr(), anwesenheitTeilzeit.get(j).getPersonalnr());
+						break;
+					case 7:
+						calendar.setTime(bearbeitungsdatum);
+						calendar.add(Calendar.DAY_OF_MONTH, 2); 
+						bearbeitungsdatum = calendar.getTime();
+						anwesenheitTeilzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
+						anwesenheitTeilzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitTeilzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
+						db.rechnerVerteilung(idAuftragsverteilung, anwesenheitTeilzeit.get(j).rechnerAuslesen().getBearbeitungsdatum(), anwesenheitTeilzeit.get(j).rechnerAuslesen().getSeriennr(), anwesenheitTeilzeit.get(j).getPersonalnr());
+						break;
+					default:
+						anwesenheitTeilzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
+						anwesenheitTeilzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitTeilzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
+						db.rechnerVerteilung(idAuftragsverteilung, anwesenheitTeilzeit.get(j).rechnerAuslesen().getBearbeitungsdatum(), anwesenheitTeilzeit.get(j).rechnerAuslesen().getSeriennr(), anwesenheitTeilzeit.get(j).getPersonalnr());
+						break;
+					}
+				}
 			}
 			for(int k=0; k<anwesenheitTeilzeit.size(); k++)
 			{
@@ -147,7 +213,7 @@ public class AuftragsansichtController implements Initializable {
 			}
 		}
 		bearbeitungsdatum = new Date();
-//		Auftr�ge werden an Vollzeitmitarbeiter verteilt
+//		Auftraege werden an Vollzeitmitarbeiter verteilt
 		for(int i=0; i<rechnerVollzeit; i++)
 		{
 			calendar.setTime(bearbeitungsdatum);
@@ -155,8 +221,70 @@ public class AuftragsansichtController implements Initializable {
 			bearbeitungsdatum = calendar.getTime();
 			for(int j=0; j<anwesenheitVollzeit.size(); j++) 
 			{
-				anwesenheitVollzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
-				anwesenheitVollzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+				int idAuftragsverteilung = anwesenheitVollzeit.get(j).getPersonalnr() + anwesenheitVollzeit.get(j).rechnerAuslesen().getSeriennr();
+				if(anwesenheitVollzeit.get(j).getArbeitsaufwand()<(anwesenheitVollzeit.get(j).getWochenstunden()/5))
+				{
+					switch(calendar.get(Calendar.DAY_OF_WEEK)) {
+					//1 = Sonntag
+					case 1: 
+						calendar.setTime(bearbeitungsdatum);
+						calendar.add(Calendar.DAY_OF_MONTH, 1); 
+						bearbeitungsdatum = calendar.getTime();
+						anwesenheitVollzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
+						anwesenheitVollzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitVollzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
+						db.rechnerVerteilung(idAuftragsverteilung, anwesenheitVollzeit.get(j).rechnerAuslesen().getBearbeitungsdatum(), anwesenheitVollzeit.get(j).rechnerAuslesen().getSeriennr(), anwesenheitVollzeit.get(j).getPersonalnr());
+						break;
+					//7 = Samstag
+					case 7:
+						calendar.setTime(bearbeitungsdatum);
+						calendar.add(Calendar.DAY_OF_MONTH, 2); 
+						bearbeitungsdatum = calendar.getTime();
+						anwesenheitVollzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
+						anwesenheitVollzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitVollzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
+						db.rechnerVerteilung(idAuftragsverteilung, anwesenheitVollzeit.get(j).rechnerAuslesen().getBearbeitungsdatum(), anwesenheitVollzeit.get(j).rechnerAuslesen().getSeriennr(), anwesenheitVollzeit.get(j).getPersonalnr());
+						break;
+					default:
+						anwesenheitVollzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
+						anwesenheitVollzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitVollzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
+						db.rechnerVerteilung(idAuftragsverteilung, anwesenheitVollzeit.get(j).rechnerAuslesen().getBearbeitungsdatum(), anwesenheitVollzeit.get(j).rechnerAuslesen().getSeriennr(), anwesenheitVollzeit.get(j).getPersonalnr());
+						break;
+					}
+				}
+				else
+				{
+					calendar.setTime(bearbeitungsdatum);
+					calendar.add(Calendar.DAY_OF_MONTH, 1); 
+					bearbeitungsdatum = calendar.getTime();
+					switch(calendar.get(Calendar.DAY_OF_WEEK)) {
+					case 1: 
+						calendar.setTime(bearbeitungsdatum);
+						calendar.add(Calendar.DAY_OF_MONTH, 1); 
+						bearbeitungsdatum = calendar.getTime();
+						anwesenheitVollzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
+						anwesenheitVollzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitVollzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
+						db.rechnerVerteilung(idAuftragsverteilung, anwesenheitVollzeit.get(j).rechnerAuslesen().getBearbeitungsdatum(), anwesenheitVollzeit.get(j).rechnerAuslesen().getSeriennr(), anwesenheitVollzeit.get(j).getPersonalnr());
+						break;
+					case 7:
+						calendar.setTime(bearbeitungsdatum);
+						calendar.add(Calendar.DAY_OF_MONTH, 2); 
+						bearbeitungsdatum = calendar.getTime();
+						anwesenheitVollzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
+						anwesenheitVollzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitVollzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
+						db.rechnerVerteilung(idAuftragsverteilung, anwesenheitVollzeit.get(j).rechnerAuslesen().getBearbeitungsdatum(), anwesenheitVollzeit.get(j).rechnerAuslesen().getSeriennr(), anwesenheitVollzeit.get(j).getPersonalnr());
+						break;
+					default:
+						anwesenheitVollzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
+						anwesenheitVollzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+						anwesenheitVollzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
+						db.rechnerVerteilung(idAuftragsverteilung, anwesenheitVollzeit.get(j).rechnerAuslesen().getBearbeitungsdatum(), anwesenheitVollzeit.get(j).rechnerAuslesen().getSeriennr(), anwesenheitVollzeit.get(j).getPersonalnr());
+						break;
+					}
+				}
 			}
 			for(int k=0; k<anwesenheitVollzeit.size(); k++)
 			{
@@ -164,14 +292,72 @@ public class AuftragsansichtController implements Initializable {
 			}
 		}
 		bearbeitungsdatum = new Date();
-//		rest wird auf Vollzeitmitarbeiter verteilt
+		
+//		Rest wird auf Vollzeitmitarbeiter verteilt
 		for(int i=0; i<rest; i++)
 		{
-			calendar.setTime(bearbeitungsdatum);
-			calendar.add(Calendar.DAY_OF_MONTH, 1); 
-			bearbeitungsdatum = calendar.getTime();
-			anwesenheitVollzeit.get(i).rechnerHinzufuegen(Datenbank.rechner.get(i));
-			anwesenheitVollzeit.get(i).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+			int idAuftragsverteilung = anwesenheitVollzeit.get(i).getPersonalnr() + anwesenheitVollzeit.get(i).rechnerAuslesen().getSeriennr();
+			if(anwesenheitVollzeit.get(i).getArbeitsaufwand()<(anwesenheitVollzeit.get(i).getWochenstunden()/5))
+			{
+				switch(calendar.get(Calendar.DAY_OF_WEEK)) {
+				case 1: 
+					calendar.setTime(bearbeitungsdatum);
+					calendar.add(Calendar.DAY_OF_MONTH, 1); 
+					bearbeitungsdatum = calendar.getTime();
+					anwesenheitVollzeit.get(i).rechnerHinzufuegen(Datenbank.rechner.get(i));
+					anwesenheitVollzeit.get(i).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+					anwesenheitVollzeit.get(i).setArbeitsaufwand(Datenbank.rechner.get(i).getBearbeitungszeit());
+					db.rechnerVerteilung(idAuftragsverteilung, anwesenheitVollzeit.get(i).rechnerAuslesen().getBearbeitungsdatum(), anwesenheitVollzeit.get(i).rechnerAuslesen().getSeriennr(), anwesenheitVollzeit.get(i).getPersonalnr());
+					break;
+				case 7:
+					calendar.setTime(bearbeitungsdatum);
+					calendar.add(Calendar.DAY_OF_MONTH, 2); 
+					bearbeitungsdatum = calendar.getTime();
+					anwesenheitVollzeit.get(i).rechnerHinzufuegen(Datenbank.rechner.get(i));
+					anwesenheitVollzeit.get(i).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+					anwesenheitVollzeit.get(i).setArbeitsaufwand(Datenbank.rechner.get(i).getBearbeitungszeit());
+					db.rechnerVerteilung(idAuftragsverteilung, anwesenheitVollzeit.get(i).rechnerAuslesen().getBearbeitungsdatum(), anwesenheitVollzeit.get(i).rechnerAuslesen().getSeriennr(), anwesenheitVollzeit.get(i).getPersonalnr());
+					break;
+				default:
+					anwesenheitVollzeit.get(i).rechnerHinzufuegen(Datenbank.rechner.get(i));
+					anwesenheitVollzeit.get(i).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+					anwesenheitVollzeit.get(i).setArbeitsaufwand(Datenbank.rechner.get(i).getBearbeitungszeit());
+					db.rechnerVerteilung(idAuftragsverteilung, anwesenheitVollzeit.get(i).rechnerAuslesen().getBearbeitungsdatum(), anwesenheitVollzeit.get(i).rechnerAuslesen().getSeriennr(), anwesenheitVollzeit.get(i).getPersonalnr());
+					break;
+				}
+			}
+			else
+			{
+				calendar.setTime(bearbeitungsdatum);
+				calendar.add(Calendar.DAY_OF_MONTH, 1); 
+				bearbeitungsdatum = calendar.getTime();
+				switch(calendar.get(Calendar.DAY_OF_WEEK)) {
+				case 1: 
+					calendar.setTime(bearbeitungsdatum);
+					calendar.add(Calendar.DAY_OF_MONTH, 1); 
+					bearbeitungsdatum = calendar.getTime();
+					anwesenheitVollzeit.get(i).rechnerHinzufuegen(Datenbank.rechner.get(i));
+					anwesenheitVollzeit.get(i).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+					anwesenheitVollzeit.get(i).setArbeitsaufwand(Datenbank.rechner.get(i).getBearbeitungszeit());
+					db.rechnerVerteilung(idAuftragsverteilung, anwesenheitVollzeit.get(i).rechnerAuslesen().getBearbeitungsdatum(), anwesenheitVollzeit.get(i).rechnerAuslesen().getSeriennr(), anwesenheitVollzeit.get(i).getPersonalnr());
+					break;
+				case 7:
+					calendar.setTime(bearbeitungsdatum);
+					calendar.add(Calendar.DAY_OF_MONTH, 2); 
+					bearbeitungsdatum = calendar.getTime();
+					anwesenheitVollzeit.get(i).rechnerHinzufuegen(Datenbank.rechner.get(i));
+					anwesenheitVollzeit.get(i).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+					anwesenheitVollzeit.get(i).setArbeitsaufwand(Datenbank.rechner.get(i).getBearbeitungszeit());
+					db.rechnerVerteilung(idAuftragsverteilung, anwesenheitVollzeit.get(i).rechnerAuslesen().getBearbeitungsdatum(), anwesenheitVollzeit.get(i).rechnerAuslesen().getSeriennr(), anwesenheitVollzeit.get(i).getPersonalnr());
+					break;
+				default:
+					anwesenheitVollzeit.get(i).rechnerHinzufuegen(Datenbank.rechner.get(i));
+					anwesenheitVollzeit.get(i).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+					anwesenheitVollzeit.get(i).setArbeitsaufwand(Datenbank.rechner.get(i).getBearbeitungszeit());
+					db.rechnerVerteilung(idAuftragsverteilung, anwesenheitVollzeit.get(i).rechnerAuslesen().getBearbeitungsdatum(), anwesenheitVollzeit.get(i).rechnerAuslesen().getSeriennr(), anwesenheitVollzeit.get(i).getPersonalnr());
+					break;
+				}
+			}
 		}
 		for(int k=0; k<rest; k++)
 		{
