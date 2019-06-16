@@ -35,7 +35,7 @@ public class Datenbank {
 	// NICHT LOESCHEN: Datenbankverbindung GABBY LOKAL
 	// private static final String DB_CONNECTION =
 	// "jdbc:mysql://localhost:3306/aj9s-montage?serverTimezone=UTC"; //fuer jan
-	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage_neu?serverTimezone=UTC";
+	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage?serverTimezone=UTC";
 	private static final String DB_USER = "root";
 	private static final String DB_PASSWORD = "root";
 
@@ -86,7 +86,7 @@ public class Datenbank {
 		ResultSet rs = stmt.executeQuery("SELECT idPersonalnummer FROM Mitarbeiter");
 		ResultSetMetaData rsmd = (ResultSetMetaData) rs.getMetaData();
 		int columnCount = rsmd.getColumnCount(); //
-		ArrayList<String> list = new ArrayList(columnCount);
+		ArrayList<String> list = new ArrayList<>(columnCount);
 		while (rs.next()) {
 			int i = 1;
 			while (i <= columnCount) {
