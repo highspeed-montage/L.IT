@@ -20,6 +20,7 @@ import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -31,6 +32,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import models.Auftragsverteilung;
 
 public class RechneransichtController implements Initializable {
@@ -258,5 +260,8 @@ public class RechneransichtController implements Initializable {
 	public void Logout(Event event) {
 		LoginController Logout =new LoginController();
 		Logout.confirmation();
+	    final Node source = (Node) event.getSource();
+	    final Stage stage = (Stage) source.getScene().getWindow();
+	    stage.close();
 	}
 }

@@ -10,8 +10,10 @@ import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
@@ -44,11 +46,11 @@ public class LoginController implements Initializable {
 		db.openConnection();
 	}
 
-	public void Login(Event event) throws IOException {
-
+	public void Login(Event event) throws IOException, SQLException {
+		int rolle;
 		username = txtUsername.getText();
 		password = txtPassword.getText();
-
+		
 		validate(username, password);
 
 		Mitarbeiter userVergleich = null;
@@ -67,10 +69,22 @@ public class LoginController implements Initializable {
 			user = new Mitarbeiter(Integer.parseInt(username), password);
 			lblStatus.setText("Anmelden erfolgreich");
 			btnAnmelden.setText("Wird durchgefuehrt");
-			new FolgeFenster("/views/Rechneransicht.fxml"); // --> prüfen welcher Mitarbeiter (ob Monteuer oder
-															// Abteilungsleiter)
+
+			rolle = db.getMitarbeiterRolle(user);
+
+			if (rolle == 301||rolle == 302)//Monteur
+				new FolgeFenster("/views/Rechneransicht.fxml");
+			if (rolle == 303)//Abteilungsleiter
+				new FolgeFenster("/views/Auftrasgsansicht.fxml");
+			else
+				error();
 		}
+		final Node source = (Node) event.getSource();
+		final Stage stage = (Stage) source.getScene().getWindow();
+		stage.close();
 	}
+
+
 
 	public void validate(String username, String password) {
 
@@ -107,19 +121,29 @@ public class LoginController implements Initializable {
 		txtPassword.clear();
 
 	}
-	
+
 	public void confirmation() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Sind Sie sicher?");
 		alert.setHeaderText(null);
 		alert.setContentText("Wenn sie auf OK klicken wird das Programm beendet.");
-		
+
 		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == ButtonType.OK){
-				Platform.exit();
+		if (result.get() == ButtonType.OK) {
+			Platform.exit();
 		} else {
-		    alert.close();
+			alert.close();
 		}
+
+	}
+	private void error() {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Fehler in der Datenstruktur");
+		alert.setHeaderText(null);
+		alert.setContentText("Aufgrund eines Fehlers konnten wir sie leider nicht erfolgreich anmelden!");
 		
+		txtUsername.clear();
+		txtPassword.clear();
+
 	}
 }

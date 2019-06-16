@@ -30,7 +30,6 @@ public class Datenbank {
 //	private static final String DB_CONNECTION = "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
 //	private static final String DB_USER = "aj9s-montage";
 //	private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
-	
 
 	// NICHT LOESCHEN: Datenbankverbindung GABBY LOKAL
 	// private static final String DB_CONNECTION =
@@ -231,8 +230,8 @@ public class Datenbank {
 	 */
 	public boolean updateSA_Recher(SA_Rechner sr) throws SQLException {
 		Statement stmt = connection.createStatement();
-		String query = "UPDATE Rechner SET Rechner.kundenverschuldet= '" + sr.isKundenverschuldet() + "', " 
-				+ "Rechner.hardwareverschuldet ='" + sr.isHardwareverschuldet() + "', Rechner.softwareverschuldet ='" 
+		String query = "UPDATE Rechner SET Rechner.kundenverschuldet= '" + sr.isKundenverschuldet() + "', "
+				+ "Rechner.hardwareverschuldet ='" + sr.isHardwareverschuldet() + "', Rechner.softwareverschuldet ='"
 				+ sr.isSoftwareverschuldet() + "', Rechner.prozessorKaputt = '" + sr.isProzessor_kaputt() + "', "
 				+ "Rechner.grafikkarteKaputt = '" + sr.isGrafikkarte_kaputt() + "', " + "Rechner.festplatteKaputt = '"
 				+ sr.isFestplatte_kaputt() + "', Rechner.laufwerkKaputt = '" + sr.isDvd_Laufwerk_kaputt()
@@ -253,15 +252,15 @@ public class Datenbank {
 	public boolean setRechnerStatus(int pSerienNr, String pStatus) throws SQLException {
 		Statement stmt = connection.createStatement();
 		int statusID = 0;
-		
+
 		String queryStatusId = "SELECT idStatus FROM Status WHERE Bezeichnung = '" + pStatus + "' ";
 		ResultSet rsInfo = stmt.executeQuery(queryStatusId);
 
 		while (rsInfo.next()) {
 			statusID = rsInfo.getInt("idStatus");
 		}
-		String query = "UPDATE Rechner SET Status_idStatus = '" + statusID + "' "
-				+ "WHERE idSeriennummer = '" + pSerienNr + "'";
+		String query = "UPDATE Rechner SET Status_idStatus = '" + statusID + "' " + "WHERE idSeriennummer = '"
+				+ pSerienNr + "'";
 		int updatedRows = stmt.executeUpdate(query);
 		return updatedRows == 1;
 	}
@@ -320,6 +319,7 @@ public class Datenbank {
 			return 0;
 		}
 	} // Methode doppelt?
+
 	/**
 	 * Frägt ET Lagerbestand ab. Benötigt für ET Suche bei SA_Rechner
 	 */
@@ -416,10 +416,11 @@ public class Datenbank {
 	 */
 	public void rechnerBefuellen() throws SQLException {
 		Statement stmt = connection.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT idSeriennummer, Auftrag.idAuftragsnummer, Status.Bezeichnung, Auftragsart.Arbeitsaufwand"
-				+ "FROM Rechner, Status, Auftrag, Auftragsart"
-				+ "WHERE Status.idStatus=Rechner.Status_idStatus AND Rechner.Auftrag_idAuftragsnummer=Auftrag.idAuftragsnummer"
-				+ "AND Auftragsart.idAuftragsart=Rechner.Auftragsart_idAuftragsart");
+		ResultSet rs = stmt.executeQuery(
+				"SELECT idSeriennummer, Auftrag.idAuftragsnummer, Status.Bezeichnung, Auftragsart.Arbeitsaufwand"
+						+ "FROM Rechner, Status, Auftrag, Auftragsart"
+						+ "WHERE Status.idStatus=Rechner.Status_idStatus AND Rechner.Auftrag_idAuftragsnummer=Auftrag.idAuftragsnummer"
+						+ "AND Auftragsart.idAuftragsart=Rechner.Auftragsart_idAuftragsart");
 		int i = 0;
 		while (rs.next()) {
 			rechner.add(new Rechner(rs.getInt("idSeriennummer"), rs.getInt("idAuftragsnummer"),
@@ -428,10 +429,20 @@ public class Datenbank {
 		}
 	}
 
-	
-	
 	public void rechenrVerteilung(Monteur pMonteur, Rechner pRechner) throws SQLException {
 		Statement stmt = connection.createStatement();
 		// ResultSet rs = stmt.executeUpdate("UPDATE ");
+	}
+
+	public int getMitarbeiterRolle(Mitarbeiter user) throws SQLException {
+		Statement stmt = connection.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT idMitarbeiterVertragsart "
+				+ "FROM MitarbeiterVertragsart" 
+				+ "WHERE Mitarbeiter.idPersonalnummer='" + user.getPerosnalnr());
+		int rolle = 0;
+		while (rs.next()) {
+			 rolle=rs.getInt("idMitarbeiterVertragsart");
+		}
+		return rolle;
 	}
 }

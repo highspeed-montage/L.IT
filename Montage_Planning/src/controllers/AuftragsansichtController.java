@@ -17,6 +17,7 @@ import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -25,6 +26,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import models.Auftrag;
 import models.Auftragsverteilung;
 import models.Monteur;
@@ -195,5 +197,8 @@ public class AuftragsansichtController implements Initializable {
 	public void Logout(Event event) {
 		LoginController Logout =new LoginController();
 		Logout.confirmation();
+	    final Node source = (Node) event.getSource();
+	    final Stage stage = (Stage) source.getScene().getWindow();
+	    stage.close();
 	}
 }
