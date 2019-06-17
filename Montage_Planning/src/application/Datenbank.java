@@ -18,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
 import models.Auftrag;
+import models.Auftragsverteilung;
 import models.FA_Rechner;
 import models.Kunde;
 import models.Mitarbeiter;
@@ -305,6 +306,7 @@ public class Datenbank {
 		int lagerbestand = 0;
 
 		while (rs.next()) {
+			
 			lagerbestand = rs.getInt("Lagerbestand");
 			if(rs.getInt("Lagerbestand")==0)
 			{
