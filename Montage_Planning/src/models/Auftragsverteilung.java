@@ -9,6 +9,7 @@ public class Auftragsverteilung {
 	private Date lieferdatum;
 	private Integer seriennr;
 	private String status;
+	private Monteur monteur;
 
 	public Auftragsverteilung(LocalDate bearbeitungsdatum, Date lieferdatum, Integer seriennr, String status) {
 		super();
@@ -24,12 +25,14 @@ public class Auftragsverteilung {
 		this.seriennr = seriennr;
 		this.bearbeitungsdatum = bearbeitungsdatum;
 	}
-
-	@Override
-	public String toString() {
-		return "Auftragsverteilung [bearbeitungsdatum=" + bearbeitungsdatum + ", lieferdatum=" + lieferdatum
-				+ ", seriennr=" + seriennr + ", status=" + status + "]";
+	
+	public Auftragsverteilung(LocalDate bearbeitungsdatum, Integer seriennr, Monteur monteur) {
+		super();
+		this.bearbeitungsdatum = bearbeitungsdatum;
+		this.seriennr = seriennr;
+		this.monteur = monteur;
 	}
+
 
 	public LocalDate getBearbeitungsdatum() {
 		return bearbeitungsdatum;
@@ -62,5 +65,23 @@ public class Auftragsverteilung {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+	public Monteur getMonteur() {
+		return monteur;
+	}
+
+	public void setMonteur(Monteur monteur) {
+		this.monteur = monteur;
+	}
+
+	@Override
+	public String toString() {
+		return "Auftragsverteilung [bearbeitungsdatum=" + bearbeitungsdatum + ", lieferdatum=" + lieferdatum
+				+ ", seriennr=" + seriennr + ", status=" + status + ", monteur=" + monteur + "]";
+	}
+
+		
+
+	
 
 }

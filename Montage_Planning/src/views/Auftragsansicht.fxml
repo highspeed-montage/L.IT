@@ -27,7 +27,7 @@
                            <top>
                               <HBox prefHeight="47.0" prefWidth="751.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <ComboBox fx:id="comboBox_AW_Wochenansicht" prefHeight="42.0" prefWidth="122.0" promptText="Wochenauswahl">
+                                    <ComboBox fx:id="comboBox_AW_Wochenansicht" prefHeight="27.0" prefWidth="199.0" promptText="Wochenauswahl">
                                        <HBox.margin>
                                           <Insets bottom="10.0" left="10.0" right="5.0" top="10.0" />
                                        </HBox.margin>
@@ -36,15 +36,7 @@
                               </HBox>
                            </top>
                            <center>
-                              <TableView fixedCellSize="1.0" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                                <columns>
-                                  <TableColumn fx:id="col_AW_Mitarbeit" editable="false" prefWidth="151.0" text="Mitarbeiter" />
-                                  <TableColumn fx:id="col_AW_Montag" editable="false" prefWidth="109.0" text="Montag" />
-                                    <TableColumn fx:id="col_AW_Dienstag" editable="false" prefWidth="108.0" text="Dienstag" />
-                                    <TableColumn fx:id="col_AW_Mittwoch" editable="false" prefWidth="125.0" text="Mittwoch" />
-                                    <TableColumn fx:id="col_AW_Donnerstag" editable="false" prefWidth="109.0" text="Donnerstag" />
-                                    <TableColumn fx:id="col_AW_Freitag" prefWidth="148.0" text="Freitag" />
-                                </columns>
+                              <TableView fx:id="tableAuftragWoche" fixedCellSize="1.0" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>

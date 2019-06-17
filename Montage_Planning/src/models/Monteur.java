@@ -3,15 +3,14 @@ package models;
 import java.util.LinkedList;
 import java.util.Deque;
 
-public class Monteur extends Mitarbeiter{
+public class Monteur extends Mitarbeiter {
 	private boolean verfuegbar;
 	private Deque<Rechner> pipeline = new LinkedList<Rechner>();
 	private int wochenstunden;
 	private int arbeitsaufwand;
-	
 
-	public Monteur(int pPersonalnr, String pName, String pVorname, int pKrankheitstage, boolean pAnwesend, int pWochenstunden)
-	{
+	public Monteur(int pPersonalnr, String pName, String pVorname, int pKrankheitstage, boolean pAnwesend,
+			int pWochenstunden) {
 		super(pPersonalnr, pName, pVorname, pKrankheitstage, pAnwesend);
 		wochenstunden = pWochenstunden;
 	}
@@ -20,12 +19,22 @@ public class Monteur extends Mitarbeiter{
 		super(personalnr, name);
 		// TODO Auto-generated constructor stub
 	}
-	public void rechnerHinzufuegen(Rechner pRechner)
-	{
+	
+
+	public Monteur(String name, String vorname, Deque<Rechner> pipeline) {
+		super(name, vorname);
+		this.pipeline = pipeline;
+	}
+	
+	public Monteur(String name, String vorname) {
+		super(name, vorname);
+	}
+
+	public void rechnerHinzufuegen(Rechner pRechner) {
 		pipeline.add(pRechner);
 	}
-	public Rechner rechnerAuslesen()
-	{
+
+	public Rechner rechnerAuslesen() {
 		return pipeline.getFirst();
 	}
 
@@ -44,8 +53,23 @@ public class Monteur extends Mitarbeiter{
 	public void setArbeitsaufwand(int pArbeitsaufwand) {
 		arbeitsaufwand = arbeitsaufwand + pArbeitsaufwand;
 	}
+
+	public Deque<Rechner> getPipeline() {
+		return pipeline;
+	}
+
+	public void setPipeline(Deque<Rechner> pipeline) {
+		this.pipeline = pipeline;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() + pipeline;		
+	}
+
+
+	
+
+
 }
-
-
-
 

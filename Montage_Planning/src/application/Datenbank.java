@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -437,19 +438,19 @@ public class Datenbank {
 	 * @param personalnummer
 	 * @throws SQLException
 	 */
-	public void rechnerVerteilung(int idAuftragsverteilung, Date bearbeitungsdatum, int seriennummer, int personalnummer) throws SQLException {
+	public void rechnerVerteilung(int idAuftragsverteilung, LocalDate bearbeitungsdatum, int seriennummer, int personalnummer) throws SQLException {
 		Statement stmt = connection.createStatement();
 		stmt.executeUpdate("INSERT INTO Auftragsverteilung" + "VALUES(idAuftragsverteilung, bearbeitungsdatum, seriennummer, personalnummer)");
 	}
 
 	public int getMitarbeiterRolle(Mitarbeiter user) throws SQLException {
 		Statement stmt = connection.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT idMitarbeiterVertragsart "
-				+ "FROM MitarbeiterVertragsart" 
-				+ "WHERE Mitarbeiter.idPersonalnummer='" + user.getPerosnalnr());
+		ResultSet rs = stmt.executeQuery("SELECT MitarbeiterVertragsart_idMitarbeiterVertragsart "
+				+ "FROM Mitarbeiter " 
+				+ "WHERE Mitarbeiter.idPersonalnummer='" + user.getPerosnalnr()+"'");
 		int rolle = 0;
 		while (rs.next()) {
-			 rolle=rs.getInt("idMitarbeiterVertragsart");
+			 rolle=rs.getInt("MitarbeiterVertragsart_idMitarbeiterVertragsart");
 		}
 		return rolle;
 	}

@@ -30,6 +30,12 @@ public class Mitarbeiter {
 		this.name = name;
 		this.mitarbeitervertragsart = mitarbeitervertragsart;
 	}
+	
+	public Mitarbeiter(String name, String vorname) {
+		super();
+		this.name = name;
+		this.vorname = vorname;
+	}
 
 	public int getPersonalnr() {
 		return personalnr;

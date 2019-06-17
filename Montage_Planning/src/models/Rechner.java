@@ -1,5 +1,6 @@
 package models;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -15,7 +16,7 @@ public class Rechner {
 	private boolean installiert;
 	private boolean getestet;
 	private int auftragsNr;
-	private Date bearbeitungsdatum;
+	private LocalDate bearbeitungsdatum;
 	private Date lieferdatum;
 	private String firmenname;
 	private String privatName;
@@ -38,11 +39,20 @@ public class Rechner {
 		super();
 		this.seriennr = seriennr;
 	}
+	
+	
 
+
+
+	public Rechner(Integer seriennr, LocalDate bearbeitungsdatum) {
+		super();
+		this.seriennr = seriennr;
+		this.bearbeitungsdatum = bearbeitungsdatum;
+	}
 
 
 	// KOnstruktor fuer FA_REchner
-	public Rechner(int pSeriennr, int auftragsNr, String pStatus, Date pBearbeitungsdatum, Date pLieferdatum,
+	public Rechner(int pSeriennr, int auftragsNr, String pStatus, LocalDate pBearbeitungsdatum, Date pLieferdatum,
 			String pFirmenname, String pPrivatname, int pKundenId, String pEMail, List<Teile> pTeile) {
 		setSeriennr(pSeriennr);
 		this.auftragsNr = auftragsNr;
@@ -58,7 +68,7 @@ public class Rechner {
 	}
 
 	// Konstruktor fuer SA_Rechner
-	public Rechner(int pSeriennr, int auftragsNr, String pStatus, Date pBearbeitungsdatum, Date pLieferdatum,
+	public Rechner(int pSeriennr, int auftragsNr, String pStatus, LocalDate pBearbeitungsdatum, Date pLieferdatum,
 			String pFirmenname, String pPrivatname, int pKundenId, String pEMail) {
 		setSeriennr(pSeriennr);
 		this.auftragsNr = auftragsNr;
@@ -153,7 +163,7 @@ public class Rechner {
 		return auftragsNr;
 	}
 
-	public Date getBearbeitungsdatum() {
+	public LocalDate getBearbeitungsdatum() {
 		return bearbeitungsdatum;
 	}
 
@@ -197,7 +207,7 @@ public class Rechner {
 		this.auftragsNr = auftragsNr;
 	}
 
-	public void setBearbeitungsdatum(Date bearbeitungsdatum) {
+	public void setBearbeitungsdatum(LocalDate bearbeitungsdatum) {
 		this.bearbeitungsdatum = bearbeitungsdatum;
 	}
 

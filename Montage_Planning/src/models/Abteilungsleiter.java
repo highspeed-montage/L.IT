@@ -2,11 +2,11 @@ package models;
 
 public class Abteilungsleiter extends Mitarbeiter {
 
-	public Abteilungsleiter(int pPersonalnr, String pName, String pVorname, double pUrlaubstage, int pKrankheitstage,
-			boolean pVollzeit) {
-		super(pPersonalnr, pName, pVorname, pUrlaubstage, pKrankheitstage, pVollzeit);
+	public Abteilungsleiter(int personalnr, String name) {
+		super(personalnr, name);
+		// TODO Auto-generated constructor stub
 	}
 
-
+	
 
 }

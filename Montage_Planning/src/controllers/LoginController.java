@@ -75,7 +75,7 @@ public class LoginController implements Initializable {
 			if (rolle == 301||rolle == 302)//Monteur
 				new FolgeFenster("/views/Rechneransicht.fxml");
 			if (rolle == 303)//Abteilungsleiter
-				new FolgeFenster("/views/Auftrasgsansicht.fxml");
+				new FolgeFenster("/views/Auftragsansicht.fxml");
 			else
 				error();
 		}
@@ -91,35 +91,38 @@ public class LoginController implements Initializable {
 		try { // Username == idPersonalnummer sind nur Zahlen
 			Integer.parseInt(username);
 		} catch (NumberFormatException ex) {
+			ex.printStackTrace();
 			String zahlenTitle = "Zahlen im Username";
 			String zahlenInfo = "Der Username besteht nur aus Zahlen!";
 			information(zahlenTitle, zahlenInfo);
+			txtUsername.clear();
+			txtPassword.clear();
 		}
 
 		if (username.isEmpty() || username == null) { // null und Empty werden unterschiedlich erkannt --> null!=empty
 			String userTitle = "Username";
 			String userInfo = "Das Username-Feld darf nicht leer sein!";
 			information(userTitle, userInfo);
+			txtUsername.clear();
+			txtPassword.clear();
 
 		} else if (password.isEmpty() || password == null) {
 			String passTitle = "Passwort";
 			String passInfo = "Das Passwort-Feld darf nicht leer sein!";
 			information(passTitle, passInfo);
+			txtUsername.clear();
+			txtPassword.clear();
 
 		}
 
 	}
 
-	public void information(String title, String info) {
+	public static void information(String title, String info) {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle(title);
 		alert.setHeaderText(null);
 		alert.setContentText(info);
 		alert.showAndWait();
-
-		txtUsername.clear();
-		txtPassword.clear();
-
 	}
 
 	public void confirmation() {
