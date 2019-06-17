@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -45,6 +46,13 @@ public class LoginController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		db.openConnection();
 	}
+	
+	public void Eingabe(KeyEvent evt) {
+	    String character = evt.getCharacter();
+	    if(!character.matches("[0-9]")) {
+	        evt.consume();                
+	    }                                         
+	}
 
 	public void Login(Event event) throws IOException, SQLException {
 		int rolle;
@@ -73,11 +81,15 @@ public class LoginController implements Initializable {
 			rolle = db.getMitarbeiterRolle(user);
 
 			if (rolle == 301||rolle == 302)//Monteur
-				new FolgeFenster("/views/Rechneransicht.fxml");
+				{new FolgeFenster("/views/Rechneransicht.fxml");}
+			
 			if (rolle == 303)//Abteilungsleiter
-				new FolgeFenster("/views/Auftragsansicht.fxml");
-			else
-				error();
+				{new FolgeFenster("/views/Auftragsansicht.fxml");}
+			else {
+				String folgeTitle = "Fehler in der Datenstruktur";
+				String folgeInfo="Es liegt ein Fehler vor bitte melden sie sich beim Support";
+				AlertController.error(folgeTitle,folgeInfo);
+				}
 		}
 		final Node source = (Node) event.getSource();
 		final Stage stage = (Stage) source.getScene().getWindow();
@@ -88,28 +100,28 @@ public class LoginController implements Initializable {
 
 	public void validate(String username, String password) {
 
-		try { // Username == idPersonalnummer sind nur Zahlen
-			Integer.parseInt(username);
-		} catch (NumberFormatException ex) {
-			ex.printStackTrace();
-			String zahlenTitle = "Zahlen im Username";
-			String zahlenInfo = "Der Username besteht nur aus Zahlen!";
-			information(zahlenTitle, zahlenInfo);
-			txtUsername.clear();
-			txtPassword.clear();
-		}
+//		try { // Username == idPersonalnummer sind nur Zahlen
+//			Integer.parseInt(username);
+//		} catch (NumberFormatException ex) {
+//			ex.printStackTrace();
+//			String zahlenTitle = "Zahlen im Username";
+//			String zahlenInfo = "Der Username besteht nur aus Zahlen!";
+//			AlertController.information(zahlenTitle, zahlenInfo);
+//			txtUsername.clear();
+//			txtPassword.clear();
+//		}
 
 		if (username.isEmpty() || username == null) { // null und Empty werden unterschiedlich erkannt --> null!=empty
 			String userTitle = "Username";
 			String userInfo = "Das Username-Feld darf nicht leer sein!";
-			information(userTitle, userInfo);
+			AlertController.information(userTitle, userInfo);
 			txtUsername.clear();
 			txtPassword.clear();
 
 		} else if (password.isEmpty() || password == null) {
 			String passTitle = "Passwort";
 			String passInfo = "Das Passwort-Feld darf nicht leer sein!";
-			information(passTitle, passInfo);
+			AlertController.information(passTitle, passInfo);
 			txtUsername.clear();
 			txtPassword.clear();
 
@@ -117,36 +129,5 @@ public class LoginController implements Initializable {
 
 	}
 
-	public static void information(String title, String info) {
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle(title);
-		alert.setHeaderText(null);
-		alert.setContentText(info);
-		alert.showAndWait();
-	}
 
-	public void confirmation() {
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Sind Sie sicher?");
-		alert.setHeaderText(null);
-		alert.setContentText("Wenn sie auf OK klicken wird das Programm beendet.");
-
-		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == ButtonType.OK) {
-			Platform.exit();
-		} else {
-			alert.close();
-		}
-
-	}
-	private void error() {
-		Alert alert = new Alert(AlertType.ERROR);
-		alert.setTitle("Fehler in der Datenstruktur");
-		alert.setHeaderText(null);
-		alert.setContentText("Aufgrund eines Fehlers konnten wir sie leider nicht erfolgreich anmelden!");
-		
-		txtUsername.clear();
-		txtPassword.clear();
-
-	}
 }

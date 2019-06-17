@@ -82,7 +82,7 @@ public class RechneransichtController implements Initializable {
 
 	ObservableList<Auftragsverteilung[]> rechnerWochenansichtTabelle = FXCollections.observableArrayList();
 	ObservableList<Auftragsverteilung> rechnerListenansichtTabelle = FXCollections.observableArrayList();
-	
+
 	Alert alert = new Alert(AlertType.INFORMATION);
 
 	@Override
@@ -90,14 +90,16 @@ public class RechneransichtController implements Initializable {
 
 		db.openConnection();
 
-		// Holt alle Bearbeitungsdaten aus der Datenbank zur dynamischen Befuellung der ComboBox
+		// Holt alle Bearbeitungsdaten aus der Datenbank zur dynamischen Befuellung der
+		// ComboBox
 		try {
 			bearbeitungsdatum.addAll(db.getRechnerBearbeitungsdatum());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		// Wochen fuer die ComboBox ermitteln anhand der Bearbeitungsdaten aus der Datenbank
+		// Wochen fuer die ComboBox ermitteln anhand der Bearbeitungsdaten aus der
+		// Datenbank
 		for (int i = 0; i < bearbeitungsdatum.size(); i++) {
 			Date date = bearbeitungsdatum.get(i);
 			int kw = getWeekNumberFromDate(date);
@@ -113,8 +115,8 @@ public class RechneransichtController implements Initializable {
 		// ComboBox befüllen
 		options.addAll(wochen);
 		comboBox_RW_Wochenansicht.setItems(options.sorted());
-		
-		// Spalten für die Wochenansicht 
+
+		// Spalten für die Wochenansicht
 		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE", Locale.GERMAN);
 
 		for (int i = 1; i <= 5; i++) {
@@ -149,7 +151,8 @@ public class RechneransichtController implements Initializable {
 			String startdatum = newValue.substring(0, 10);
 			String enddatum = newValue.substring(11, 21);
 
-			// Befuellen der Wochenansicht Tabelle mit den verteilten Auftraegen aus der Datenbank
+			// Befuellen der Wochenansicht Tabelle mit den verteilten Auftraegen aus der
+			// Datenbank
 			try {
 				Auftragsverteilung[][] row = new Auftragsverteilung[10][DayOfWeek.FRIDAY.getValue()];
 				for (Auftragsverteilung auftrag : db.getRechnerAusAuftragsverteilungWoche(startdatum, enddatum)) {
@@ -231,7 +234,6 @@ public class RechneransichtController implements Initializable {
 
 		}
 	}
-	
 
 	// ComboBox: Kalenderwoche holen
 	public static int getWeekNumberFromDate(Date date) {
@@ -257,14 +259,19 @@ public class RechneransichtController implements Initializable {
 		cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
 		return cal.getTime();
 	}
-	
+
 	public void Logout(Event event) {
-		LoginController Logout =new LoginController();
-		Logout.confirmation();
-	    final Node source = (Node) event.getSource();
-	    final Stage stage = (Stage) source.getScene().getWindow();
-	    stage.close();
+		AlertController.confirmation();
+		try {
+			new FolgeFenster("/views/Login.fxml");
+		} catch (IOException e) {
+			String logoutTitle = "Fehler";
+			String logoutInfo = "Sie konnten nicht ausgeloggt werden.";
+			AlertController.error(logoutTitle, logoutInfo);
+			e.printStackTrace();
+		}
+		final Node source = (Node) event.getSource();
+		final Stage stage = (Stage) source.getScene().getWindow();
+		stage.close();
 	}
 }
-
-

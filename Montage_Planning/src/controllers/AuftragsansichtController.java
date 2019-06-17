@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -380,8 +381,15 @@ public class AuftragsansichtController implements Initializable {
 	}
 
 	public void Logout(Event event) {
-		LoginController Logout = new LoginController();
-		Logout.confirmation();
+		AlertController.confirmation();
+		try {
+			new FolgeFenster("/views/Login.fxml");
+		} catch (IOException e) {
+			String logoutTitle = "Fehler";
+			String logoutInfo = "Sie konnten nicht ausgeloggt werden.";
+			AlertController.error(logoutTitle, logoutInfo);
+			e.printStackTrace();
+		}
 		final Node source = (Node) event.getSource();
 		final Stage stage = (Stage) source.getScene().getWindow();
 		stage.close();
