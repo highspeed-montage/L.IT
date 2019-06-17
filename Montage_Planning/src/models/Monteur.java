@@ -26,7 +26,7 @@ public class Monteur extends Mitarbeiter{
 	}
 	public Rechner rechnerAuslesen()
 	{
-		return pipeline.getFirst();
+		return pipeline.getLast();
 	}
 
 	public int getWochenstunden() {
