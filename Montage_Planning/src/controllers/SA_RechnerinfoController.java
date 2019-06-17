@@ -113,7 +113,7 @@ public class SA_RechnerinfoController implements Initializable {
 								| eingabe.equalsIgnoreCase("hauptspeicher") | eingabe.equalsIgnoreCase("festplatte")
 								| eingabe.equalsIgnoreCase("laufwerk")) {
 							try {
-								lagerbestand = db.getEinzelteilLagerbestand(eingabe);
+								lagerbestand = db.getEinzelteilLagerbestand(eingabe, sr.getSeriennr());
 								System.out.println("Lagerbestand: " + lagerbestand);
 							} catch (SQLException e) {
 								e.printStackTrace();
