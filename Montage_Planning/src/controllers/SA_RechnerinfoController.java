@@ -86,7 +86,6 @@ public class SA_RechnerinfoController implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
 		db.openConnection();
-		
 
 		// String stsGetestet = "getestet"; //Anstelle von stsBearb
 		String stsBearb = "in Bearbeitung";
@@ -139,36 +138,38 @@ public class SA_RechnerinfoController implements Initializable {
 		 * fehlt noch.. WO KOMMT DAS HIN? => SA Konstruktor �ndern
 		 */
 
-		rbtn_SAI_Hardware.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-				if(rbtn_SAI_Hardware.isSelected()==true) {
-					sr.setHardwareverschuldet(true);
-					sr.setSoftwareverschuldet(false);
-					sr.setKundenverschuldet(false);
-					System.out.println(sr.toString());
-				}			
-		});
-		
-		rbtn_SAI_Software.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-				if(rbtn_SAI_Software.isSelected() == true) {
-					sr.setSoftwareverschuldet(true);
-					sr.setHardwareverschuldet(false);
-					sr.setKundenverschuldet(false);
-					System.out.println(sr.toString());
-				}
-			});
-		
-		rbtn_SAI_Kunde.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-				if(rbtn_SAI_Kunde.isSelected()==true) {
-					sr.setKundenverschuldet(true);
-					sr.setHardwareverschuldet(false);
-					sr.setSoftwareverschuldet(false);
-					System.out.println(sr.toString());
-				}
-		});
+		rbtn_SAI_Hardware.selectedProperty()
+				.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+					if (rbtn_SAI_Hardware.isSelected() == true) {
+						sr.setHardwareverschuldet(true);
+						sr.setSoftwareverschuldet(false);
+						sr.setKundenverschuldet(false);
+						System.out.println(sr.toString());
+					}
+				});
+
+		rbtn_SAI_Software.selectedProperty()
+				.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+					if (rbtn_SAI_Software.isSelected() == true) {
+						sr.setSoftwareverschuldet(true);
+						sr.setHardwareverschuldet(false);
+						sr.setKundenverschuldet(false);
+						System.out.println(sr.toString());
+					}
+				});
+
+		rbtn_SAI_Kunde.selectedProperty()
+				.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+					if (rbtn_SAI_Kunde.isSelected() == true) {
+						sr.setKundenverschuldet(true);
+						sr.setHardwareverschuldet(false);
+						sr.setSoftwareverschuldet(false);
+						System.out.println(sr.toString());
+					}
+				});
 
 	}
-	
-	
+
 	private void SA_RechnerInfo_fuellen() {
 		try {
 			sr = db.getSARechnerInfo(RechneransichtController.seriennrAktuell);// RechneransichtController.seriennrAktuell
@@ -225,6 +226,7 @@ public class SA_RechnerinfoController implements Initializable {
 
 		try {
 			db.setRechnerStatus(sr.getSeriennr(), selectedSatus);
+			lbl_SAI_status.setText(selectedSatus);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

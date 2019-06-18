@@ -1,5 +1,6 @@
 package models;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -10,19 +11,19 @@ public class SA_Rechner extends Rechner {
 //	private boolean neues_Betriebssystem;
 
 	private static final double ARBEITSAUFWAND_SA = 2;
-	// Boolean zu Problemfällen (für rbtns der Doku)
+	// Boolean zu Problemfï¿½llen (fï¿½r rbtns der Doku)
 	private boolean kundenverschuldet;
 	private boolean hardwareverschuldet;
 	private boolean softwareverschuldet;
-	// Boolean zu HW-Schäden (rbtns unter hw-rbtn)
+	// Boolean zu HW-Schï¿½den (rbtns unter hw-rbtn)
 	private boolean prozessor_kaputt;
 	private boolean grafikkarte_kaputt;
 	private boolean festplatte_kaputt;
 	private boolean dvd_Laufwerk_kaputt;
 
 
-	/** Konstruktor für DB-Interaktionen */
-	public SA_Rechner(int pSeriennr, int auftragsNr, String pStatus, Date pBearbeitungsdatum, Date pLieferdatum,
+	/** Konstruktor fï¿½r DB-Interaktionen */
+	public SA_Rechner(int pSeriennr, int auftragsNr, String pStatus, LocalDate pBearbeitungsdatum, Date pLieferdatum,
 			String pFirmenname, String pPrivatname, int pKundenId, String pEMail, boolean pKundenverschuldet,
 			boolean pHardwareverschuldet, boolean pSoftwareverschuldet, boolean pProzessor_kaputt,
 			boolean pGrafikkarte_kaputt, boolean pFestplatte_kaputt, boolean pDvd_Laufwerk_kaputt) {

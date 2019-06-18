@@ -6,11 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.ResourceBundle;
-
-import javax.swing.JOptionPane;
-
 import application.Datenbank;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,11 +20,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import models.Auftragsverteilung;
 import models.FA_Rechner;
 import models.Teile;
 
-public class FA_RechnerinfoController implements EventHandler, Initializable {
+public class FA_RechnerinfoController implements Initializable {
 	/** Rechnerinfo */
 	@FXML
 	private Label lbl_FAI_status;
@@ -91,7 +86,7 @@ public class FA_RechnerinfoController implements EventHandler, Initializable {
 			e1.printStackTrace();
 		}
 
-		lbl_FAI_Seriennummer.setText(String.valueOf(fr.getSeriennr()));
+		lbl_FAI_Seriennummer.setText(String.valueOf(RechneransichtController.seriennrAktuell));
 
 		if (fr.getFirmenname() != null) {
 			lbl_FAI_kunde.setText(fr.getFirmenname());
@@ -121,22 +116,16 @@ public class FA_RechnerinfoController implements EventHandler, Initializable {
 
 		try {
 			db.setRechnerStatus(fr.getSeriennr(), selectedSatus);
+			lbl_FAI_status.setText(selectedSatus);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} // pSeriennummer aus SA_Rechner sr (sr.getSNr..);
 	}
 
-	@Override
-	public void handle(Event arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
 	public void createSeriennummerPDF() {
 		
 		// Seriennummer wird in Textdatei geschrieben
-
 		PrintWriter pWriter = null;
 		try {
 			pWriter = new PrintWriter(new BufferedWriter(new FileWriter("src/application/seriennummer.txt")));

@@ -1,12 +1,11 @@
 package models;
 
-import java.util.List;
+import java.util.Date;
 
 public class Serviceauftrag extends Auftrag{
 
-	public Serviceauftrag(int pAuftragsnr, String pStatus, Kunde pKunde, boolean pZugewiesen, List<Rechner> pRechner) {
-		super(pAuftragsnr, pStatus, pKunde, pZugewiesen, pRechner);
+	public Serviceauftrag(Integer auftragsnr, Date lieferdatum, Integer anzahlRechner, String status) {
+		super(auftragsnr, lieferdatum, anzahlRechner, status);
 	}
-
 	
 }

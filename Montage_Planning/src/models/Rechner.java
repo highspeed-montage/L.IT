@@ -39,10 +39,6 @@ public class Rechner {
 		super();
 		this.seriennr = seriennr;
 	}
-	
-	
-
-
 
 	public Rechner(Integer seriennr, LocalDate bearbeitungsdatum) {
 		super();

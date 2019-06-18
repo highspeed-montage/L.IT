@@ -138,7 +138,7 @@ public class Datenbank {
 			int pKundenId = rsInfo.getInt("Auftrag.Kunde_idKunde");
 			String pStatus = rsInfo.getString("Status.Bezeichnung");
 			Date pLieferdatum = rsInfo.getDate("Auftrag.Lieferdatum");
-			Date pBearbeitungsdatum = rsInfo.getDate("Auftragsverteilung.Bearbeitungsdatum");
+			LocalDate pBearbeitungsdatum = rsInfo.getDate("Auftragsverteilung.Bearbeitungsdatum").toLocalDate();
 			String pFirmenname = null;
 			String pPrivatname = null;
 			String pEMail = rsInfo.getString("Kunde.EMail");
@@ -196,7 +196,7 @@ public class Datenbank {
 			int pKundenId = rsInfo.getInt("Auftrag.Kunde_idKunde");
 			String pStatus = rsInfo.getString("Status.Bezeichnung");
 			Date pLieferdatum = rsInfo.getDate("Auftrag.Lieferdatum");
-			Date pBearbeitungsdatum = rsInfo.getDate("Auftragsverteilung.Bearbeitungsdatum");
+			LocalDate pBearbeitungsdatum = rsInfo.getDate("Auftragsverteilung.Bearbeitungsdatum").toLocalDate();
 			String pFirmenname = null;
 			String pPrivatname = null;
 			String pEMail = rsInfo.getString("Kunde.EMail");

@@ -206,7 +206,7 @@ public class AuftragsansichtController implements Initializable {
 					System.out.println(i);
 					System.out.println(date.getDayOfWeek().getValue()-1);
 					
-//					row[i][5] = auftrag;
+					row[i][5] = auftrag;
 					i++;
 				}
 
