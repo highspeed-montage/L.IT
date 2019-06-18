@@ -163,7 +163,7 @@ public class AuftragsansichtController implements Initializable {
 	public void listenansichtFuellen() {
 
 		try {
-			auftragListenansichtTabelle.addAll(dbG.getAuftrag());
+			auftragListenansichtTabelle.addAll(dbG.getAuftragFuerListe());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
