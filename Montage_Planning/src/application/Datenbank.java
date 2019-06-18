@@ -32,7 +32,7 @@ public class Datenbank {
 //	private static final String DB_CONNECTION = "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
 //	private static final String DB_USER = "aj9s-montage";
 //	private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
-	
+
 	// NICHT LOESCHEN: Datenbankverbindung GABBY LOKAL
 	// private static final String DB_CONNECTION =
 	// "jdbc:mysql://localhost:3306/aj9s-montage?serverTimezone=UTC"; //fuer jan
@@ -113,15 +113,38 @@ public class Datenbank {
 			rechner.add(new Rechner(rechnerSNr, rechnerStatus));
 		}
 		
-		String queryInfo = "SELECT Status.Bezeichnung, Auftrag.Lieferdatum, Auftrag.Bestelldatum, Kundengruppe.Bezeichnung,"
-				+ "Kunde.idKundennummer, Kunde.EMail, Kunde.Name, Kunde.Firmenname"
-				+ "FROM Status, Auftrag, Kundengruppe, Kunde"
-				+ "WHERE";
-		
+		String queryInfo = "SELECT Auftrag.idAuftragsnummer, Status.Bezeichnung, Auftrag.Lieferdatum, Auftrag.Bestelldatum, "
+				+ "Auftrag.Kunde_idKunde, Kunde.EMail, Kunde.Name, Kunde.Firmenname, Kundengruppe.Bezeichnung "
+				+ "FROM Status, Auftrag, Kundengruppe, Kunde "
+//				+ "WHERE Rechner.Auftrag_idAuftragsnummer = '"+pAuftragsnr+"' AND Auftrag.Status_idStatus = Status.idStatus "
+//						+ "AND Auftrag.Kunde_idKunde = Kunde.idKundennummer AND Kunde.Kundengruppe_idKundengruppe = Kundengruppe.idKundengruppe ";
+		//Probleme: Status.Bezeichnung WHERE Auftrag.Status_idStatus = Status.idStatus !!!!!!!!
+		ResultSet rsInfo = stmt.executeQuery(queryInfo);
+		while(rsInfo.next()) {
+			int auftragsnr = rsInfo.getInt("Auftrag.idAuftragsnummer");
+			String pStatus = rsInfo.getString("Status.Bezeichnung");
+			Date pLieferdatum = rsInfo.getDate("Auftrag.Lieferdatum");
+			Date pBestelldatum = rsInfo.getDate("Auftrag.Bestelldatum");
+			String pKundentyp = rsInfo.getString("Kundengruppe.Bezeichnung");
+			int pKundenNr = rsInfo.getInt("Auftrag.Kunde_idKunde");
+			String pKundenEmail = rsInfo.getString("Kunde.EMail");
+			String pFirmenname = null;
+			String pPrivatname = null;
+			
+			if (rsInfo.getString("Kunde.Firmenname") != null) {
+				pFirmenname = rsInfo.getString("Kunde.Firmenname");
+
+			} else {
+				pPrivatname = rsInfo.getString("Kunde.Name");
+			}
+			
+			a1 = new Auftrag(auftragsnr, pStatus, pLieferdatum, pBestelldatum, pKundentyp, pKundenNr, pKundenEmail, pFirmenname, pPrivatname, rechner) ;
+		}
 		
 		
 		return a1;
 	}
+
 	/**
 	 * holt info für FA_Rechner nach Seriennummer
 	 * 
@@ -291,6 +314,7 @@ public class Datenbank {
 		int updatedRows = stmt.executeUpdate(query);
 		return updatedRows == 1;
 	}
+
 //
 //	/**
 //	 * Diese Methode listet die Bezeichnung der Teile eines Rechners auf.
@@ -318,9 +342,11 @@ public class Datenbank {
 //		return teileAuflistung;
 //	}
 	/**
-	 * Die Methode gibt den Lagerbestand eines Einzelteils aus und veraendert den Status des Rechners, wenn
+	 * Die Methode gibt den Lagerbestand eines Einzelteils aus und veraendert den
+	 * Status des Rechners, wenn
+	 * 
 	 * @param eingabe
-	 * @param pSeriennummer 
+	 * @param pSeriennummer
 	 * @return Lagerbestand des Einzelteils
 	 * @throws SQLException
 	 */
@@ -331,17 +357,16 @@ public class Datenbank {
 		int lagerbestand = 0;
 
 		while (rs.next()) {
-			
+
 			lagerbestand = rs.getInt("Lagerbestand");
-			if(rs.getInt("Lagerbestand")==0)
-			{
-				int updatedRows = stmt.executeUpdate("UPDATE Rechner SET Status_idStatus = '7' WHERE idSeriennummer = '" + pSeriennummer +"'");
+			if (rs.getInt("Lagerbestand") == 0) {
+				int updatedRows = stmt.executeUpdate(
+						"UPDATE Rechner SET Status_idStatus = '7' WHERE idSeriennummer = '" + pSeriennummer + "'");
 			}
 		}
 		return lagerbestand;
 	}
 
-	
 	public String authenticateUser(String username, String passwort) throws SQLException {
 
 		// String passwort = String.valueOf(passwortInt);
@@ -436,28 +461,32 @@ public class Datenbank {
 			i++;
 		}
 	}
+
 	/**
 	 * Die Methode uebertraegt die Rechnerverteilung in die Datenbank
+	 * 
 	 * @param idAuftragsverteilung
 	 * @param bearbeitungsdatum
 	 * @param seriennummer
 	 * @param personalnummer
 	 * @throws SQLException
 	 */
-	public void rechnerVerteilung(int idAuftragsverteilung, LocalDate bearbeitungsdatum, int seriennummer, int personalnummer) throws SQLException {
+	public void rechnerVerteilung(int idAuftragsverteilung, LocalDate bearbeitungsdatum, int seriennummer,
+			int personalnummer) throws SQLException {
 		Statement stmt = connection.createStatement();
-		stmt.executeUpdate("INSERT INTO Auftragsverteilung" + "VALUES(idAuftragsverteilung, bearbeitungsdatum, seriennummer, personalnummer)");
-		int updatedRows = stmt.executeUpdate("UPDATE Rechner SET Status_idStatus = '3' WHERE idSeriennummer = '" + seriennummer +"'");
+		stmt.executeUpdate("INSERT INTO Auftragsverteilung"
+				+ "VALUES(idAuftragsverteilung, bearbeitungsdatum, seriennummer, personalnummer)");
+		int updatedRows = stmt.executeUpdate(
+				"UPDATE Rechner SET Status_idStatus = '3' WHERE idSeriennummer = '" + seriennummer + "'");
 	}
 
 	public int getMitarbeiterRolle(Mitarbeiter user) throws SQLException {
 		Statement stmt = connection.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT MitarbeiterVertragsart_idMitarbeiterVertragsart "
-				+ "FROM Mitarbeiter " 
-				+ "WHERE Mitarbeiter.idPersonalnummer='" + user.getPerosnalnr()+"'");
+		ResultSet rs = stmt.executeQuery("SELECT MitarbeiterVertragsart_idMitarbeiterVertragsart " + "FROM Mitarbeiter "
+				+ "WHERE Mitarbeiter.idPersonalnummer='" + user.getPerosnalnr() + "'");
 		int rolle = 0;
 		while (rs.next()) {
-			 rolle=rs.getInt("MitarbeiterVertragsart_idMitarbeiterVertragsart");
+			rolle = rs.getInt("MitarbeiterVertragsart_idMitarbeiterVertragsart");
 		}
 		return rolle;
 	}
