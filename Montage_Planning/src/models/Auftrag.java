@@ -16,18 +16,55 @@ public class Auftrag {
 	private static final int lieferzeit = 14;
 	private Date lieferdatum;
 
+	// Fuer DB Abfrage Auftragsinfo:
+	private Date bestelldatum;
+	private String kundentyp;
+	private String kundenNr;
+	private String kundenEMail;
+	private List<Rechner> rechnerVonAuftrag = new ArrayList<Rechner>();
+
 	public Auftrag(Integer pAuftragsnr) {
 		auftragsnr = pAuftragsnr;
 	}
 
+	public Date getBestelldatum() {
+		return bestelldatum;
+	}
+
+	public String getKundentyp() {
+		return kundentyp;
+	}
+
+	public String getKundenNr() {
+		return kundenNr;
+	}
+
+	public String getKundenEMail() {
+		return kundenEMail;
+	}
+
+	public List<Rechner> getRechnerVonAuftrag() {
+		return rechnerVonAuftrag;
+	}
+
 	public Auftrag(Integer auftragsnr, Date lieferdatum, Integer anzahlRechner, String status) {
-		super();
 		this.auftragsnr = auftragsnr;
 		this.lieferdatum = lieferdatum;
 		this.anzahlRechner = anzahlRechner;
 		this.status = status;
 	}
-	
+
+	/** Für DB Abfragen um AUftragsinfo zu füllen */
+	public Auftrag(Integer pAuftragsnr, String pStatus, Date pLieferdatum, Date pBestelldatum, String pKundentyp,
+			Integer pKundenNr, String pKundenEmail, String pKundenName, List<Rechner> pRechner) {
+		this.auftragsnr = pAuftragsnr;
+		this.status = pStatus;
+		this.lieferdatum = pLieferdatum;
+		this.bestelldatum = pBestelldatum;
+		this.kundentyp = pKundentyp;
+		this.rechnerVonAuftrag = pRechner;
+	}
+
 	public Auftrag(Integer auftragsnr, Date lieferdatum) {
 		super();
 		this.auftragsnr = auftragsnr;
@@ -125,7 +162,5 @@ public class Auftrag {
 	public void setArbeitsaufwand(double arbeitsaufwand) {
 		this.arbeitsaufwand = arbeitsaufwand;
 	}
-	
-	
 
 }

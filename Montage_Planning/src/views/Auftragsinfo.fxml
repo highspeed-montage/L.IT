@@ -84,7 +84,6 @@
                      <columns>
                         <TableColumn prefWidth="75.0" text="SerienNr" />
                         <TableColumn prefWidth="75.0" text="Status" />
-                        <TableColumn prefWidth="75.0" text="Mitarbeiter" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

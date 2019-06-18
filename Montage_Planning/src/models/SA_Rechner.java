@@ -1,5 +1,6 @@
 package models;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class SA_Rechner extends Rechner {
 
 
 	/** Konstruktor für DB-Interaktionen */
-	public SA_Rechner(int pSeriennr, int auftragsNr, String pStatus, Date pBearbeitungsdatum, Date pLieferdatum,
+	public SA_Rechner(int pSeriennr, int auftragsNr, String pStatus, LocalDate pBearbeitungsdatum, Date pLieferdatum,
 			String pFirmenname, String pPrivatname, int pKundenId, String pEMail, boolean pKundenverschuldet,
 			boolean pHardwareverschuldet, boolean pSoftwareverschuldet, boolean pProzessor_kaputt,
 			boolean pGrafikkarte_kaputt, boolean pFestplatte_kaputt, boolean pDvd_Laufwerk_kaputt) {
