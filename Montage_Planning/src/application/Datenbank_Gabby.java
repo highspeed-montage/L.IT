@@ -147,7 +147,7 @@ public class Datenbank_Gabby {
 		return bearbeitungsdatum;
 	}
 
-	public List<Auftrag> getAuftrag() throws SQLException {
+	public List<Auftrag> getAuftragFuerListe() throws SQLException {
 		List<Auftrag> auftraege = new ArrayList<>();
 		Statement stmt = connection.createStatement();
 		Statement stmtAR = connection.createStatement();

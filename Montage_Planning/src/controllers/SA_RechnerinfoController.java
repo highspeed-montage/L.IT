@@ -102,17 +102,17 @@ public class SA_RechnerinfoController implements Initializable {
 			@Override
 			public void handle(KeyEvent ke) {
 				// wenn der rbtn_Hwardware ausgewï¿½hlt ist, DANN per Enter gesucht werden!
-				if (rbtn_SAI_Hardware.isSelected()) {
-					int lagerbestand = 0;
-					if (ke.getCode().equals(KeyCode.ENTER)) {
-						String eingabe = txt_SAI_Einzelteilsuche.getText();
+
+				int lagerbestand = 0;
+				if (ke.getCode().equals(KeyCode.ENTER)) {
+					if (rbtn_SAI_Hardware.isSelected()) {
+						String eingabe = txt_SAI_Einzelteilsuche.getText().toLowerCase();
 						if (eingabe.isEmpty()) {
 							lbl_SAI_SuchStatus.setText("leere Eingabe");
-						} else if (eingabe.contains("prozessor") | eingabe.equalsIgnoreCase("prozessor")
-								| eingabe.equalsIgnoreCase("hauptspeicher") | eingabe.equalsIgnoreCase("festplatte")
-								| eingabe.equalsIgnoreCase("laufwerk")) {
+						} else if (eingabe.contains("prozessor") | eingabe.contains("hauptspeicher")
+								| eingabe.contains("festplatte") | eingabe.contains("laufwerk")) {
 							try {
-								lagerbestand = db.getEinzelteilLagerbestand(eingabe);
+								lagerbestand = db.getEinzelteilLagerbestand(eingabe, sr.getSeriennr());
 								System.out.println("Lagerbestand: " + lagerbestand);
 							} catch (SQLException e) {
 								e.printStackTrace();
@@ -125,9 +125,8 @@ public class SA_RechnerinfoController implements Initializable {
 						} else if (lagerbestand == 0) {
 							lbl_SAI_SuchStatus.setText("nicht auf Lager");
 						}
-						{
-							lbl_SAI_SuchStatus.setText("ungï¿½ltige Eingabe");
-						}
+					} else {
+						// hier sonen Popup Fenster, HW BTN MuSS AUSGEWÄHLT WERDEN
 					}
 				}
 
