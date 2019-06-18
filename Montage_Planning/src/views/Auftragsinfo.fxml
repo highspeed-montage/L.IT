@@ -80,10 +80,10 @@
                         <Insets bottom="2.0" top="2.0" />
                      </VBox.margin>
                   </HBox>
-                  <TableView prefHeight="200.0" prefWidth="200.0">
+                  <TableView fx:id="tableView_AI_Rechner" prefHeight="200.0" prefWidth="200.0">
                      <columns>
-                        <TableColumn prefWidth="75.0" text="SerienNr" />
-                        <TableColumn prefWidth="75.0" text="Status" />
+                        <TableColumn fx:id="tableColumn_AI_SerienNr" prefWidth="75.0" text="SerienNr" />
+                        <TableColumn fx:id="tableColumn_AI_Status" prefWidth="75.0" text="Status" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

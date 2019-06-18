@@ -37,6 +37,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import models.Auftrag;
 import models.Auftragsverteilung;
@@ -96,6 +97,8 @@ public class AuftragsansichtController implements Initializable {
 
 	// ComboBox
 	private ObservableList<String> options = FXCollections.observableArrayList();
+	
+	public static int auftragsnummerAktuell;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -380,6 +383,49 @@ public class AuftragsansichtController implements Initializable {
 		}
 	}
 
+//	// Wochenansicht: Klick auf Aufrtrag oeffnet Auftragsinfo
+//	public void clickRechnerWoche(MouseEvent e) {
+//
+//		if (e.getClickCount() == 2) {
+//
+//			seriennrAktuell = tableAuftragWoche.getSelectionModel().getSelectedItem().ge;
+//
+//			try {
+//				int idAuftragsart = db.getRechnerAuftragsart(seriennrAktuell);
+//				if (idAuftragsart == 502) {
+//					new FolgeFenster("/views/FA_Rechnerinfo.fxml");
+//				} else if (idAuftragsart == 501) {
+//					new FolgeFenster("/views/SA_Rechnerinfo.fxml");
+//				} else {
+//					System.out.println("Keine Info vorhanden");
+//				}
+//			} catch (SQLException | IOException e2) {
+//				e2.printStackTrace();
+//			}
+//		}
+//	}
+
+	// Listenansicht: Klick auf Auftrag oeffnet Auftragsinfo
+	public void clickRechnerListe(MouseEvent e) {
+
+		if (e.getClickCount() == 2) {
+			auftragsnummerAktuell = tableAuftragListe.getSelectionModel().getSelectedItem().getAuftragsnr();
+
+			try {
+//				int idAuftragsart = db.getRechnerAuftragsart(seriennrAktuell);
+//				if (idAuftragsart == 502) {
+					new FolgeFenster("/views/Auftragsinfo.fxml");
+//				} else if (idAuftragsart == 501) {
+//					new FolgeFenster("/views/SA_Rechnerinfo.fxml");
+//				} else {
+//					System.out.println("Keine Info vorhanden");
+//				}
+			} catch (IOException e2) {
+				e2.printStackTrace();
+			}
+
+		}
+	}
 	public void Logout(Event event) {
 		AlertController.confirmation();
 		try {

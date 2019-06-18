@@ -19,9 +19,11 @@ public class Auftrag {
 	// Fuer DB Abfrage Auftragsinfo:
 	private Date bestelldatum;
 	private String kundentyp;
-	private String kundenNr;
+	private Integer kundenNr;
 	private String kundenEMail;
 	private List<Rechner> rechnerVonAuftrag = new ArrayList<Rechner>();
+	private String firmenname;
+	private String privatname;
 
 	public Auftrag(Integer pAuftragsnr) {
 		auftragsnr = pAuftragsnr;
@@ -56,12 +58,16 @@ public class Auftrag {
 
 	/** Für DB Abfragen um AUftragsinfo zu füllen */
 	public Auftrag(Integer pAuftragsnr, String pStatus, Date pLieferdatum, Date pBestelldatum, String pKundentyp,
-			Integer pKundenNr, String pKundenEmail, String pKundenName, List<Rechner> pRechner) {
+			Integer pKundenNr, String pKundenEmail, String pFirmenname, String pPrivatname, List<Rechner> pRechner) {
 		this.auftragsnr = pAuftragsnr;
 		this.status = pStatus;
 		this.lieferdatum = pLieferdatum;
 		this.bestelldatum = pBestelldatum;
 		this.kundentyp = pKundentyp;
+		this.kundenNr = pKundenNr;
+		this.kundenEMail = pKundenEmail;
+		this.firmenname = pFirmenname;
+		this.privatname = pPrivatname;
 		this.rechnerVonAuftrag = pRechner;
 	}
 
