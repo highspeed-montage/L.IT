@@ -18,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
 import models.Auftrag;
+import models.Auftragsverteilung;
 import models.FA_Rechner;
 import models.Kunde;
 import models.Mitarbeiter;
@@ -96,6 +97,31 @@ public class Datenbank {
 		return list;
 	}
 
+	public Auftrag getAuftragsinfo(int pAuftragsnr) throws SQLException {
+
+		Auftrag a1 = null;
+		Statement stmt = connection.createStatement();
+		List<Rechner>rechner = new ArrayList<>(); //SerienNr, Status
+		String queryRechner = "SELECT Rechner.idSeriennummer, Status.Bezeichnung "
+							+ "FROM Rechner, Status"
+							+ "WHERE Rechner.Auftrag_idAuftragsnummer = '"+pAuftragsnr+"' "
+									+ "AND Rechner.Status_idStatus = Status.idStatus";
+		ResultSet rsRechner = stmt.executeQuery(queryRechner);
+		while(rsRechner.next()) {
+			String rechnerStatus = rsRechner.getString("Status.Bezeichnung");
+			int rechnerSNr = rsRechner.getInt("Rechner.idSeriennummer");
+			rechner.add(new Rechner(rechnerSNr, rechnerStatus));
+		}
+		
+		String queryInfo = "SELECT Status.Bezeichnung, Auftrag.Lieferdatum, Auftrag.Bestelldatum, Kundengruppe.Bezeichnung,"
+				+ "Kunde.idKundennummer, Kunde.EMail, Kunde.Name, Kunde.Firmenname"
+				+ "FROM Status, Auftrag, Kundengruppe, Kunde"
+				+ "WHERE";
+		
+		
+		
+		return a1;
+	}
 	/**
 	 * holt info für FA_Rechner nach Seriennummer
 	 * 
@@ -138,7 +164,7 @@ public class Datenbank {
 			int pKundenId = rsInfo.getInt("Auftrag.Kunde_idKunde");
 			String pStatus = rsInfo.getString("Status.Bezeichnung");
 			Date pLieferdatum = rsInfo.getDate("Auftrag.Lieferdatum");
-			Date pBearbeitungsdatum = rsInfo.getDate("Auftragsverteilung.Bearbeitungsdatum");
+			LocalDate pBearbeitungsdatum = rsInfo.getDate("Auftragsverteilung.Bearbeitungsdatum").toLocalDate();
 			String pFirmenname = null;
 			String pPrivatname = null;
 			String pEMail = rsInfo.getString("Kunde.EMail");
@@ -196,7 +222,7 @@ public class Datenbank {
 			int pKundenId = rsInfo.getInt("Auftrag.Kunde_idKunde");
 			String pStatus = rsInfo.getString("Status.Bezeichnung");
 			Date pLieferdatum = rsInfo.getDate("Auftrag.Lieferdatum");
-			Date pBearbeitungsdatum = rsInfo.getDate("Auftragsverteilung.Bearbeitungsdatum");
+			LocalDate pBearbeitungsdatum = rsInfo.getDate("Auftragsverteilung.Bearbeitungsdatum").toLocalDate();
 			String pFirmenname = null;
 			String pPrivatname = null;
 			String pEMail = rsInfo.getString("Kunde.EMail");
@@ -305,6 +331,7 @@ public class Datenbank {
 		int lagerbestand = 0;
 
 		while (rs.next()) {
+			
 			lagerbestand = rs.getInt("Lagerbestand");
 			if(rs.getInt("Lagerbestand")==0)
 			{
@@ -314,6 +341,7 @@ public class Datenbank {
 		return lagerbestand;
 	}
 
+	
 	public String authenticateUser(String username, String passwort) throws SQLException {
 
 		// String passwort = String.valueOf(passwortInt);

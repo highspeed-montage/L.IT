@@ -39,10 +39,6 @@ public class Rechner {
 		super();
 		this.seriennr = seriennr;
 	}
-	
-	
-
-
 
 	public Rechner(Integer seriennr, LocalDate bearbeitungsdatum) {
 		super();
@@ -67,7 +63,7 @@ public class Rechner {
 
 	}
 
-	// Konstruktor fuer SA_Rechner
+	//Konstruktor fuer SA_Rechner
 	public Rechner(int pSeriennr, int auftragsNr, String pStatus, LocalDate pBearbeitungsdatum, Date pLieferdatum,
 			String pFirmenname, String pPrivatname, int pKundenId, String pEMail) {
 		setSeriennr(pSeriennr);
@@ -80,6 +76,11 @@ public class Rechner {
 		this.kundenId = pKundenId;
 		this.eMail = pEMail;
 
+	}
+	//Konstruktor für DB Abfrage Auftragsinfo (Rechnerliste)
+	public Rechner(int pSeriennr, String pStatus) {
+		this.seriennr = pSeriennr;
+		this.status = pStatus;
 	}
 
 	public void disponieren() {

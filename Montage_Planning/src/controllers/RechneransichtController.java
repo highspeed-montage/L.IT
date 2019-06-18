@@ -93,6 +93,7 @@ public class RechneransichtController implements Initializable {
 		// Holt alle Bearbeitungsdaten aus der Datenbank zur dynamischen Befuellung der
 		// ComboBox
 		try {
+			db.openConnection();
 			bearbeitungsdatum.addAll(db.getRechnerBearbeitungsdatum());
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -125,7 +126,6 @@ public class RechneransichtController implements Initializable {
 			TableColumn<Auftragsverteilung[], Integer> column = new TableColumn<>(formatter.format(day));
 			column.setCellValueFactory(cd -> {
 				Auftragsverteilung auftrag = cd.getValue()[dayIndex];
-				System.out.println(cd.getValue()[dayIndex]);
 				return new SimpleObjectProperty<>(auftrag == null ? null : auftrag.getSeriennr());
 			});
 
