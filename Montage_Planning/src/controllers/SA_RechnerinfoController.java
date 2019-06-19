@@ -126,7 +126,9 @@ public class SA_RechnerinfoController implements Initializable {
 							lbl_SAI_SuchStatus.setText("nicht auf Lager");
 						}
 					} else {
-						// hier sonen Popup Fenster, HW BTN MuSS AUSGEWÄHLT WERDEN
+						String title = "Einzelteilsuche";
+						String info = "RadioButton \"Hardware\" muss ausgewählt sein";
+						AlertController.information(title, info);
 					}
 				}
 
@@ -237,16 +239,12 @@ public class SA_RechnerinfoController implements Initializable {
 	@FXML
 	private void handleCBoxProzessor() {
 		if (rbtn_SAI_Hardware.isSelected()) {
-			sr.setProzessor_kaputt(true); // Wenn der Wert false war
-			// if(cBox_SAI_Prozessor.isSelected()) { //BRAUCH ICH DAS FALLS UNSELECTED
-			// WIRD??
-			// sr.setProzessor_kaputt(true);
-			// }else {
-			// sr.setProzessor_kaputt(false);
+			sr.setProzessor_kaputt(true);
 			// }
 		} else {
-			lbl_SAI_SuchStatus.setText("kein Hardwareproblem");// Falls kein HW Problem, kann dies auch niht ankgekreuzt
-																// werden
+			String title = "Checkbox";
+			String info = "RadioButton \"Hardware\" muss ausgewählt sein";
+			AlertController.information(title, info);
 		}
 	}
 
@@ -257,7 +255,9 @@ public class SA_RechnerinfoController implements Initializable {
 			sr.setGrafikkarte_kaputt(true);
 			;
 		} else {
-			lbl_SAI_SuchStatus.setText("kein Hardwareproblem");
+			String title = "Checkbox";
+			String info = "RadioButton \"Hardware\" muss ausgewählt sein";
+			AlertController.information(title, info);
 		}
 	}
 
@@ -267,8 +267,9 @@ public class SA_RechnerinfoController implements Initializable {
 		if (rbtn_SAI_Hardware.isSelected()) {
 			sr.setFestplatte_kaputt(true);
 		} else {
-			lbl_SAI_SuchStatus.setText("kein Hardwareproblem");
-		}
+			String title = "Checkbox";
+			String info = "RadioButton \"Hardware\" muss ausgewählt sein";
+			AlertController.information(title, info);		}
 	}
 
 	/** handle Checkbox "Laufwerk". Falls geklickt: set true */
@@ -277,8 +278,9 @@ public class SA_RechnerinfoController implements Initializable {
 		if (rbtn_SAI_Hardware.isSelected()) {
 			sr.setDvd_Laufwerk_kaputt(true);
 		} else {
-			lbl_SAI_SuchStatus.setText("kein Hardwareproblem");
-		}
+			String title = "Checkbox";
+			String info = "RadioButton \"Hardware\" muss ausgewählt sein";
+			AlertController.information(title, info);		}
 	}
 
 	/** Speichern Button, Aenderungen an SA_Rechner Objekt werden in DB geladen */
