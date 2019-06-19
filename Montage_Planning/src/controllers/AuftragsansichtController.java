@@ -411,19 +411,12 @@ public class AuftragsansichtController implements Initializable {
 		if (e.getClickCount() == 2) {
 			auftragsnummerAktuell = tableAuftragListe.getSelectionModel().getSelectedItem().getAuftragsnr();
 
-			try {
-//				int idAuftragsart = db.getRechnerAuftragsart(seriennrAktuell);
-//				if (idAuftragsart == 502) {
-					new FolgeFenster("/views/Auftragsinfo.fxml");
-//				} else if (idAuftragsart == 501) {
-//					new FolgeFenster("/views/SA_Rechnerinfo.fxml");
-//				} else {
-//					System.out.println("Keine Info vorhanden");
-//				}
-			} catch (IOException e2) {
-				e2.printStackTrace();
-			}
-
+					try {
+						new FolgeFenster("/views/Auftragsinfo.fxml");
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 		}
 	}
 	public void Logout(Event event) {
