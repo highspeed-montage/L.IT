@@ -10,7 +10,6 @@ public class Auftrag {
 	private String status;
 	private Kunde kunde;
 	private boolean zugewiesen;
-	private List<Rechner> rechner = new ArrayList<Rechner>();
 	private Integer anzahlRechner;
 	private double arbeitsaufwand;
 	private static final int lieferzeit = 14;
@@ -37,7 +36,7 @@ public class Auftrag {
 		return kundentyp;
 	}
 
-	public String getKundenNr() {
+	public Integer getKundenNr() {
 		return kundenNr;
 	}
 
@@ -69,6 +68,15 @@ public class Auftrag {
 		this.firmenname = pFirmenname;
 		this.privatname = pPrivatname;
 		this.rechnerVonAuftrag = pRechner;
+	}
+	
+
+	@Override
+	public String toString() {
+		return "Auftrag [auftragsnr=" + auftragsnr + ", status=" + status + ", kunde=" + kunde + ", lieferdatum="
+				+ lieferdatum + ", bestelldatum=" + bestelldatum + ", kundentyp=" + kundentyp + ", kundenNr=" + kundenNr
+				+ ", kundenEMail=" + kundenEMail + ", rechnerVonAuftrag=" + rechnerVonAuftrag + ", firmenname="
+				+ firmenname + ", privatname=" + privatname + "]";
 	}
 
 	public Auftrag(Integer auftragsnr, Date lieferdatum) {
@@ -129,14 +137,6 @@ public class Auftrag {
 		return lieferzeit;
 	}
 
-	public List<Rechner> getRechner() {
-		return rechner;
-	}
-
-	public void setRechner(List<Rechner> rechner) {
-		this.rechner = rechner;
-	}
-
 	public Date getLieferdatum() {
 		return lieferdatum;
 	}
@@ -167,6 +167,14 @@ public class Auftrag {
 
 	public void setArbeitsaufwand(double arbeitsaufwand) {
 		this.arbeitsaufwand = arbeitsaufwand;
+	}
+
+	public String getFirmenname() {
+		return firmenname;
+	}
+
+	public String getPrivatname() {
+		return privatname;
 	}
 
 }

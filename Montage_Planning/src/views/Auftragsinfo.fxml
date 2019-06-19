@@ -30,7 +30,7 @@
                               <HBox>
                                  <children>
                                     <Label text="Status:               " />
-                                    <Label fx:id="lbl_AI_status" text="Label" />
+                                    <Label fx:id="lbl_AI_Status" text="Label" />
                                  </children>
                               </HBox>
                               <HBox>
