@@ -29,16 +29,16 @@ import models.Teile;
 
 public class Datenbank {
 
-//	private static final String DB_CONNECTION = "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
-//	private static final String DB_USER = "aj9s-montage";
-//	private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
+	private static final String DB_CONNECTION = "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
+	private static final String DB_USER = "aj9s-montage";
+	private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
 
 	// NICHT LOESCHEN: Datenbankverbindung GABBY LOKAL
 	// private static final String DB_CONNECTION =
 	// "jdbc:mysql://localhost:3306/aj9s-montage?serverTimezone=UTC"; //fuer jan
-	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage_neu?serverTimezone=UTC";
-	private static final String DB_USER = "root";
-	private static final String DB_PASSWORD = "root";
+//	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage_neu?serverTimezone=UTC";
+//	private static final String DB_USER = "root";
+//	private static final String DB_PASSWORD = "root";
 
 	private Connection connection;
 
@@ -101,25 +101,25 @@ public class Datenbank {
 
 		Auftrag a1 = null;
 		Statement stmt = connection.createStatement();
-		List<Rechner>rechner = new ArrayList<>(); //SerienNr, Status
+		List<Rechner>rechner = new ArrayList<>(); 
 		String queryRechner = "SELECT Rechner.idSeriennummer, Status.Bezeichnung "
-							+ "FROM Rechner, Status"
+							+ "FROM Rechner, Status "
 							+ "WHERE Rechner.Auftrag_idAuftragsnummer = '"+pAuftragsnr+"' "
-									+ "AND Rechner.Status_idStatus = Status.idStatus";
-		ResultSet rsRechner = stmt.executeQuery(queryRechner);
+							+ "AND Rechner.Status_idStatus = Status.idStatus";
+		ResultSet rsRechner = stmt.executeQuery(queryRechner);	//FUNKTIONIERT
+		System.out.println(queryRechner);
 		while(rsRechner.next()) {
 			String rechnerStatus = rsRechner.getString("Status.Bezeichnung");
 			int rechnerSNr = rsRechner.getInt("Rechner.idSeriennummer");
 			rechner.add(new Rechner(rechnerSNr, rechnerStatus));
 		}
-		
-		String queryInfo = "SELECT Auftrag.idAuftragsnummer, Status.Bezeichnung, Auftrag.Lieferdatum, Auftrag.Bestelldatum, "
+		String queryInfo = "SELECT Auftrag.idAuftragsnummer, Status.Bezeichnung, Auftrag.Lieferdatum, Auftrag.Bestelldatum, "	
 				+ "Auftrag.Kunde_idKunde, Kunde.EMail, Kunde.Name, Kunde.Firmenname, Kundengruppe.Bezeichnung "
 				+ "FROM Status, Auftrag, Kundengruppe, Kunde "
-//				+ "WHERE Rechner.Auftrag_idAuftragsnummer = '"+pAuftragsnr+"' AND Auftrag.Status_idStatus = Status.idStatus "
-//						+ "AND Auftrag.Kunde_idKunde = Kunde.idKundennummer AND Kunde.Kundengruppe_idKundengruppe = Kundengruppe.idKundengruppe ";
-		//Probleme: Status.Bezeichnung WHERE Auftrag.Status_idStatus = Status.idStatus !!!!!!!!
-		ResultSet rsInfo = stmt.executeQuery(queryInfo);
+				+ "WHERE Auftrag.idAuftragsnummer = '"+pAuftragsnr+"' AND Auftrag.Status_idStatus = Status.idStatus "
+						+ "AND Auftrag.Kunde_idKunde = Kunde.idKundennummer AND Kunde.Kundengruppe_idKundengruppe = Kundengruppe.idKundengruppe ";
+		ResultSet rsInfo = stmt.executeQuery(queryInfo);	//FUNKTIONIERT
+		System.out.println(queryInfo);
 		while(rsInfo.next()) {
 			int auftragsnr = rsInfo.getInt("Auftrag.idAuftragsnummer");
 			String pStatus = rsInfo.getString("Status.Bezeichnung");
@@ -139,6 +139,7 @@ public class Datenbank {
 			}
 			
 			a1 = new Auftrag(auftragsnr, pStatus, pLieferdatum, pBestelldatum, pKundentyp, pKundenNr, pKundenEmail, pFirmenname, pPrivatname, rechner) ;
+			System.out.println(a1.toString());
 		}
 		
 		
