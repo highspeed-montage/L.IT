@@ -2,25 +2,23 @@ package application;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+import controllers.AlertController;
+
 //import com.mysql.cj.jdbc.result.ResultSetMetaData;
 //Ruth: Der obere Import funktioniert so bei mir nicht 
 import java.sql.ResultSetMetaData;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.RadioButton;
 import models.Auftrag;
-import models.Auftragsverteilung;
 import models.FA_Rechner;
-import models.Kunde;
 import models.Mitarbeiter;
 import models.Monteur;
 import models.Rechner;
@@ -101,26 +99,25 @@ public class Datenbank {
 
 		Auftrag a1 = null;
 		Statement stmt = connection.createStatement();
-		List<Rechner>rechner = new ArrayList<>(); 
-		String queryRechner = "SELECT Rechner.idSeriennummer, Status.Bezeichnung "
-							+ "FROM Rechner, Status "
-							+ "WHERE Rechner.Auftrag_idAuftragsnummer = '"+pAuftragsnr+"' "
-							+ "AND Rechner.Status_idStatus = Status.idStatus";
-		ResultSet rsRechner = stmt.executeQuery(queryRechner);	//FUNKTIONIERT
+		List<Rechner> rechner = new ArrayList<>();
+		String queryRechner = "SELECT Rechner.idSeriennummer, Status.Bezeichnung " + "FROM Rechner, Status "
+				+ "WHERE Rechner.Auftrag_idAuftragsnummer = '" + pAuftragsnr + "' "
+				+ "AND Rechner.Status_idStatus = Status.idStatus";
+		ResultSet rsRechner = stmt.executeQuery(queryRechner); // FUNKTIONIERT
 		System.out.println(queryRechner);
-		while(rsRechner.next()) {
+		while (rsRechner.next()) {
 			String rechnerStatus = rsRechner.getString("Status.Bezeichnung");
 			int rechnerSNr = rsRechner.getInt("Rechner.idSeriennummer");
 			rechner.add(new Rechner(rechnerSNr, rechnerStatus));
 		}
-		String queryInfo = "SELECT Auftrag.idAuftragsnummer, Status.Bezeichnung, Auftrag.Lieferdatum, Auftrag.Bestelldatum, "	
+		String queryInfo = "SELECT Auftrag.idAuftragsnummer, Status.Bezeichnung, Auftrag.Lieferdatum, Auftrag.Bestelldatum, "
 				+ "Auftrag.Kunde_idKunde, Kunde.EMail, Kunde.Name, Kunde.Firmenname, Kundengruppe.Bezeichnung "
-				+ "FROM Status, Auftrag, Kundengruppe, Kunde "
-				+ "WHERE Auftrag.idAuftragsnummer = '"+pAuftragsnr+"' AND Auftrag.Status_idStatus = Status.idStatus "
-						+ "AND Auftrag.Kunde_idKunde = Kunde.idKundennummer AND Kunde.Kundengruppe_idKundengruppe = Kundengruppe.idKundengruppe ";
-		ResultSet rsInfo = stmt.executeQuery(queryInfo);	//FUNKTIONIERT
+				+ "FROM Status, Auftrag, Kundengruppe, Kunde " + "WHERE Auftrag.idAuftragsnummer = '" + pAuftragsnr
+				+ "' AND Auftrag.Status_idStatus = Status.idStatus "
+				+ "AND Auftrag.Kunde_idKunde = Kunde.idKundennummer AND Kunde.Kundengruppe_idKundengruppe = Kundengruppe.idKundengruppe ";
+		ResultSet rsInfo = stmt.executeQuery(queryInfo); // FUNKTIONIERT
 		System.out.println(queryInfo);
-		while(rsInfo.next()) {
+		while (rsInfo.next()) {
 			int auftragsnr = rsInfo.getInt("Auftrag.idAuftragsnummer");
 			String pStatus = rsInfo.getString("Status.Bezeichnung");
 			Date pLieferdatum = rsInfo.getDate("Auftrag.Lieferdatum");
@@ -130,19 +127,19 @@ public class Datenbank {
 			String pKundenEmail = rsInfo.getString("Kunde.EMail");
 			String pFirmenname = null;
 			String pPrivatname = null;
-			
+
 			if (rsInfo.getString("Kunde.Firmenname") != null) {
 				pFirmenname = rsInfo.getString("Kunde.Firmenname");
 
 			} else {
 				pPrivatname = rsInfo.getString("Kunde.Name");
 			}
-			
-			a1 = new Auftrag(auftragsnr, pStatus, pLieferdatum, pBestelldatum, pKundentyp, pKundenNr, pKundenEmail, pFirmenname, pPrivatname, rechner) ;
+
+			a1 = new Auftrag(auftragsnr, pStatus, pLieferdatum, pBestelldatum, pKundentyp, pKundenNr, pKundenEmail,
+					pFirmenname, pPrivatname, rechner);
 			System.out.println(a1.toString());
 		}
-		
-		
+
 		return a1;
 	}
 
@@ -275,6 +272,42 @@ public class Datenbank {
 	}
 
 	/**
+	 * 
+	 * @param pAuftragsnummer
+	 * @return Status IDs aller REchner eines Auftrags
+	 * @throws SQLException
+	 */
+	public int getLowestRechnerIDAuftrag(int pAuftragsnummer) throws SQLException {
+		List<Integer> statusIDs = new ArrayList<Integer>();
+		Statement stmt = connection.createStatement();
+		String query = "SELECT Rechner.Status_idStatus FROM Rechner WHERE Rechner.Auftrag_idAuftragsnummer = '"
+				+ pAuftragsnummer + "'";
+		ResultSet rs = stmt.executeQuery(query);
+
+		while (rs.next()) {
+			statusIDs.add(rs.getInt("Rechner.Status_idStatus"));
+		}
+		Collections.sort(statusIDs);
+		int lowestId = statusIDs.get(0);
+		System.out.println(lowestId);
+		return lowestId;
+
+	}
+/**
+ * Update des Auftragsstatus auf niedrigste STatusid aller zugehörigen Rechner
+ * @param pAuftragsnummer
+ * @param lowestId
+ * @throws SQLException
+ */
+	public boolean setAuftragStatus(int pAuftragsnummer, int lowestId) throws SQLException {
+		Statement stmt = connection.createStatement();
+		String query = "UPDATE Auftrag SET Auftrag.Status_idStatus = '"+lowestId+"' "
+				+ "WHERE Auftrag.idAuftragsnummer = '"+pAuftragsnummer+"'";
+		int updatedRows = stmt.executeUpdate(query);
+		return updatedRows == 1;
+	}	
+
+	/**
 	 * Booleanvariablen der Problemdoku werden aktualisiert
 	 * 
 	 * @throws SQLException
@@ -353,17 +386,24 @@ public class Datenbank {
 	 */
 	public int getEinzelteilLagerbestand(String eingabe, int pSeriennummer) throws SQLException {
 		Statement stmt = connection.createStatement();
-		String query = "SELECT Lagerbestand FROM Teile WHERE Bezeichnung = '" + eingabe + "'";
+		String query = "SELECT Lagerbestand FROM Teile WHERE Bezeichnung LIKE '%" + eingabe + "%'";
 		ResultSet rs = stmt.executeQuery(query);
 		int lagerbestand = 0;
 
 		while (rs.next()) {
-
-			lagerbestand = rs.getInt("Lagerbestand");
-			if (rs.getInt("Lagerbestand") == 0) {
-				int updatedRows = stmt.executeUpdate(
-						"UPDATE Rechner SET Status_idStatus = '7' WHERE idSeriennummer = '" + pSeriennummer + "'");
+			if (rs.wasNull()) {
+				System.out.println("null ");
+//				lagerbestand = 9999;
+				System.out.println(lagerbestand);
+				// FUNKTIONIERT NICHT:
+//				String title = "unbekannte Eingabe";
+//				String info = "Kein Einzelteil mit dieser Bezeichnung";
+//				AlertController.error(title, info);
+			} else {
+				lagerbestand = rs.getInt("Lagerbestand");
 			}
+			System.out.println("in DB: " + lagerbestand);
+
 		}
 		return lagerbestand;
 	}
