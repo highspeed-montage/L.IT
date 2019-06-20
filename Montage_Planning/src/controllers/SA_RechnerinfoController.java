@@ -227,6 +227,9 @@ public class SA_RechnerinfoController implements Initializable {
 		try {
 			db.setRechnerStatus(sr.getSeriennr(), selectedSatus);
 			lbl_SAI_status.setText(selectedSatus);
+			//Update Auftragsstatus:
+			int lowestId = db.getLowestRechnerIDAuftrag(sr.getAuftragsNr());
+			db.setAuftragStatus(sr.getAuftragsNr(), lowestId);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

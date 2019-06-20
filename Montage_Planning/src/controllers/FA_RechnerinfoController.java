@@ -117,10 +117,12 @@ public class FA_RechnerinfoController implements Initializable {
 		try {
 			db.setRechnerStatus(fr.getSeriennr(), selectedSatus);
 			lbl_FAI_status.setText(selectedSatus);
+			int lowestId = db.getLowestRechnerIDAuftrag(fr.getAuftragsNr());
+			db.setAuftragStatus(fr.getAuftragsNr(), lowestId);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} // pSeriennummer aus SA_Rechner sr (sr.getSNr..);
+		} 
 	}
 
 	public void createSeriennummerPDF() {
