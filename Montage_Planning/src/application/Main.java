@@ -25,18 +25,21 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-		launch(args);
-//		Datenbank db = new Datenbank();
-//		
-//		db.openConnection();
-//		
-//		try {
-//			db.getAuftragsinfo(100001);
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+//		launch(args);
+		Datenbank db = new Datenbank();
 		
 
+		db.openConnection();
+//		int lagerbestand = 0;
+		try {
+//			lagerbestand = db.getEinzelteilLagerbestand("pasjhhlit", 10001);
+			int lowestId = db.getLowestRechnerIDAuftrag(100001);
+			db.setAuftragStatus(100001, lowestId);
+			System.out.println(db.getAuftragsinfo(100001));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }

@@ -87,7 +87,6 @@ public class SA_RechnerinfoController implements Initializable {
 
 		db.openConnection();
 
-		// String stsGetestet = "getestet"; //Anstelle von stsBearb
 		String stsBearb = "in Bearbeitung";
 		String stsFertig = "erledigt";
 		String stsImLager = "im Lager";
@@ -101,7 +100,6 @@ public class SA_RechnerinfoController implements Initializable {
 
 			@Override
 			public void handle(KeyEvent ke) {
-				// wenn der rbtn_Hwardware ausgewï¿½hlt ist, DANN per Enter gesucht werden!
 
 				int lagerbestand = 0;
 				if (ke.getCode().equals(KeyCode.ENTER)) {
@@ -109,21 +107,22 @@ public class SA_RechnerinfoController implements Initializable {
 						String eingabe = txt_SAI_Einzelteilsuche.getText().toLowerCase();
 						if (eingabe.isEmpty()) {
 							lbl_SAI_SuchStatus.setText("leere Eingabe");
-						} else if (eingabe.contains("prozessor") | eingabe.contains("hauptspeicher")
-								| eingabe.contains("festplatte") | eingabe.contains("laufwerk")) {
+						} else {
 							try {
 								lagerbestand = db.getEinzelteilLagerbestand(eingabe, sr.getSeriennr());
-								System.out.println("Lagerbestand: " + lagerbestand);
-							} catch (SQLException e) {
-								e.printStackTrace();
+							} catch (SQLException e1) {
+								e1.printStackTrace();
 							}
-						} else {
-							lbl_SAI_SuchStatus.setText("kein ET mit diser Bezeichnung");
-						}
-						if (lagerbestand > 0) {
-							lbl_SAI_SuchStatus.setText("auf Lager: " + lagerbestand);
-						} else if (lagerbestand == 0) {
-							lbl_SAI_SuchStatus.setText("nicht auf Lager");
+							if (lagerbestand == 0) {
+								try { // Aktualisieung Rechner Status zu id = 7
+									db.setRechnerStatus(sr.getSeriennr(), "unvollstaendig");
+								} catch (SQLException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							} else if (lagerbestand > 0) {
+								lbl_SAI_SuchStatus.setText("auf Lager: " + lagerbestand);
+							}
 						}
 					} else {
 						String title = "Einzelteilsuche";
@@ -269,7 +268,8 @@ public class SA_RechnerinfoController implements Initializable {
 		} else {
 			String title = "Checkbox";
 			String info = "RadioButton \"Hardware\" muss ausgewählt sein";
-			AlertController.information(title, info);		}
+			AlertController.information(title, info);
+		}
 	}
 
 	/** handle Checkbox "Laufwerk". Falls geklickt: set true */
@@ -280,7 +280,8 @@ public class SA_RechnerinfoController implements Initializable {
 		} else {
 			String title = "Checkbox";
 			String info = "RadioButton \"Hardware\" muss ausgewählt sein";
-			AlertController.information(title, info);		}
+			AlertController.information(title, info);
+		}
 	}
 
 	/** Speichern Button, Aenderungen an SA_Rechner Objekt werden in DB geladen */
