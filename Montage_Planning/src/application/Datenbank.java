@@ -530,15 +530,21 @@ System.out.println(query);
 	 * @param bearbeitungsdatum
 	 * @param seriennummer
 	 * @param personalnummer
+	 * @return 
 	 * @throws SQLException
 	 */
 	public void rechnerVerteilung(int idAuftragsverteilung, LocalDate bearbeitungsdatum, int seriennummer,
 			int personalnummer) throws SQLException {
+		connection.setAutoCommit(false);
 		Statement stmt = connection.createStatement();
-		stmt.executeUpdate("INSERT INTO Auftragsverteilung" + "VALUES(" + idAuftragsverteilung + ", '"
-				+ bearbeitungsdatum + "', '" + seriennummer + "', '" + personalnummer + "'");
-		int updatedRows = stmt.executeUpdate(
-				"UPDATE Rechner SET Status_idStatus = '3' WHERE idSeriennummer = '" + seriennummer + "'");
+		String query = "INSERT INTO Auftragsverteilung VALUES(" + idAuftragsverteilung + ", '"
+				+ bearbeitungsdatum + "', '" + seriennummer + "', '" + personalnummer + "')";
+		System.out.println(query);
+		stmt.executeUpdate(query);
+		
+//		stmt.executeUpdate(
+//				"UPDATE Rechner SET Status_idStatus = '3' WHERE idSeriennummer = '" + seriennummer + "'");
+//		return updatedRows == 1;
 	}
 
 	public int getMitarbeiterRolle(Mitarbeiter user) throws SQLException {

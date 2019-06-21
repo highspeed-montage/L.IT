@@ -104,7 +104,7 @@ public class AuftragsansichtController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 
 		db.openConnection();
-		dbG.openConnection();
+//		dbG.openConnection();
 		try {
 			auftraegeVerteilen();
 		} catch (SQLException e) {
@@ -114,58 +114,58 @@ public class AuftragsansichtController implements Initializable {
 
 		// Holt alle Bearbeitungsdaten aus der Datenbank zur dynamischen Befuellung der
 		// ComboBox
-		try {
-			bearbeitungsdatum.addAll(dbG.getRechnerBearbeitungsdatum());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		// Wochen fuer die ComboBox ermitteln anhand der Bearbeitungsdaten aus der
-		// Datenbank
-		for (int i = 0; i < bearbeitungsdatum.size(); i++) {
-			Date date = bearbeitungsdatum.get(i);
-			int kw = RechneransichtController.getWeekNumberFromDate(date);
-			Date montag = RechneransichtController.getMondayFromWeekNumber(2019, kw);
-			Date freitag = RechneransichtController.getFridayFromWeekNumber(2019, kw);
-			String woche = sdf.format(montag) + "-" + sdf.format(freitag);
-
-			if (wochen.contains(woche) == false) {
-				wochen.add(woche);
-			}
-		}
-
-		// ComboBox befuellen
-		options.addAll(wochen);
-		comboBox_AW_Wochenansicht.setItems(options.sorted());
-
-		// Spalten für die Wochenansicht
-		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE", Locale.GERMAN);
-
-		for (int i = 1; i <= 5; i++) {
-			final int dayIndex = i - 1;
-			DayOfWeek day = DayOfWeek.of(i);
-			TableColumn<Auftragsverteilung[], Integer> column = new TableColumn<>(formatter.format(day));
-			column.setCellValueFactory(cd -> {
-				Auftragsverteilung auftrag = cd.getValue()[dayIndex];
-				return new SimpleObjectProperty<>(auftrag == null ? null : auftrag.getSeriennr());
-			});
-
-			tableAuftragWoche.getColumns().add(column);
-		}
-
-		String name = "Mitarbeiter";
-		TableColumn<Auftragsverteilung[], String> columnMA = new TableColumn<>(name);
-		columnMA.setCellValueFactory(cd -> {
-			Auftragsverteilung auftrag = cd.getValue()[6];
-			return new SimpleObjectProperty<>(auftrag == null ? null : auftrag.getMonteur().getName());
-		});
-
-		tableAuftragWoche.getColumns().add(columnMA);
-
-		tableAuftragWoche.setItems(auftragWochenansichtTabelle);
-
-		listenansichtFuellen();
-		wochenansichtFuellen();
+//		try {
+//			bearbeitungsdatum.addAll(dbG.getRechnerBearbeitungsdatum());
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//
+//		// Wochen fuer die ComboBox ermitteln anhand der Bearbeitungsdaten aus der
+//		// Datenbank
+//		for (int i = 0; i < bearbeitungsdatum.size(); i++) {
+//			Date date = bearbeitungsdatum.get(i);
+//			int kw = RechneransichtController.getWeekNumberFromDate(date);
+//			Date montag = RechneransichtController.getMondayFromWeekNumber(2019, kw);
+//			Date freitag = RechneransichtController.getFridayFromWeekNumber(2019, kw);
+//			String woche = sdf.format(montag) + "-" + sdf.format(freitag);
+//
+//			if (wochen.contains(woche) == false) {
+//				wochen.add(woche);
+//			}
+//		}
+//
+//		// ComboBox befuellen
+//		options.addAll(wochen);
+//		comboBox_AW_Wochenansicht.setItems(options.sorted());
+//
+//		// Spalten für die Wochenansicht
+//		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE", Locale.GERMAN);
+//
+//		for (int i = 1; i <= 5; i++) {
+//			final int dayIndex = i - 1;
+//			DayOfWeek day = DayOfWeek.of(i);
+//			TableColumn<Auftragsverteilung[], Integer> column = new TableColumn<>(formatter.format(day));
+//			column.setCellValueFactory(cd -> {
+//				Auftragsverteilung auftrag = cd.getValue()[dayIndex];
+//				return new SimpleObjectProperty<>(auftrag == null ? null : auftrag.getSeriennr());
+//			});
+//
+//			tableAuftragWoche.getColumns().add(column);
+//		}
+//
+//		String name = "Mitarbeiter";
+//		TableColumn<Auftragsverteilung[], String> columnMA = new TableColumn<>(name);
+//		columnMA.setCellValueFactory(cd -> {
+//			Auftragsverteilung auftrag = cd.getValue()[6];
+//			return new SimpleObjectProperty<>(auftrag == null ? null : auftrag.getMonteur().getName());
+//		});
+//
+//		tableAuftragWoche.getColumns().add(columnMA);
+//
+//		tableAuftragWoche.setItems(auftragWochenansichtTabelle);
+//
+//		listenansichtFuellen();
+//		wochenansichtFuellen();
 	}
 
 	public void listenansichtFuellen() {
@@ -276,8 +276,8 @@ public class AuftragsansichtController implements Initializable {
 	 * 
 	 * @throws SQLException
 	 */
-	public void auftraegeVerteilen() throws SQLException{
-		try{
+	public void auftraegeVerteilen() throws SQLException {
+		try {
 			ArrayList<Monteur> monteure = db.monteureBefuellen();
 			for (int i = 0; i < monteure.size(); i++) {
 				if (monteure.get(i).getAnwesend() == true) {
@@ -287,9 +287,10 @@ public class AuftragsansichtController implements Initializable {
 						anwesenheitTeilzeit.add(monteure.get(i));
 					}
 				}
-			}}catch (Exception e) {
-				e.printStackTrace();
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 //		try {
 //			db.monteureBefuellen();
 //		} catch (SQLException e) {
@@ -301,7 +302,6 @@ public class AuftragsansichtController implements Initializable {
 		int rechnerTeilzeit = (rechner.size() / 3);
 		int rechnerVollzeit = rechnerTeilzeit * 2;
 		int rest = (rechner.size() % 3);
-
 		// Auftraege werden auf Teilzeitmitarbeiter verteilt
 		for (int k = 0; k < rechnerTeilzeit; k++) {
 			for (int j = 0; j < anwesenheitTeilzeit.size(); j++) {
@@ -385,8 +385,8 @@ public class AuftragsansichtController implements Initializable {
 				anwesenheitVollzeit.get(j).rechnerHinzufuegen(rechner.get(j));
 				anwesenheitVollzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
 				anwesenheitVollzeit.get(j).setArbeitsaufwand(rechner.get(j).getBearbeitungszeit());
-				int idAuftragsverteilung = anwesenheitVollzeit.get(j).getPersonalnr()
-						+ anwesenheitVollzeit.get(j).rechnerAuslesen().getSeriennr();
+				int idAuftragsverteilung = ((anwesenheitVollzeit.get(j).getPersonalnr()
+						+ anwesenheitVollzeit.get(j).rechnerAuslesen().getSeriennr()));
 				try {
 					db.rechnerVerteilung(idAuftragsverteilung,
 							anwesenheitVollzeit.get(j).rechnerAuslesen().getBearbeitungsdatum(),
@@ -405,7 +405,8 @@ public class AuftragsansichtController implements Initializable {
 
 		// Rest wird auf Vollzeitmitarbeiter verteilt
 		for (int i1 = 0; i1 < rest; i1++) {
-			if (anwesenheitVollzeit.get(i1).getArbeitsaufwand() < (anwesenheitVollzeit.get(i1).getWochenstunden() / 5)) {
+			if (anwesenheitVollzeit.get(i1)
+					.getArbeitsaufwand() < (anwesenheitVollzeit.get(i1).getWochenstunden() / 5)) {
 				switch (bearbeitungsdatum.getDayOfWeek()) {
 				case SUNDAY:
 					bearbeitungsdatum = bearbeitungsdatum.plusDays(1);
@@ -449,7 +450,7 @@ public class AuftragsansichtController implements Initializable {
 		for (int k = 0; k < rest; k++) {
 			rechner.remove(0);
 		}
-}
+	}
 
 //	// Wochenansicht: Klick auf Aufrtrag oeffnet Auftragsinfo
 //	public void clickRechnerWoche(MouseEvent e) {

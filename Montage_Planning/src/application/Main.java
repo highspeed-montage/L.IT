@@ -15,7 +15,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/views/Auftragsinfo.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/views/Auftragsansicht.fxml"));
 			Scene scene = new Scene(root, 800, 400);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
@@ -28,18 +28,17 @@ public class Main extends Application {
 	public static void main(String[] args) {
 		launch(args);
 		Datenbank db = new Datenbank();
-//		AuftragsansichtController auftragsansichtController = new AuftragsansichtController();
+		AuftragsansichtController auftragsansichtController = new AuftragsansichtController();
 		
 		db.openConnection();
 
-//		  try {
-//			  auftragsansichtController.initialize(null, null);
-//			  auftragsansichtController.auftraegeVerteilen();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} 
-//			  System.out.println("start");
+		  try {
+			  auftragsansichtController.initialize(null, null);
+			  auftragsansichtController.auftraegeVerteilen();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 //			  db.rechnerBefuellen();
 	
 	}
