@@ -315,14 +315,38 @@ public class Datenbank {
 	 * @throws SQLException
 	 */
 	public boolean updateSA_Recher(SA_Rechner sr) throws SQLException {
+		int tinyHardware = 0;
+		int tinySoftware = 0;
+		int tinyKunde = 0;
+		int tinyProzessor = 0;
+		int tinyGrafikkarte = 0;
+		int tinyFestplatte = 0;
+		int tinyLaufwerk = 0;
+		if (sr.isHardwareverschuldet() == true) {
+			tinyHardware = 1;
+			if (sr.isDvd_Laufwerk_kaputt())
+				tinyLaufwerk = 1;
+			if (sr.isFestplatte_kaputt())
+				tinyFestplatte = 1;
+			if (sr.isGrafikkarte_kaputt())
+				tinyGrafikkarte = 1;
+			if (sr.isProzessor_kaputt())
+				tinyProzessor = 1;
+		} else if (sr.isSoftwareverschuldet() == true) {
+			tinySoftware = 1;
+		} else if (sr.isKundenverschuldet() == true) {
+			tinyKunde = 1;
+		}
 		Statement stmt = connection.createStatement();
-		String query = "UPDATE Rechner SET Rechner.kundenverschuldet= '" + sr.isKundenverschuldet() + "', "
-				+ "Rechner.hardwareverschuldet ='" + sr.isHardwareverschuldet() + "', Rechner.softwareverschuldet ='"
-				+ sr.isSoftwareverschuldet() + "', Rechner.prozessorKaputt = '" + sr.isProzessor_kaputt() + "', "
-				+ "Rechner.grafikkarteKaputt = '" + sr.isGrafikkarte_kaputt() + "', " + "Rechner.festplatteKaputt = '"
-				+ sr.isFestplatte_kaputt() + "', Rechner.laufwerkKaputt = '" + sr.isDvd_Laufwerk_kaputt()
-				+ "' WHERE Auftragsverteilung.Rechner_seriennummer = '" + sr.getSeriennr()
-				+ "' AND Rechner.idSeriennummer = Auftragsverteilung.Rechner_seriennummer";
+		String query = "UPDATE Rechner SET Rechner.kundenverschuldet= '" + tinyKunde + "', "
+				+ "Rechner.hardwareverschuldet ='" + tinyHardware + "', Rechner.softwareverschuldet ='"
+				+ tinySoftware + "', Rechner.prozessorKaputt = '" + tinyProzessor + "', "
+				+ "Rechner.grafikkarteKaputt = '" + tinyGrafikkarte + "', " + "Rechner.festplatteKaputt = '"
+				+ tinyFestplatte + "', Rechner.laufwerkKaputt = '" + tinyLaufwerk + "' "
+				+ "WHERE Rechner.idSeriennummer = '" + sr.getSeriennr() + "'";
+
+//				+ "WHERE Auftragsverteilung.Rechner_seriennummer = '" + sr.getSeriennr() + "' "
+//				+ "AND Rechner.idSeriennummer = Auftragsverteilung.Rechner_seriennummer";
 
 		System.out.println(query);
 
@@ -391,7 +415,7 @@ public class Datenbank {
 		String query = "SELECT Lagerbestand FROM Teile WHERE Bezeichnung LIKE '%" + eingabe + "%'";
 		ResultSet rs = stmt.executeQuery(query);
 		int lagerbestand = 0;
-
+System.out.println(query);
 		while (rs.next()) {
 			if (!rs.wasNull()) {
 				lagerbestand = rs.getInt("Lagerbestand");
@@ -490,7 +514,7 @@ public class Datenbank {
 				+ "AND Rechner.Status_idStatus='1'";
 		System.out.println(query);
 		ResultSet rs = stmt.executeQuery(query);
-		
+
 		while (rs.next()) {
 			rechner.add(new Rechner(rs.getInt("Rechner.idSeriennummer"), rs.getInt("Auftrag.idAuftragsnummer"),
 					rs.getString("Status.Bezeichnung"), rs.getInt("Auftragsart.Arbeitsaufwand")));
