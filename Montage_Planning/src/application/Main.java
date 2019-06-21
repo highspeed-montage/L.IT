@@ -26,7 +26,7 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-//		launch(args);
+		launch(args);
 		Datenbank db = new Datenbank();
 //		AuftragsansichtController auftragsansichtController = new AuftragsansichtController();
 		
@@ -41,18 +41,7 @@ public class Main extends Application {
 //		} 
 //			  System.out.println("start");
 //			  db.rechnerBefuellen();
+	
 	}
 
-////		int lagerbestand = 0;
-//		try {
-////			lagerbestand = db.getEinzelteilLagerbestand("pasjhhlit", 10001);
-//			int lowestId = db.getLowestRechnerIDAuftrag(100001);
-//			db.setAuftragStatus(100001, lowestId);
-//			System.out.println(db.getAuftragsinfo(100001));
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-	
 }
