@@ -158,6 +158,14 @@ public class SA_RechnerinfoController implements Initializable {
 						sr.setHardwareverschuldet(false);
 						sr.setKundenverschuldet(false);
 						System.out.println(sr.toString());
+						sr.setProzessor_kaputt(false);
+						sr.setDvd_Laufwerk_kaputt(false);
+						sr.setGrafikkarte_kaputt(false);
+						sr.setFestplatte_kaputt(false);
+						cBox_SAI__Festplatte.setSelected(false);
+						cBox_SAI_Grafikkarte.setSelected(false);
+						cBox_SAI_Laufwerk.setSelected(false);
+						cBox_SAI_Prozessor.setSelected(false);
 					}
 				});
 
@@ -168,6 +176,14 @@ public class SA_RechnerinfoController implements Initializable {
 						sr.setHardwareverschuldet(false);
 						sr.setSoftwareverschuldet(false);
 						System.out.println(sr.toString());
+						sr.setProzessor_kaputt(false);
+						sr.setDvd_Laufwerk_kaputt(false);
+						sr.setGrafikkarte_kaputt(false);
+						sr.setFestplatte_kaputt(false);
+						cBox_SAI__Festplatte.setSelected(false);
+						cBox_SAI_Grafikkarte.setSelected(false);
+						cBox_SAI_Laufwerk.setSelected(false);
+						cBox_SAI_Prozessor.setSelected(false);
 					}
 				});
 
