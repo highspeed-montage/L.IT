@@ -93,7 +93,7 @@ public class AuftragsansichtController implements Initializable {
 	ObservableList<Auftrag> auftragListenansichtTabelle = FXCollections.observableArrayList();
 	ObservableList<Auftragsverteilung[]> auftragWochenansichtTabelle = FXCollections.observableArrayList();
 
-	Alert alert = new Alert(AlertType.INFORMATION);
+//	Alert alert = new Alert(AlertType.INFORMATION);
 
 	// ComboBox
 	private ObservableList<String> options = FXCollections.observableArrayList();
@@ -217,10 +217,10 @@ public class AuftragsansichtController implements Initializable {
 				auftragWochenansichtTabelle.addAll(row);
 			} catch (SQLException e) {
 				e.printStackTrace();
-				alert.setTitle("Fehlermeldung");
-				alert.setHeaderText("Keine Datenbankverbindung");
-				alert.setContentText("Bitte überprüfen Sie Ihre Datenbankverbindung");
-				alert.showAndWait();
+//				alert.setTitle("Fehlermeldung");
+//				alert.setHeaderText("Keine Datenbankverbindung");
+//				alert.setContentText("Bitte überprüfen Sie Ihre Datenbankverbindung");
+//				alert.showAndWait();
 			}
 		});
 
