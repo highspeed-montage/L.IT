@@ -85,8 +85,8 @@ public class AuftragsinfoController implements Initializable {
 		
 		rechner.addAll(a1.getRechnerVonAuftrag());
 
-		tableColumn_AI_SerienNr.setCellValueFactory(new PropertyValueFactory<>("SerienNr"));
-		tableColumn_AI_Status.setCellValueFactory(new PropertyValueFactory<>("Status"));
+		tableColumn_AI_SerienNr.setCellValueFactory(new PropertyValueFactory<>("seriennr"));
+		tableColumn_AI_Status.setCellValueFactory(new PropertyValueFactory<>("status"));
 		tableView_AI_Rechner.setItems(rechner);
 	}
 
