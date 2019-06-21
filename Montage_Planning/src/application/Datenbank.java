@@ -451,29 +451,11 @@ public class Datenbank {
 		return userVergleich;
 	}
 
-//	public static ArrayList<Monteur> monteure = new ArrayList<>();
-
 	/**
 	 * Die Methode befuellt eine ArrayList mit allen Monteuren
 	 * 
 	 * @throws SQLException
 	 */
-//	public void monteureBefuellen() throws SQLException {
-//		Statement stmt = connection.createStatement();
-//		String query = "SELECT idPersonalnummer, Name, Vorname, Krankheitstage, anwesend, Wochenstunden "
-//				+ "FROM Mitarbeiter, MitarbeiterVertragsart "
-//				+ "WHERE Mitarbeiter.MitarbeiterVertragsart_idMitarbeiterVertragsart=301 "
-//				+ "AND Mitarbeiter.MitarbeiterVertragsart_idMitarbeiterVertragsart=MitarbeiterVertragsart.idMitarbeiterVertragsart "
-//				+ "OR Mitarbeiter.MitarbeiterVertragsart_idMitarbeiterVertragsart=302 "
-//				+ "AND Mitarbeiter.MitarbeiterVertragsart_idMitarbeiterVertragsart=MitarbeiterVertragsart.idMitarbeiterVertragsart";
-//		System.out.println(query);
-//		ResultSet rs = stmt.executeQuery(query);
-//		while (rs.next()) {
-//			monteure.add(new Monteur(rs.getInt("idPersonalnummer"), rs.getString("Name"), rs.getString("Vorname"),
-//					rs.getInt("Krankheitstage"), rs.getBoolean("anwesend"), rs.getInt("Wochenstunden")));
-//			System.out.println(monteure.toString());
-//		}
-//	}
 	public ArrayList<Monteur> monteureBefuellen() throws SQLException {
 		ArrayList<Monteur> monteure = new ArrayList<>();
 		Statement stmt = connection.createStatement();
@@ -488,35 +470,16 @@ public class Datenbank {
 		while (rs.next()) {
 			monteure.add(new Monteur(rs.getInt("idPersonalnummer"), rs.getString("Name"), rs.getString("Vorname"),
 					rs.getInt("Krankheitstage"), rs.getBoolean("anwesend"), rs.getInt("Wochenstunden")));
-			System.out.println(monteure.toString());
 		}
+		System.out.println(monteure.toString());
 		return monteure;
 	}
-
-
-//	public static ArrayList<Rechner> rechner = new ArrayList<>();
 
 	/**
 	 * Die Methode befuellt eine ArrayList mit allen Auftraegen aus der Datenbank
 	 * 
 	 * @throws SQLException
 	 */
-//	public void rechnerBefuellen() throws SQLException {
-//		Statement stmt = connection.createStatement();
-//		String query = "SELECT idSeriennummer, Auftrag.idAuftragsnummer, Status.Bezeichnung, Auftragsart.Arbeitsaufwand "
-//				+ "FROM Rechner, Status, Auftrag, Auftragsart "
-//				+ "WHERE Status.idStatus=Rechner.Status_idStatus AND Rechner.Auftrag_idAuftragsnummer=Auftrag.idAuftragsnummer "
-//				+ "AND Auftragsart.idAuftragsart=Rechner.Auftragsart_idAuftragsart "
-//				+ "AND Rechner.Status_idStatus='1'";
-//		System.out.println(query);
-//		ResultSet rs = stmt.executeQuery(query);
-//		
-//		while (rs.next()) {
-//			rechner.add(new Rechner(rs.getInt("Rechner.idSeriennummer"), rs.getInt("Auftrag.idAuftragsnummer"),
-//					rs.getString("Status.Bezeichnung"), rs.getInt("Auftragsart.Arbeitsaufwand")));
-//			System.out.println(rechner.toString());
-//		}
-//	}
 	public ArrayList<Rechner> rechnerBefuellen() throws SQLException {
 		ArrayList<Rechner> rechner = new ArrayList<>();
 		Statement stmt = connection.createStatement();
@@ -531,8 +494,8 @@ public class Datenbank {
 		while (rs.next()) {
 			rechner.add(new Rechner(rs.getInt("Rechner.idSeriennummer"), rs.getInt("Auftrag.idAuftragsnummer"),
 					rs.getString("Status.Bezeichnung"), rs.getInt("Auftragsart.Arbeitsaufwand")));
-			System.out.println(rechner.toString());
 		}
+		System.out.println(rechner.toString());
 		return rechner;
 	}
 
@@ -549,9 +512,9 @@ public class Datenbank {
 			int personalnummer) throws SQLException {
 		Statement stmt = connection.createStatement();
 		stmt.executeUpdate("INSERT INTO Auftragsverteilung" + "VALUES('" + idAuftragsverteilung + "', '"
-				+ bearbeitungsdatum + "', '" + seriennummer + "', '" + personalnummer + "')");
-		int updatedRows = stmt.executeUpdate(
-				"UPDATE Rechner SET Status_idStatus = '3' WHERE idSeriennummer = '" + seriennummer + "'");
+				+ bearbeitungsdatum + "', '" + seriennummer + "', '" + personalnummer + "'");
+//		int updatedRows = stmt.executeUpdate(
+//				"UPDATE Rechner SET Status_idStatus = '3' WHERE idSeriennummer = '" + seriennummer + "'");
 	}
 
 	public int getMitarbeiterRolle(Mitarbeiter user) throws SQLException {

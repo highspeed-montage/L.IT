@@ -105,6 +105,12 @@ public class AuftragsansichtController implements Initializable {
 
 		db.openConnection();
 		dbG.openConnection();
+		try {
+			auftraegeVerteilen();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// Holt alle Bearbeitungsdaten aus der Datenbank zur dynamischen Befuellung der
 		// ComboBox
@@ -158,12 +164,6 @@ public class AuftragsansichtController implements Initializable {
 
 		tableAuftragWoche.setItems(auftragWochenansichtTabelle);
 
-		try {
-			auftraegeVerteilen();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		listenansichtFuellen();
 		wochenansichtFuellen();
 	}
@@ -252,24 +252,24 @@ public class AuftragsansichtController implements Initializable {
 //			}
 //		}
 //	}
-
-	public void monteurHinzufuegen() {
-		try {
-			ArrayList<Monteur> monteure = db.monteureBefuellen();
-			for (int i = 0; i < monteure.size(); i++) {
-				if (monteure.get(i).getAnwesend() == true) {
-					if (monteure.get(i).getWochenstunden() == 40) {
-						anwesenheitVollzeit.add(monteure.get(i));
-					} else {
-						anwesenheitTeilzeit.add(monteure.get(i));
-					}
-				}
-
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+//
+//	public void monteurHinzufuegen() {
+//		try {
+//			ArrayList<Monteur> monteure = db.monteureBefuellen();
+//			for (int i = 0; i < monteure.size(); i++) {
+//				if (monteure.get(i).getAnwesend() == true) {
+//					if (monteure.get(i).getWochenstunden() == 40) {
+//						anwesenheitVollzeit.add(monteure.get(i));
+//					} else {
+//						anwesenheitTeilzeit.add(monteure.get(i));
+//					}
+//				}
+//
+//			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	/**
 	 * Die Auftraege werden den einzelnen Monteuren zugewiesen
@@ -305,8 +305,6 @@ public class AuftragsansichtController implements Initializable {
 		// Auftraege werden auf Teilzeitmitarbeiter verteilt
 		for (int k = 0; k < rechnerTeilzeit; k++) {
 			for (int j = 0; j < anwesenheitTeilzeit.size(); j++) {
-				int idAuftragsverteilung = anwesenheitTeilzeit.get(j).getPersonalnr()
-						+ anwesenheitTeilzeit.get(j).rechnerAuslesen().getSeriennr();
 				if (anwesenheitTeilzeit.get(j)
 						.getArbeitsaufwand() < (anwesenheitTeilzeit.get(j).getWochenstunden() / 5)) {
 					System.out.println("IF");
@@ -338,6 +336,8 @@ public class AuftragsansichtController implements Initializable {
 				anwesenheitTeilzeit.get(j).rechnerHinzufuegen(rechner.get(j));
 				anwesenheitTeilzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
 				anwesenheitTeilzeit.get(j).setArbeitsaufwand(rechner.get(j).getBearbeitungszeit());
+				int idAuftragsverteilung = anwesenheitTeilzeit.get(j).getPersonalnr()
+						+ anwesenheitTeilzeit.get(j).rechnerAuslesen().getSeriennr();
 				try {
 					db.rechnerVerteilung(idAuftragsverteilung,
 							anwesenheitTeilzeit.get(j).rechnerAuslesen().getBearbeitungsdatum(),
@@ -356,8 +356,6 @@ public class AuftragsansichtController implements Initializable {
 		// Auftraege werden an Vollzeitmitarbeiter verteilt
 		for (int z = 0; z < rechnerVollzeit; z++) {
 			for (int j = 0; j < anwesenheitVollzeit.size(); j++) {
-				int idAuftragsverteilung = anwesenheitVollzeit.get(j).getPersonalnr()
-						+ anwesenheitVollzeit.get(j).rechnerAuslesen().getSeriennr();
 				if (anwesenheitVollzeit.get(j)
 						.getArbeitsaufwand() < (anwesenheitVollzeit.get(j).getWochenstunden() / 5)) {
 					switch (bearbeitungsdatum.getDayOfWeek()) {
@@ -387,6 +385,8 @@ public class AuftragsansichtController implements Initializable {
 				anwesenheitVollzeit.get(j).rechnerHinzufuegen(rechner.get(j));
 				anwesenheitVollzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
 				anwesenheitVollzeit.get(j).setArbeitsaufwand(rechner.get(j).getBearbeitungszeit());
+				int idAuftragsverteilung = anwesenheitVollzeit.get(j).getPersonalnr()
+						+ anwesenheitVollzeit.get(j).rechnerAuslesen().getSeriennr();
 				try {
 					db.rechnerVerteilung(idAuftragsverteilung,
 							anwesenheitVollzeit.get(j).rechnerAuslesen().getBearbeitungsdatum(),
@@ -405,8 +405,6 @@ public class AuftragsansichtController implements Initializable {
 
 		// Rest wird auf Vollzeitmitarbeiter verteilt
 		for (int i1 = 0; i1 < rest; i1++) {
-			int idAuftragsverteilung = anwesenheitVollzeit.get(i1).getPersonalnr()
-					+ anwesenheitVollzeit.get(i1).rechnerAuslesen().getSeriennr();
 			if (anwesenheitVollzeit.get(i1).getArbeitsaufwand() < (anwesenheitVollzeit.get(i1).getWochenstunden() / 5)) {
 				switch (bearbeitungsdatum.getDayOfWeek()) {
 				case SUNDAY:
@@ -436,6 +434,8 @@ public class AuftragsansichtController implements Initializable {
 			anwesenheitVollzeit.get(i1).rechnerHinzufuegen(rechner.get(i1));
 			anwesenheitVollzeit.get(i1).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
 			anwesenheitVollzeit.get(i1).setArbeitsaufwand(rechner.get(i1).getBearbeitungszeit());
+			int idAuftragsverteilung = anwesenheitVollzeit.get(i1).getPersonalnr()
+					+ anwesenheitVollzeit.get(i1).rechnerAuslesen().getSeriennr();
 			try {
 				db.rechnerVerteilung(idAuftragsverteilung,
 						anwesenheitVollzeit.get(i1).rechnerAuslesen().getBearbeitungsdatum(),

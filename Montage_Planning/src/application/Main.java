@@ -28,16 +28,17 @@ public class Main extends Application {
 	public static void main(String[] args) {
 //		launch(args);
 		Datenbank db = new Datenbank();
+//		AuftragsansichtController auftragsansichtController = new AuftragsansichtController();
 		
 		db.openConnection();
 
-		  try {
-			new AuftragsansichtController().monteurHinzufuegen();
-			new AuftragsansichtController().auftraegeVerteilen();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
+//		  try {
+//			  auftragsansichtController.initialize(null, null);
+//			  auftragsansichtController.auftraegeVerteilen();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} 
 //			  System.out.println("start");
 //			  db.rechnerBefuellen();
 	}
