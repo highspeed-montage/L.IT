@@ -2,6 +2,7 @@ package application;
 
 import java.sql.SQLException;
 
+import controllers.AuftragsansichtController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -28,18 +29,29 @@ public class Main extends Application {
 //		launch(args);
 		Datenbank db = new Datenbank();
 		
-
 		db.openConnection();
-//		int lagerbestand = 0;
-		try {
-//			lagerbestand = db.getEinzelteilLagerbestand("pasjhhlit", 10001);
-			int lowestId = db.getLowestRechnerIDAuftrag(100001);
-			db.setAuftragStatus(100001, lowestId);
-			System.out.println(db.getAuftragsinfo(100001));
+
+		  try {
+			new AuftragsansichtController().monteurHinzufuegen();
+			new AuftragsansichtController().auftraegeVerteilen();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
+		} 
+//			  System.out.println("start");
+//			  db.rechnerBefuellen();
 	}
+
+////		int lagerbestand = 0;
+//		try {
+////			lagerbestand = db.getEinzelteilLagerbestand("pasjhhlit", 10001);
+//			int lowestId = db.getLowestRechnerIDAuftrag(100001);
+//			db.setAuftragStatus(100001, lowestId);
+//			System.out.println(db.getAuftragsinfo(100001));
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+	
 }

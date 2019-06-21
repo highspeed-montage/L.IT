@@ -293,19 +293,21 @@ public class Datenbank {
 		return lowestId;
 
 	}
-/**
- * Update des Auftragsstatus auf niedrigste STatusid aller zugehörigen Rechner
- * @param pAuftragsnummer
- * @param lowestId
- * @throws SQLException
- */
+
+	/**
+	 * Update des Auftragsstatus auf niedrigste STatusid aller zugehörigen Rechner
+	 * 
+	 * @param pAuftragsnummer
+	 * @param lowestId
+	 * @throws SQLException
+	 */
 	public boolean setAuftragStatus(int pAuftragsnummer, int lowestId) throws SQLException {
 		Statement stmt = connection.createStatement();
-		String query = "UPDATE Auftrag SET Auftrag.Status_idStatus = '"+lowestId+"' "
-				+ "WHERE Auftrag.idAuftragsnummer = '"+pAuftragsnummer+"'";
+		String query = "UPDATE Auftrag SET Auftrag.Status_idStatus = '" + lowestId + "' "
+				+ "WHERE Auftrag.idAuftragsnummer = '" + pAuftragsnummer + "'";
 		int updatedRows = stmt.executeUpdate(query);
 		return updatedRows == 1;
-	}	
+	}
 
 	/**
 	 * Booleanvariablen der Problemdoku werden aktualisiert
@@ -449,51 +451,89 @@ public class Datenbank {
 		return userVergleich;
 	}
 
-	public static ArrayList<Monteur> monteure = new ArrayList<>();
+//	public static ArrayList<Monteur> monteure = new ArrayList<>();
 
 	/**
 	 * Die Methode befuellt eine ArrayList mit allen Monteuren
 	 * 
 	 * @throws SQLException
 	 */
-	public void monteureBefuellen() throws SQLException {
+//	public void monteureBefuellen() throws SQLException {
+//		Statement stmt = connection.createStatement();
+//		String query = "SELECT idPersonalnummer, Name, Vorname, Krankheitstage, anwesend, Wochenstunden "
+//				+ "FROM Mitarbeiter, MitarbeiterVertragsart "
+//				+ "WHERE Mitarbeiter.MitarbeiterVertragsart_idMitarbeiterVertragsart=301 "
+//				+ "AND Mitarbeiter.MitarbeiterVertragsart_idMitarbeiterVertragsart=MitarbeiterVertragsart.idMitarbeiterVertragsart "
+//				+ "OR Mitarbeiter.MitarbeiterVertragsart_idMitarbeiterVertragsart=302 "
+//				+ "AND Mitarbeiter.MitarbeiterVertragsart_idMitarbeiterVertragsart=MitarbeiterVertragsart.idMitarbeiterVertragsart";
+//		System.out.println(query);
+//		ResultSet rs = stmt.executeQuery(query);
+//		while (rs.next()) {
+//			monteure.add(new Monteur(rs.getInt("idPersonalnummer"), rs.getString("Name"), rs.getString("Vorname"),
+//					rs.getInt("Krankheitstage"), rs.getBoolean("anwesend"), rs.getInt("Wochenstunden")));
+//			System.out.println(monteure.toString());
+//		}
+//	}
+	public ArrayList<Monteur> monteureBefuellen() throws SQLException {
+		ArrayList<Monteur> monteure = new ArrayList<>();
 		Statement stmt = connection.createStatement();
-		ResultSet rs = stmt
-				.executeQuery("SELECT idPersonalnummer, Name, Vorname, Krankheitstage, anwesend, Wochenstunden "
-						+ "FROM Mitarbeiter, MitarbeiterVertragsart"
-						+ "WHERE MitarbeiterVertragsart_idMitarbeiterVertragsart='301' "
-						+ "AND MitarbeiterVertragsart_idMitarbeiterVertragsart=MitarbeiterVertragsart.idMitarbeiterVertragsart "
-						+ "OR MitarbeiterVertragsart_idMitarbeiterVertragsart='302' "
-						+ "AND MitarbeiterVertragsart_idMitarbeiterVertragsart=MitarbeiterVertragsart.idMitarbeiterVertragsart");
-		int i = 0;
+		String query = "SELECT idPersonalnummer, Name, Vorname, Krankheitstage, anwesend, Wochenstunden "
+				+ "FROM Mitarbeiter, MitarbeiterVertragsart "
+				+ "WHERE Mitarbeiter.MitarbeiterVertragsart_idMitarbeiterVertragsart=301 "
+				+ "AND Mitarbeiter.MitarbeiterVertragsart_idMitarbeiterVertragsart=MitarbeiterVertragsart.idMitarbeiterVertragsart "
+				+ "OR Mitarbeiter.MitarbeiterVertragsart_idMitarbeiterVertragsart=302 "
+				+ "AND Mitarbeiter.MitarbeiterVertragsart_idMitarbeiterVertragsart=MitarbeiterVertragsart.idMitarbeiterVertragsart";
+		System.out.println(query);
+		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
 			monteure.add(new Monteur(rs.getInt("idPersonalnummer"), rs.getString("Name"), rs.getString("Vorname"),
 					rs.getInt("Krankheitstage"), rs.getBoolean("anwesend"), rs.getInt("Wochenstunden")));
-			i++;
+			System.out.println(monteure.toString());
 		}
+		return monteure;
 	}
 
-	public static ArrayList<Rechner> rechner = new ArrayList<>();
+
+//	public static ArrayList<Rechner> rechner = new ArrayList<>();
 
 	/**
 	 * Die Methode befuellt eine ArrayList mit allen Auftraegen aus der Datenbank
 	 * 
 	 * @throws SQLException
 	 */
-	public void rechnerBefuellen() throws SQLException {
+//	public void rechnerBefuellen() throws SQLException {
+//		Statement stmt = connection.createStatement();
+//		String query = "SELECT idSeriennummer, Auftrag.idAuftragsnummer, Status.Bezeichnung, Auftragsart.Arbeitsaufwand "
+//				+ "FROM Rechner, Status, Auftrag, Auftragsart "
+//				+ "WHERE Status.idStatus=Rechner.Status_idStatus AND Rechner.Auftrag_idAuftragsnummer=Auftrag.idAuftragsnummer "
+//				+ "AND Auftragsart.idAuftragsart=Rechner.Auftragsart_idAuftragsart "
+//				+ "AND Rechner.Status_idStatus='1'";
+//		System.out.println(query);
+//		ResultSet rs = stmt.executeQuery(query);
+//		
+//		while (rs.next()) {
+//			rechner.add(new Rechner(rs.getInt("Rechner.idSeriennummer"), rs.getInt("Auftrag.idAuftragsnummer"),
+//					rs.getString("Status.Bezeichnung"), rs.getInt("Auftragsart.Arbeitsaufwand")));
+//			System.out.println(rechner.toString());
+//		}
+//	}
+	public ArrayList<Rechner> rechnerBefuellen() throws SQLException {
+		ArrayList<Rechner> rechner = new ArrayList<>();
 		Statement stmt = connection.createStatement();
-		ResultSet rs = stmt.executeQuery(
-				"SELECT idSeriennummer, Auftrag.idAuftragsnummer, Status.Bezeichnung, Auftragsart.Arbeitsaufwand "
-						+ "FROM Rechner, Status, Auftrag, Auftragsart "
-						+ "WHERE Status.idStatus=Rechner.Status_idStatus AND Rechner.Auftrag_idAuftragsnummer=Auftrag.idAuftragsnummer "
-						+ "AND Auftragsart.idAuftragsart=Rechner.Auftragsart_idAuftragsart "
-						+ "AND Rechner.Status_idStatus='1'");
-		int i = 0;
+		String query = "SELECT idSeriennummer, Auftrag.idAuftragsnummer, Status.Bezeichnung, Auftragsart.Arbeitsaufwand "
+				+ "FROM Rechner, Status, Auftrag, Auftragsart "
+				+ "WHERE Status.idStatus=Rechner.Status_idStatus AND Rechner.Auftrag_idAuftragsnummer=Auftrag.idAuftragsnummer "
+				+ "AND Auftragsart.idAuftragsart=Rechner.Auftragsart_idAuftragsart "
+				+ "AND Rechner.Status_idStatus='1'";
+		System.out.println(query);
+		ResultSet rs = stmt.executeQuery(query);
+		
 		while (rs.next()) {
-			rechner.add(new Rechner(rs.getInt("idSeriennummer"), rs.getInt("idAuftragsnummer"),
+			rechner.add(new Rechner(rs.getInt("Rechner.idSeriennummer"), rs.getInt("Auftrag.idAuftragsnummer"),
 					rs.getString("Status.Bezeichnung"), rs.getInt("Auftragsart.Arbeitsaufwand")));
-			i++;
+			System.out.println(rechner.toString());
 		}
+		return rechner;
 	}
 
 	/**
@@ -508,8 +548,8 @@ public class Datenbank {
 	public void rechnerVerteilung(int idAuftragsverteilung, LocalDate bearbeitungsdatum, int seriennummer,
 			int personalnummer) throws SQLException {
 		Statement stmt = connection.createStatement();
-		stmt.executeUpdate("INSERT INTO Auftragsverteilung"
-				+ "VALUES('" +idAuftragsverteilung+ "', '"+bearbeitungsdatum+"', '"+seriennummer+"', '"+personalnummer+"')");
+		stmt.executeUpdate("INSERT INTO Auftragsverteilung" + "VALUES('" + idAuftragsverteilung + "', '"
+				+ bearbeitungsdatum + "', '" + seriennummer + "', '" + personalnummer + "')");
 		int updatedRows = stmt.executeUpdate(
 				"UPDATE Rechner SET Status_idStatus = '3' WHERE idSeriennummer = '" + seriennummer + "'");
 	}

@@ -93,11 +93,11 @@ public class AuftragsansichtController implements Initializable {
 	ObservableList<Auftrag> auftragListenansichtTabelle = FXCollections.observableArrayList();
 	ObservableList<Auftragsverteilung[]> auftragWochenansichtTabelle = FXCollections.observableArrayList();
 
-	Alert alert = new Alert(AlertType.INFORMATION);
+//	Alert alert = new Alert(AlertType.INFORMATION);
 
 	// ComboBox
 	private ObservableList<String> options = FXCollections.observableArrayList();
-	
+
 	public static int auftragsnummerAktuell;
 
 	@Override
@@ -128,7 +128,7 @@ public class AuftragsansichtController implements Initializable {
 			}
 		}
 
-		// ComboBox befüllen
+		// ComboBox befuellen
 		options.addAll(wochen);
 		comboBox_AW_Wochenansicht.setItems(options.sorted());
 
@@ -158,7 +158,12 @@ public class AuftragsansichtController implements Initializable {
 
 		tableAuftragWoche.setItems(auftragWochenansichtTabelle);
 
-		// auftraegeVerteilen();
+		try {
+			auftraegeVerteilen();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		listenansichtFuellen();
 		wochenansichtFuellen();
 	}
@@ -217,10 +222,13 @@ public class AuftragsansichtController implements Initializable {
 				auftragWochenansichtTabelle.addAll(row);
 			} catch (SQLException e) {
 				e.printStackTrace();
-				alert.setTitle("Fehlermeldung");
-				alert.setHeaderText("Keine Datenbankverbindung");
-				alert.setContentText("Bitte überprüfen Sie Ihre Datenbankverbindung");
-				alert.showAndWait();
+				String title = "keine Datenbankverbindung";
+				String info = "Bitte �berpr�fen sie die Datanbankverbindung";
+				AlertController.error(title, info);
+//				alert.setTitle("Fehlermeldung");
+//				alert.setHeaderText("Keine Datenbankverbindung");
+//				alert.setContentText("Bitte überprüfen Sie Ihre Datenbankverbindung");
+//				alert.showAndWait();
 			}
 		});
 
@@ -230,16 +238,36 @@ public class AuftragsansichtController implements Initializable {
 	 * Die Methode fuegt alle anwesenden Monteure einer ArrayList fuer Vollzeit-
 	 * oder Teilzeitmitarbeiter hinzu. Auf die Monteure in der ArrayList werden die
 	 * Auftraege verteilt.
+	 * 
+	 * @throws SQLException
 	 */
+//	public void monteurHinzufuegen() {
+//		for (int i = 0; i < Datenbank.monteure.size(); i++) {
+//			if (Datenbank.monteure.get(i).getAnwesend() == true) {
+//				if (Datenbank.monteure.get(i).getWochenstunden() == 40) {
+//					anwesenheitVollzeit.add(Datenbank.monteure.get(i));
+//				} else {
+//					anwesenheitTeilzeit.add(Datenbank.monteure.get(i));
+//				}
+//			}
+//		}
+//	}
+
 	public void monteurHinzufuegen() {
-		for (int i = 0; i < Datenbank.monteure.size(); i++) {
-			if (Datenbank.monteure.get(i).getAnwesend() == true) {
-				if (Datenbank.monteure.get(i).getWochenstunden() == 40) {
-					anwesenheitVollzeit.add(Datenbank.monteure.get(i));
-				} else {
-					anwesenheitTeilzeit.add(Datenbank.monteure.get(i));
+		try {
+			ArrayList<Monteur> monteure = db.monteureBefuellen();
+			for (int i = 0; i < monteure.size(); i++) {
+				if (monteure.get(i).getAnwesend() == true) {
+					if (monteure.get(i).getWochenstunden() == 40) {
+						anwesenheitVollzeit.add(monteure.get(i));
+					} else {
+						anwesenheitTeilzeit.add(monteure.get(i));
+					}
 				}
+
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -248,19 +276,40 @@ public class AuftragsansichtController implements Initializable {
 	 * 
 	 * @throws SQLException
 	 */
-	public void auftraegeVerteilen() throws SQLException {
+	public void auftraegeVerteilen() throws SQLException{
+		try{
+			ArrayList<Monteur> monteure = db.monteureBefuellen();
+			for (int i = 0; i < monteure.size(); i++) {
+				if (monteure.get(i).getAnwesend() == true) {
+					if (monteure.get(i).getWochenstunden() == 40) {
+						anwesenheitVollzeit.add(monteure.get(i));
+					} else {
+						anwesenheitTeilzeit.add(monteure.get(i));
+					}
+				}
+			}}catch (Exception e) {
+				e.printStackTrace();
+			}
+//		try {
+//			db.monteureBefuellen();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		ArrayList<Rechner> rechner = db.rechnerBefuellen();
 		LocalDate bearbeitungsdatum = LocalDate.now();
-		int rechnerTeilzeit = (Datenbank.rechner.size() / 3);
+		int rechnerTeilzeit = (rechner.size() / 3);
 		int rechnerVollzeit = rechnerTeilzeit * 2;
-		int rest = (Datenbank.rechner.size() % 3);
+		int rest = (rechner.size() % 3);
 
 		// Auftraege werden auf Teilzeitmitarbeiter verteilt
-		for (int i = 0; i < rechnerTeilzeit; i++) {
+		for (int k = 0; k < rechnerTeilzeit; k++) {
 			for (int j = 0; j < anwesenheitTeilzeit.size(); j++) {
 				int idAuftragsverteilung = anwesenheitTeilzeit.get(j).getPersonalnr()
 						+ anwesenheitTeilzeit.get(j).rechnerAuslesen().getSeriennr();
 				if (anwesenheitTeilzeit.get(j)
 						.getArbeitsaufwand() < (anwesenheitTeilzeit.get(j).getWochenstunden() / 5)) {
+					System.out.println("IF");
 					switch (bearbeitungsdatum.getDayOfWeek()) {
 					case SUNDAY:
 						bearbeitungsdatum = bearbeitungsdatum.plusDays(1);
@@ -272,6 +321,7 @@ public class AuftragsansichtController implements Initializable {
 						break;
 					}
 				} else {
+					System.out.println("ELSE");
 					bearbeitungsdatum = bearbeitungsdatum.plusDays(1);
 					switch (bearbeitungsdatum.getDayOfWeek()) {
 					case SUNDAY:
@@ -284,21 +334,27 @@ public class AuftragsansichtController implements Initializable {
 						break;
 					}
 				}
-				anwesenheitTeilzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
+				System.out.println("Teilzeit Mitarbeiter");
+				anwesenheitTeilzeit.get(j).rechnerHinzufuegen(rechner.get(j));
 				anwesenheitTeilzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
-				anwesenheitTeilzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
-				db.rechnerVerteilung(idAuftragsverteilung,
-						anwesenheitTeilzeit.get(j).rechnerAuslesen().getBearbeitungsdatum(),
-						anwesenheitTeilzeit.get(j).rechnerAuslesen().getSeriennr(),
-						anwesenheitTeilzeit.get(j).getPersonalnr());
+				anwesenheitTeilzeit.get(j).setArbeitsaufwand(rechner.get(j).getBearbeitungszeit());
+				try {
+					db.rechnerVerteilung(idAuftragsverteilung,
+							anwesenheitTeilzeit.get(j).rechnerAuslesen().getBearbeitungsdatum(),
+							anwesenheitTeilzeit.get(j).rechnerAuslesen().getSeriennr(),
+							anwesenheitTeilzeit.get(j).getPersonalnr());
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-			for (int k = 0; k < anwesenheitTeilzeit.size(); k++) {
-				Datenbank.rechner.remove(0);
+			for (int k1 = 0; k1 < anwesenheitTeilzeit.size(); k1++) {
+				rechner.remove(0);
 			}
 		}
 		bearbeitungsdatum = LocalDate.now();
 		// Auftraege werden an Vollzeitmitarbeiter verteilt
-		for (int i = 0; i < rechnerVollzeit; i++) {
+		for (int z = 0; z < rechnerVollzeit; z++) {
 			for (int j = 0; j < anwesenheitVollzeit.size(); j++) {
 				int idAuftragsverteilung = anwesenheitVollzeit.get(j).getPersonalnr()
 						+ anwesenheitVollzeit.get(j).rechnerAuslesen().getSeriennr();
@@ -327,25 +383,31 @@ public class AuftragsansichtController implements Initializable {
 						break;
 					}
 				}
-				anwesenheitVollzeit.get(j).rechnerHinzufuegen(Datenbank.rechner.get(j));
+				System.out.println("Vollzeit Mitarbeiter");
+				anwesenheitVollzeit.get(j).rechnerHinzufuegen(rechner.get(j));
 				anwesenheitVollzeit.get(j).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
-				anwesenheitVollzeit.get(j).setArbeitsaufwand(Datenbank.rechner.get(j).getBearbeitungszeit());
-				db.rechnerVerteilung(idAuftragsverteilung,
-						anwesenheitVollzeit.get(j).rechnerAuslesen().getBearbeitungsdatum(),
-						anwesenheitVollzeit.get(j).rechnerAuslesen().getSeriennr(),
-						anwesenheitVollzeit.get(j).getPersonalnr());
+				anwesenheitVollzeit.get(j).setArbeitsaufwand(rechner.get(j).getBearbeitungszeit());
+				try {
+					db.rechnerVerteilung(idAuftragsverteilung,
+							anwesenheitVollzeit.get(j).rechnerAuslesen().getBearbeitungsdatum(),
+							anwesenheitVollzeit.get(j).rechnerAuslesen().getSeriennr(),
+							anwesenheitVollzeit.get(j).getPersonalnr());
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			for (int k = 0; k < anwesenheitVollzeit.size(); k++) {
-				Datenbank.rechner.remove(0);
+				rechner.remove(0);
 			}
 		}
 		bearbeitungsdatum = LocalDate.now();
 
 		// Rest wird auf Vollzeitmitarbeiter verteilt
-		for (int i = 0; i < rest; i++) {
-			int idAuftragsverteilung = anwesenheitVollzeit.get(i).getPersonalnr()
-					+ anwesenheitVollzeit.get(i).rechnerAuslesen().getSeriennr();
-			if (anwesenheitVollzeit.get(i).getArbeitsaufwand() < (anwesenheitVollzeit.get(i).getWochenstunden() / 5)) {
+		for (int i1 = 0; i1 < rest; i1++) {
+			int idAuftragsverteilung = anwesenheitVollzeit.get(i1).getPersonalnr()
+					+ anwesenheitVollzeit.get(i1).rechnerAuslesen().getSeriennr();
+			if (anwesenheitVollzeit.get(i1).getArbeitsaufwand() < (anwesenheitVollzeit.get(i1).getWochenstunden() / 5)) {
 				switch (bearbeitungsdatum.getDayOfWeek()) {
 				case SUNDAY:
 					bearbeitungsdatum = bearbeitungsdatum.plusDays(1);
@@ -364,24 +426,30 @@ public class AuftragsansichtController implements Initializable {
 					break;
 				case SATURDAY:
 					bearbeitungsdatum = bearbeitungsdatum.plusDays(2);
-					anwesenheitVollzeit.get(i).rechnerHinzufuegen(Datenbank.rechner.get(i));
+					anwesenheitVollzeit.get(i1).rechnerHinzufuegen(rechner.get(i1));
 					break;
 				default:
 					break;
 				}
 			}
-			anwesenheitVollzeit.get(i).rechnerHinzufuegen(Datenbank.rechner.get(i));
-			anwesenheitVollzeit.get(i).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
-			anwesenheitVollzeit.get(i).setArbeitsaufwand(Datenbank.rechner.get(i).getBearbeitungszeit());
-			db.rechnerVerteilung(idAuftragsverteilung,
-					anwesenheitVollzeit.get(i).rechnerAuslesen().getBearbeitungsdatum(),
-					anwesenheitVollzeit.get(i).rechnerAuslesen().getSeriennr(),
-					anwesenheitVollzeit.get(i).getPersonalnr());
+			System.out.println("Rest");
+			anwesenheitVollzeit.get(i1).rechnerHinzufuegen(rechner.get(i1));
+			anwesenheitVollzeit.get(i1).rechnerAuslesen().setBearbeitungsdatum(bearbeitungsdatum);
+			anwesenheitVollzeit.get(i1).setArbeitsaufwand(rechner.get(i1).getBearbeitungszeit());
+			try {
+				db.rechnerVerteilung(idAuftragsverteilung,
+						anwesenheitVollzeit.get(i1).rechnerAuslesen().getBearbeitungsdatum(),
+						anwesenheitVollzeit.get(i1).rechnerAuslesen().getSeriennr(),
+						anwesenheitVollzeit.get(i1).getPersonalnr());
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		for (int k = 0; k < rest; k++) {
-			Datenbank.rechner.remove(0);
+			rechner.remove(0);
 		}
-	}
+}
 
 //	// Wochenansicht: Klick auf Aufrtrag oeffnet Auftragsinfo
 //	public void clickRechnerWoche(MouseEvent e) {
@@ -411,14 +479,15 @@ public class AuftragsansichtController implements Initializable {
 		if (e.getClickCount() == 2) {
 			auftragsnummerAktuell = tableAuftragListe.getSelectionModel().getSelectedItem().getAuftragsnr();
 
-					try {
-						new FolgeFenster("/views/Auftragsinfo.fxml");
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+			try {
+				new FolgeFenster("/views/Auftragsinfo.fxml");
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
+
 	public void Logout(Event event) {
 		AlertController.confirmation();
 		try {
