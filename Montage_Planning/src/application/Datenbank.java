@@ -516,7 +516,7 @@ public class Datenbank {
 			int personalnummer) throws SQLException {
 		Statement stmt = connection.createStatement();
 		stmt.executeUpdate("INSERT INTO Auftragsverteilung"
-				+ "VALUES(idAuftragsverteilung, bearbeitungsdatum, seriennummer, personalnummer)");
+				+ "VALUES('" +idAuftragsverteilung+ "', '"+bearbeitungsdatum+"', '"+seriennummer+"', '"+personalnummer+"')");
 		int updatedRows = stmt.executeUpdate(
 				"UPDATE Rechner SET Status_idStatus = '3' WHERE idSeriennummer = '" + seriennummer + "'");
 	}
