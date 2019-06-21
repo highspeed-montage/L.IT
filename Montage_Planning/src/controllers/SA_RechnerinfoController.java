@@ -122,7 +122,10 @@ public class SA_RechnerinfoController implements Initializable {
 								}
 							} else if (lagerbestand > 0) {
 								lbl_SAI_SuchStatus.setText("auf Lager: " + lagerbestand);
-							}
+							} else if (lagerbestand == 9999) {
+								String title = "Unbekannte Eingabe";
+								String info = "Kein Einzelteil mit dieser Bezeichnung";
+								AlertController.error(title, info);							}
 						}
 					} else {
 						String title = "Einzelteilsuche";

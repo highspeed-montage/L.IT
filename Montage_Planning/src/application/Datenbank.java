@@ -391,19 +391,12 @@ public class Datenbank {
 		int lagerbestand = 0;
 
 		while (rs.next()) {
-			if (rs.wasNull()) {
-				System.out.println("null ");
-//				lagerbestand = 9999;
-				System.out.println(lagerbestand);
-				// FUNKTIONIERT NICHT:
-//				String title = "unbekannte Eingabe";
-//				String info = "Kein Einzelteil mit dieser Bezeichnung";
-//				AlertController.error(title, info);
-			} else {
+			if (!rs.wasNull()) {
 				lagerbestand = rs.getInt("Lagerbestand");
+				System.out.println(lagerbestand);
+			} else {
+				lagerbestand = 9999;
 			}
-			System.out.println("in DB: " + lagerbestand);
-
 		}
 		return lagerbestand;
 	}
