@@ -15,6 +15,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -41,6 +42,8 @@ public class FA_RechnerinfoController implements Initializable {
 	private Label lbl_FAI_Seriennummer;
 	@FXML
 	private ComboBox<String> comboBox_FAI_Status = null;
+	@FXML
+	private Button btn_FAI_SNrDrucken;
 
 	/** Einzelteiltabelle */
 	@FXML
@@ -99,7 +102,7 @@ public class FA_RechnerinfoController implements Initializable {
 		lbl_FAI_kundenNr.setText(String.valueOf(fr.getKundenId()));
 		lbl_FAI_lieferdatum.setText(String.valueOf(fr.getLieferdatum()));
 		lbl_FAI_status.setText(fr.getStatus());
-		
+
 		einzelteile.addAll(fr.getTeile());
 
 		TableColumn_FAI_einzelteile.setCellValueFactory(new PropertyValueFactory<>("bezeichnung"));
@@ -122,23 +125,27 @@ public class FA_RechnerinfoController implements Initializable {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		}
 	}
 
+	@FXML
 	public void createSeriennummerPDF() {
-		
+
 		// Seriennummer wird in Textdatei geschrieben
 		PrintWriter pWriter = null;
 		try {
 			pWriter = new PrintWriter(new BufferedWriter(new FileWriter("src/application/seriennummer.txt")));
 			pWriter.println(RechneransichtController.seriennrAktuell);
+			String title = "PDF";
+			String info = "Seriennummer PDF generiert";
+			AlertController.information(title, info);
 			System.out.println("PDF gedruckt"); // Message Dialog "PDF ist gespeichert."
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		} finally {
 			if (pWriter != null) {
 				pWriter.flush();
-				pWriter.close();	
+				pWriter.close();
 			}
 
 		}
