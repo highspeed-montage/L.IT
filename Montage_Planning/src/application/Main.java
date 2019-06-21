@@ -28,10 +28,22 @@ public class Main extends Application {
 	public static void main(String[] args) {
 //		launch(args);
 		Datenbank db = new Datenbank();
+//		AuftragsansichtController auftragsansichtController = new AuftragsansichtController();
 		
-
 		db.openConnection();
-//		int lagerbestand = 0;
+
+//		  try {
+//			  auftragsansichtController.initialize(null, null);
+//			  auftragsansichtController.auftraegeVerteilen();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} 
+//			  System.out.println("start");
+//			  db.rechnerBefuellen();
+	}
+
+////		int lagerbestand = 0;
 //		try {
 ////			lagerbestand = db.getEinzelteilLagerbestand("pasjhhlit", 10001);
 //			int lowestId = db.getLowestRechnerIDAuftrag(100001);
@@ -41,13 +53,6 @@ public class Main extends Application {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-		
-		try {
-			new AuftragsansichtController().auftraegeVerteilen();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
+//		
+	
 }
