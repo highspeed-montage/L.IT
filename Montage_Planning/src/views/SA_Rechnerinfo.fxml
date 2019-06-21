@@ -74,55 +74,78 @@
             </VBox>
          </top>
          <center>
-            <VBox spacing="40.0">
-               <children>
-                  <HBox alignment="TOP_CENTER">
+            <ScrollPane fitToHeight="true" fitToWidth="true" prefViewportHeight="419.0" prefViewportWidth="445.0">
+               <content>
+                  <AnchorPane>
                      <children>
-                        <ComboBox fx:id="comboBox_SAI_Bearbeitungsstatus" onAction="#setSAStatus" prefWidth="150.0" promptText="Bearbeitungsstatus" />
-                     </children>
-                  </HBox>
-                  <RadioButton fx:id="rbtn_SAI_Hardware" mnemonicParsing="false" text="Hardware">
-                     <toggleGroup>
-                        <ToggleGroup fx:id="toggle_SAI_Dokumentation" />
-                     </toggleGroup>
-                  </RadioButton>
-                  <VBox alignment="TOP_CENTER" spacing="5.0">
-                     <children>
-                        <CheckBox fx:id="cBox_SAI_Prozessor" mnemonicParsing="false" onAction="#handleCBoxProzessor" text="Prozessor" textAlignment="CENTER" />
-                        <CheckBox fx:id="cBox_SAI_Grafikkarte" mnemonicParsing="false" onAction="#handleCBoxGrafikkarte" text="Grafikkarte" textAlignment="CENTER" />
-                        <CheckBox fx:id="cBox_SAI__Festplatte" mnemonicParsing="false" onAction="#handleCBoxFestplatte" text="Festplatte" textAlignment="CENTER" />
-                        <CheckBox fx:id="cBox_SAI_Laufwerk" mnemonicParsing="false" onAction="#handleCBoxLaufwerk" text="Laufwerk" textAlignment="CENTER" />
-                        <HBox alignment="CENTER" prefHeight="20.0" prefWidth="200.0" spacing="5.0">
+                        <VBox alignment="TOP_CENTER" prefHeight="419.0" prefWidth="435.0" spacing="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <TextField fx:id="txt_SAI_Einzelteilsuche" promptText="Einzelteilsuche" />
-                              <Label fx:id="lbl_SAI_SuchStatus" text="Status der Suche" />
+                              <HBox alignment="TOP_CENTER" prefHeight="25.0" prefWidth="417.0">
+                                 <children>
+                                    <ComboBox fx:id="comboBox_SAI_Bearbeitungsstatus" onAction="#setSAStatus" prefWidth="150.0" promptText="Bearbeitungsstatus" />
+                                 </children>
+                              </HBox>
+                              <VBox>
+                                 <children>
+                                    <RadioButton fx:id="rbtn_SAI_Hardware" mnemonicParsing="false" text="Hardware">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="toggle_SAI_Dokumentation" />
+                                       </toggleGroup>
+                                    </RadioButton>
+                                    <HBox alignment="TOP_CENTER">
+                                       <children>
+                                          <VBox alignment="TOP_CENTER" spacing="5.0">
+                                             <children>
+                                                <CheckBox fx:id="cBox_SAI_Prozessor" mnemonicParsing="false" onAction="#handleCBoxProzessor" text="Prozessor   " textAlignment="CENTER" />
+                                                <CheckBox fx:id="cBox_SAI_Grafikkarte" mnemonicParsing="false" onAction="#handleCBoxGrafikkarte" text="Grafikkarte" textAlignment="CENTER" />
+                                                <CheckBox fx:id="cBox_SAI__Festplatte" mnemonicParsing="false" onAction="#handleCBoxFestplatte" text="Festplatte " textAlignment="CENTER" />
+                                                <CheckBox fx:id="cBox_SAI_Laufwerk" mnemonicParsing="false" onAction="#handleCBoxLaufwerk" text="Laufwerk  " textAlignment="CENTER" />
+                                                <HBox alignment="CENTER" prefHeight="25.0" prefWidth="449.0" spacing="5.0">
+                                                   <children>
+                                                      <TextField fx:id="txt_SAI_Einzelteilsuche" promptText="Einzelteilsuche" />
+                                                      <Label fx:id="lbl_SAI_SuchStatus" prefHeight="17.0" prefWidth="96.0" text="Status der Suche" />
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets />
+                                                   </VBox.margin>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                              </VBox>
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <RadioButton fx:id="rbtn_SAI_Software" alignment="TOP_CENTER" mnemonicParsing="false" text="Software" toggleGroup="$toggle_SAI_Dokumentation" />
+                                    <RadioButton fx:id="rbtn_SAI_Kunde" mnemonicParsing="false" text="Kunde" toggleGroup="$toggle_SAI_Dokumentation" />
+                                    <HBox alignment="TOP_CENTER" spacing="5.0">
+                                       <children>
+                                          <Button fx:id="btn_SAI_pdf" mnemonicParsing="false" prefWidth="100.0" text="PDF Generieren" textAlignment="CENTER" />
+                                          <Button fx:id="btn_SAI_Speichern" mnemonicParsing="false" onAction="#handleSpeichernToDb" prefWidth="100.0" text="Speichern" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="5.0" />
+                                       </padding>
+                                    </HBox>
+                                 </children>
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                              </VBox>
                            </children>
-                           <VBox.margin>
+                           <opaqueInsets>
                               <Insets />
-                           </VBox.margin>
-                        </HBox>
+                           </opaqueInsets>
+                        </VBox>
                      </children>
-                  </VBox>
-                  <RadioButton fx:id="rbtn_SAI_Software" mnemonicParsing="false" text="Software" toggleGroup="$toggle_SAI_Dokumentation" />
-                  <RadioButton fx:id="rbtn_SAI_Kunde" mnemonicParsing="false" text="Kunde" toggleGroup="$toggle_SAI_Dokumentation" />
-                  <HBox alignment="TOP_CENTER" spacing="5.0">
-                     <children>
-                        <Button fx:id="btn_SAI_pdf" mnemonicParsing="false" prefWidth="100.0" text="PDF Generieren" textAlignment="CENTER" />
-                        <Button fx:id="btn_SAI_Speichern" mnemonicParsing="false" onAction="#handleSpeichernToDb" prefWidth="100.0" text="Speichern" />
-                     </children>
-                     <padding>
-                        <Insets bottom="5.0" />
-                     </padding>
-                  </HBox>
-               </children>
-               <BorderPane.margin>
-                  <Insets left="5.0" />
-               </BorderPane.margin>
-            </VBox>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
          </center>
-         <right>
-            <ScrollBar orientation="VERTICAL" BorderPane.alignment="CENTER" />
-         </right>
       </BorderPane>
    </children>
 </AnchorPane>

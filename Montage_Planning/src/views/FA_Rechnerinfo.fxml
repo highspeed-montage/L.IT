@@ -73,29 +73,38 @@
 					</children>
 				</VBox>
 			</top>
-			<center>
-				<VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-					<children>
-                  <Button mnemonicParsing="false" onMouseClicked="#createSeriennummerPDF" text="Seriennummer Drucken" />
-						<ComboBox fx:id="comboBox_FAI_Status" onAction="#setFAStatus" prefHeight="38.0" prefWidth="163.0" promptText="Bearbeitungstatus" />
-							
-						<TableView fx:id="tableFARechnerInfo" prefHeight="201.0" prefWidth="426.0">
-							<columns>
-								<TableColumn fx:id="TableColumn_FAI_einzelteile" minWidth="-Infinity" prefWidth="250.0" text="Einzelteile" />
-							</columns>
-							<padding>
-								<Insets top="5.0" />
-							</padding>
-						</TableView>
-					</children>
-					<BorderPane.margin>
-						<Insets left="5.0" right="5.0" />
-					</BorderPane.margin>
-				</VBox>
-			</center>
-			<right>
-      				<ScrollBar orientation="VERTICAL" BorderPane.alignment="CENTER" />
-			</right>
+         <center>
+            <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <content>
+                  <AnchorPane>
+                     <children>
+                        <VBox prefHeight="264.0" prefWidth="426.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <HBox spacing="5.0">
+                                 <children>
+                  						<ComboBox fx:id="comboBox_FAI_Status" layoutY="25.0" onAction="#setFAStatus" promptText="Bearbeitungstatus" />
+                                    <Button fx:id="btn_FAI_SNrDrucken" mnemonicParsing="false" onAction="#createSeriennummerPDF" onMouseClicked="#createSeriennummerPDF" text="Seriennummer Drucken" />
+                                 </children>
+                              </HBox>
+            							
+                  						<TableView fx:id="tableFARechnerInfo" layoutY="53.0" prefHeight="201.0" prefWidth="426.0">
+            							<columns>
+            								<TableColumn fx:id="TableColumn_FAI_einzelteile" minWidth="-Infinity" prefWidth="250.0" text="Einzelteile" />
+            							</columns>
+            							<padding>
+            								<Insets top="5.0" />
+            							</padding>
+            						</TableView>
+                           </children>
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
+         </center>
 		</BorderPane>
 	</children>
 </AnchorPane>
