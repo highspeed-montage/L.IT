@@ -70,8 +70,7 @@ public class AuftragsansichtController implements Initializable {
 	private TableColumn<Auftrag, Date> col_AL_Lieferdatum;
 
 	private Datenbank db = new Datenbank();
-	private ArrayList<Monteur> anwesenheitVollzeit = new ArrayList<>();
-	private ArrayList<Monteur> anwesenheitTeilzeit = new ArrayList<>();
+
 	private ArrayList<Monteur> anwesendMonteure = new ArrayList<>();
 	private List<Rechner> rechner = new ArrayList<>();
 
@@ -142,14 +141,15 @@ public class AuftragsansichtController implements Initializable {
 			tableAuftragWoche.getColumns().add(column);
 		}
 
-//		String name = "Mitarbeiter";
-//		TableColumn<Auftragsverteilung[], String> columnMA = new TableColumn<>(name);
-//		columnMA.setCellValueFactory(cd -> {
-//			Auftragsverteilung auftrag = cd.getValue()[5];
-//			return new SimpleObjectProperty<>(auftrag == null ? null : auftrag.getMonteur().getName());
-//		});
-//
-//		tableAuftragWoche.getColumns().add(columnMA);
+		// String name = "Mitarbeiter";
+		// TableColumn<Auftragsverteilung[], String> columnMA = new TableColumn<>(name);
+		// columnMA.setCellValueFactory(cd -> {
+		// Auftragsverteilung auftrag = cd.getValue()[5];
+		// return new SimpleObjectProperty<>(auftrag == null ? null :
+		// auftrag.getMonteur().getName());
+		// });
+		//
+		// tableAuftragWoche.getColumns().add(columnMA);
 
 		tableAuftragWoche.setItems(auftragWochenansichtTabelle);
 
@@ -188,17 +188,17 @@ public class AuftragsansichtController implements Initializable {
 			// Datenbank
 			try {
 				Auftragsverteilung[][] row = new Auftragsverteilung[50][6];
-				
-				int i = 0;				
+
+				int i = 0;
 				for (Auftragsverteilung auftrag : db.getRechnerAuftragswoche(startdatum, enddatum)) {
 
 					LocalDate date = auftrag.getBearbeitungsdatum();
-					
+
 					row[i][date.getDayOfWeek().getValue() - 1] = auftrag;
-//					row[i][5] = auftrag;						
+					// row[i][5] = auftrag;
 					i++;
 				}
-				
+
 				auftragWochenansichtTabelle.addAll(row);
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -206,32 +206,6 @@ public class AuftragsansichtController implements Initializable {
 			}
 		});
 
-	}
-
-	/**
-	 * Die Methode fuegt alle anwesenden Monteure einer ArrayList fuer Vollzeit-
-	 * oder Teilzeitmitarbeiter hinzu. Auf die Monteure in der ArrayList werden die
-	 * Auftraege verteilt.
-	 * 
-	 * @throws SQLException
-	 */
-	public void monteurHinzufuegen() {
-		try {
-			ArrayList<Monteur> monteure = db.monteureBefuellen();
-			for (int i = 0; i < monteure.size(); i++) {
-				if (monteure.get(i).getAnwesend() == true) {
-					if (monteure.get(i).getWochenstunden() == 40) {
-						anwesenheitVollzeit.add(monteure.get(i));
-					} else {
-						anwesenheitTeilzeit.add(monteure.get(i));
-					}
-				}
-
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			AlertController.error("Fehler", "Keine Verbindung zur Datenbank möglich");
-		}
 	}
 
 	/**
