@@ -37,7 +37,7 @@ import models.Auftragsverteilung;
 
 public class RechneransichtController implements Initializable {
 
-	// Grundfunktionen, Menüleiste
+	// Grundfunktionen, Menueleiste
 	@FXML
 	private Button btnLogout;
 	@FXML
@@ -140,7 +140,10 @@ public class RechneransichtController implements Initializable {
 
 	}
 
-	// Wochenansicht: Tabelle befüllen
+	/**
+	 * Wochenansicht: Tabelle befuellen
+	 * 
+	 */
 	public void wochenansichtFuellen() {
 
 		// ComboBox Listener
@@ -175,7 +178,9 @@ public class RechneransichtController implements Initializable {
 
 	}
 
-	// Listenansicht: Tabelle befüllen
+	/**
+	 * Listenansicht: Tabelle befuellen
+	 */
 	public void listenansichtFuellen() {
 		try {
 			rechnerListenansichtTabelle.addAll(db.getRechnerAusAuftragsverteilungListe(/* LoginController.user */));
@@ -191,7 +196,10 @@ public class RechneransichtController implements Initializable {
 		tableRechnerListe.setItems(rechnerListenansichtTabelle);
 	}
 
-	// Wochenansicht: Klick auf Rechner öffnet Rechnerinfo
+	/**
+	 * Wochenansicht: Klick auf Rechner oeffnet Rechnerinfo
+	 * @param e
+	 */
 	public void clickRechnerWoche(MouseEvent e) {
 
 		if (e.getClickCount() == 2) {
@@ -204,8 +212,9 @@ public class RechneransichtController implements Initializable {
 					new FolgeFenster("/views/FA_Rechnerinfo.fxml");
 				} else if (idAuftragsart == 501) {
 					new FolgeFenster("/views/SA_Rechnerinfo.fxml");
+					
 				} else {
-					System.out.println("Keine Info vorhanden");
+					AlertController.error("Fehler", "Keine Info vorhanden");
 				}
 			} catch (SQLException | IOException e2) {
 				e2.printStackTrace();
@@ -213,7 +222,10 @@ public class RechneransichtController implements Initializable {
 		}
 	}
 
-	// Listenansicht: Klick auf Rechner öffnet Rechnerinfo
+	/**
+	 * Listenansicht: Klick auf Rechner oeffnet Rechnerinfo
+	 * @param e
+	 */
 	public void clickRechnerListe(MouseEvent e) {
 
 		if (e.getClickCount() == 2) {
@@ -226,7 +238,7 @@ public class RechneransichtController implements Initializable {
 				} else if (idAuftragsart == 501) {
 					new FolgeFenster("/views/SA_Rechnerinfo.fxml");
 				} else {
-					System.out.println("Keine Info vorhanden");
+					AlertController.error("Fehler", "Keine Info vorhanden");
 				}
 			} catch (SQLException | IOException e2) {
 				e2.printStackTrace();
@@ -234,15 +246,24 @@ public class RechneransichtController implements Initializable {
 
 		}
 	}
-
-	// ComboBox: Kalenderwoche holen
+	
+	/**
+	 * ComboBox: Kalenderwoche holen
+	 * @param date
+	 * @return
+	 */
 	public static int getWeekNumberFromDate(Date date) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		return cal.get(Calendar.WEEK_OF_YEAR);
 	}
 
-	// ComboBox: Montag der Kalenderwoche holen
+	/**
+	 * ComboBox: Montag der Kalenderwoche holen
+	 * @param year
+	 * @param weekNumber
+	 * @return
+	 */
 	public static Date getMondayFromWeekNumber(int year, int weekNumber) {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, year);
@@ -251,7 +272,12 @@ public class RechneransichtController implements Initializable {
 		return cal.getTime();
 	}
 
-	// ComboBox: Freitag der Kalenderwoche holen
+	/**
+	 * ComboBox:Freitag der Kalenderwoche holen
+	 * @param year
+	 * @param weekNumber
+	 * @return
+	 */
 	public static Date getFridayFromWeekNumber(int year, int weekNumber) {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, year);
@@ -259,7 +285,10 @@ public class RechneransichtController implements Initializable {
 		cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
 		return cal.getTime();
 	}
-
+/**
+ * loggt den User aus und �oeffnet das "Login"-Fenster
+ * @param event
+ */
 	public void Logout(Event event) {
 		AlertController.confirmation();
 		try {

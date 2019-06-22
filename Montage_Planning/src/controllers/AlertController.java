@@ -8,7 +8,12 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 
 public class AlertController {
-	
+	/**
+	 * Alert-Fenster zur Darstellung von Informationen
+	 * 
+	 * @param title
+	 * @param info
+	 */
 	public static void information(String title, String info) {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle(title);
@@ -17,16 +22,22 @@ public class AlertController {
 		alert.showAndWait();
 	}
 
-
+/**
+ * Alert-Fenster zur Darstellung eines Fehlers
+ * 
+ * @param title
+ * @param info
+ */
 	public static void error(String title, String info) {
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle(title);
 		alert.setHeaderText(null);
 		alert.setContentText(info);
-		
-
-
 	}
+	
+	/**
+	 * Alert-Fenster zur Abfrage ob man ausgeloggt werden moechte
+	 */
 	public static void confirmation() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Sind Sie sicher?");

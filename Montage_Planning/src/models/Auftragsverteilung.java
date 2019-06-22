@@ -19,7 +19,6 @@ public class Auftragsverteilung {
 		this.status = status;
 	}
 
-	// Konstruktor für Datenbankabfrage listRechnerAusAuftragsverteilungWoche()
 	public Auftragsverteilung(Integer seriennr, LocalDate bearbeitungsdatum) {
 		super();
 		this.seriennr = seriennr;

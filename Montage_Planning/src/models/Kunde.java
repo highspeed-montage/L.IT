@@ -2,19 +2,17 @@ package models;
 
 public class Kunde {
 	private String eMail;
-	
-	public Kunde(String pEMail)
-	{
+
+	public Kunde(String pEMail) {
 		eMail = pEMail;
 	}
-	public void setEMail(String pEMail)
-	{
+
+	public void setEMail(String pEMail) {
 		eMail = pEMail;
 	}
-	public String getEMail()
-	{
+
+	public String getEMail() {
 		return eMail;
 	}
-	
-	
+
 }

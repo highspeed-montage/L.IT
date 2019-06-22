@@ -6,7 +6,6 @@ public class Mitarbeiter {
 	private String vorname;
 	private double urlaubstage;
 	private int krankheitstage;
-	// Vollzeit, Teilzeit, Abteilungsleiter
 	private String mitarbeitervertragsart;
 	private boolean anwesend;
 

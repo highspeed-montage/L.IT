@@ -17,7 +17,6 @@ public class Monteur extends Mitarbeiter {
 
 	public Monteur(int personalnr, String name) {
 		super(personalnr, name);
-		// TODO Auto-generated constructor stub
 	}
 	
 

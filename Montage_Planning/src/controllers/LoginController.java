@@ -46,14 +46,24 @@ public class LoginController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		db.openConnection();
 	}
-	
+	/**
+	 * Verhindert die Eingabe von buchstaben im Username-Feld
+	 * 
+	 * @param evt
+	 */
 	public void Eingabe(KeyEvent evt) {
 	    String character = evt.getCharacter();
 	    if(!character.matches("[0-9]")) {
 	        evt.consume();                
 	    }                                         
 	}
-
+/**
+ * Auf Klick des "Anmelden"-Buttons wird eine Ueberpruefung gestartet und ein Login durch gefuehrt
+ * 
+ * @param event
+ * @throws IOException
+ * @throws SQLException
+ */
 	public void Login(Event event) throws IOException, SQLException {
 		int rolle;
 		username = txtUsername.getText();
@@ -96,20 +106,14 @@ public class LoginController implements Initializable {
 		stage.close();
 	}
 
-
+/**
+ * Prueft ob Eingabe-Felder leer sind
+ * @param username
+ * @param password
+ */
 
 	public void validate(String username, String password) {
 
-//		try { // Username == idPersonalnummer sind nur Zahlen
-//			Integer.parseInt(username);
-//		} catch (NumberFormatException ex) {
-//			ex.printStackTrace();
-//			String zahlenTitle = "Zahlen im Username";
-//			String zahlenInfo = "Der Username besteht nur aus Zahlen!";
-//			AlertController.information(zahlenTitle, zahlenInfo);
-//			txtUsername.clear();
-//			txtPassword.clear();
-//		}
 
 		if (username.isEmpty() || username == null) { // null und Empty werden unterschiedlich erkannt --> null!=empty
 			String userTitle = "Username";

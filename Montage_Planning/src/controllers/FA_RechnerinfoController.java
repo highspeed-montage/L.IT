@@ -110,7 +110,7 @@ public class FA_RechnerinfoController implements Initializable {
 	}
 
 	/**
-	 * Bekommt gew�hltes Element der ComboBox Aktualisiert dementsprechend den
+	 * Bekommt gewaehltes Element der ComboBox Aktualisiert dementsprechend den
 	 * Rechnerstatus
 	 */
 	@FXML
@@ -129,9 +129,12 @@ public class FA_RechnerinfoController implements Initializable {
 	}
 
 	@FXML
+	/**
+	 * Seriennummer wird in .txt Datei geschrieben
+	 * fuers Drucken der Sticker zur identifikation
+	 */
 	public void createSeriennummerPDF() {
 
-		// Seriennummer wird in Textdatei geschrieben
 		PrintWriter pWriter = null;
 		try {
 			pWriter = new PrintWriter(new BufferedWriter(new FileWriter("src/application/seriennummer.txt")));

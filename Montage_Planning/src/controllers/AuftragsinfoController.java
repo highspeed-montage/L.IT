@@ -61,7 +61,9 @@ public class AuftragsinfoController implements Initializable {
 		auftragsInfoFuellen();
 
 	}
-
+/**
+ * AuftragsInfo-Tabelle wird gefuellt
+ */
 	private void auftragsInfoFuellen() {
 		try {
 			a1 = db.getAuftragsinfo(AuftragsansichtController.auftragsnummerAktuell);

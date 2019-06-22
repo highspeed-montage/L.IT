@@ -9,7 +9,12 @@ import javafx.stage.Stage;
 
 public class FolgeFenster extends Stage {
 	Stage stage;
-
+/**
+ *Oeffnet ein neues Fenster  
+ *
+ * @param dateipfad
+ * @throws IOException
+ */
 	public FolgeFenster(String dateipfad) throws IOException {
 	      try {
 	          FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(dateipfad));

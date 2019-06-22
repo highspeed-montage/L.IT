@@ -55,7 +55,7 @@ public class Auftrag {
 		this.status = status;
 	}
 
-	/** Für DB Abfragen um AUftragsinfo zu füllen */
+
 	public Auftrag(Integer pAuftragsnr, String pStatus, Date pLieferdatum, Date pBestelldatum, String pKundentyp,
 			Integer pKundenNr, String pKundenEmail, String pFirmenname, String pPrivatname, List<Rechner> pRechner) {
 		this.auftragsnr = pAuftragsnr;

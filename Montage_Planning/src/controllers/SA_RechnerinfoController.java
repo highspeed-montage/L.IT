@@ -136,10 +136,7 @@ public class SA_RechnerinfoController implements Initializable {
 
 			}
 		});
-		/**
-		 * Radio button toggle Group Doku Problem muss in Rechner gepackt werden ->
-		 * fehlt noch.. WO KOMMT DAS HIN? => SA Konstruktor �ndern
-		 */
+
 
 		rbtn_SAI_Hardware.selectedProperty()
 				.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
@@ -188,7 +185,9 @@ public class SA_RechnerinfoController implements Initializable {
 				});
 
 	}
-
+/**
+ * Rechnerinfo wird gefuellt mit Informationen
+ */
 	private void SA_RechnerInfo_fuellen() {
 		try {
 			sr = db.getSARechnerInfo(RechneransichtController.seriennrAktuell);// RechneransichtController.seriennrAktuell
@@ -236,8 +235,9 @@ public class SA_RechnerinfoController implements Initializable {
 	}
 
 	/**
-	 * Bekommt gew�hltes Element der ComboBox Aktualisiert dementsprechend den
+	 *  ComboBox Aktualisiert dementsprechend den
 	 * Rechnerstatus
+	 * @param event
 	 */
 	@FXML
 	public void setSAStatus(ActionEvent event) {
@@ -255,8 +255,9 @@ public class SA_RechnerinfoController implements Initializable {
 		}
 	}
 
-	// CHeckBox HAndler:
-	/** handle Checkbox "Prozessor". Falls geklickt: set true */
+	/**
+	 * Checkbox Handler Prozessor
+	 */
 	@FXML
 	private void handleCBoxProzessor() {
 		if (rbtn_SAI_Hardware.isSelected()) {
@@ -269,7 +270,9 @@ public class SA_RechnerinfoController implements Initializable {
 		}
 	}
 
-	/** handle Checkbox "Grafikkarte". Falls geklickt: set true */
+	/**
+	 * Checkbox Handler Grafikkarte
+	 */
 	@FXML
 	private void handleCBoxGrafikkarte() {
 		if (rbtn_SAI_Hardware.isSelected()) {
@@ -282,7 +285,9 @@ public class SA_RechnerinfoController implements Initializable {
 		}
 	}
 
-	/** handle Checkbox "Festplatte". Falls geklickt: set true */
+	/**
+	 * Checkbox Handler Festplatte
+	 */
 	@FXML
 	private void handleCBoxFestplatte() {
 		if (rbtn_SAI_Hardware.isSelected()) {
@@ -294,7 +299,9 @@ public class SA_RechnerinfoController implements Initializable {
 		}
 	}
 
-	/** handle Checkbox "Laufwerk". Falls geklickt: set true */
+	/**
+	 * Checkbox Handler Laufwerk
+	 */
 	@FXML
 	private void handleCBoxLaufwerk() {
 		if (rbtn_SAI_Hardware.isSelected()) {
@@ -306,7 +313,9 @@ public class SA_RechnerinfoController implements Initializable {
 		}
 	}
 
-	/** Speichern Button, Aenderungen an SA_Rechner Objekt werden in DB geladen */
+	/**
+	 * Checkbox Handler Aenderungen werden in DB geladen
+	 */
 	@FXML
 	private void handleSpeichernToDb(ActionEvent event) {
 		try {
