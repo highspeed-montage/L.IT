@@ -3,13 +3,11 @@ package controllers;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-
 import application.Datenbank;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -17,7 +15,6 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import models.Auftrag;
 import models.Rechner;
-import models.Teile;
 
 public class AuftragsinfoController implements Initializable {
 
@@ -57,7 +54,6 @@ public class AuftragsinfoController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		db.openConnection();
-		
 		auftragsInfoFuellen();
 
 	}
@@ -68,8 +64,8 @@ public class AuftragsinfoController implements Initializable {
 		try {
 			a1 = db.getAuftragsinfo(AuftragsansichtController.auftragsnummerAktuell);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			AlertController.information("Fehler", "Datenbankverbindung nicht möglich");
 		}
 		lbl_AI_AuftragsNr.setText(String.valueOf(a1.getAuftragsnr()));
 		lbl_AI_bestelldatum.setText(String.valueOf(a1.getBestelldatum()));

@@ -9,14 +9,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Deque;
-import java.util.LinkedList;
 import java.util.List;
 import controllers.AlertController;
-//import com.mysql.cj.jdbc.result.ResultSetMetaData;
-//Ruth: Der obere Import funktioniert so bei mir nicht 
-import java.sql.ResultSetMetaData;
-
 import models.Auftrag;
 import models.Auftragsverteilung;
 import models.FA_Rechner;
@@ -28,9 +22,14 @@ import models.Teile;
 
 public class Datenbank {
 
-	private static final String DB_CONNECTION = "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
-	private static final String DB_USER = "aj9s-montage";
-	private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
+	// private static final String DB_CONNECTION =
+	// "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
+	// private static final String DB_USER = "aj9s-montage";
+	// private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
+
+	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage_neu?serverTimezone=UTC";
+	private static final String DB_USER = "root";
+	private static final String DB_PASSWORD = "root";
 
 	private Connection connection;
 
@@ -42,7 +41,6 @@ public class Datenbank {
 	private Connection getConnection() {
 		Connection dbConnection = null;
 		try {
-			// Treiber werden geladen
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			dbConnection = DriverManager.getConnection(DB_CONNECTION, DB_USER, DB_PASSWORD);
 		} catch (ClassNotFoundException e) {
@@ -59,9 +57,6 @@ public class Datenbank {
 	public void openConnection() {
 		this.connection = getConnection();
 	}
-	
-	
-	
 
 	/**
 	 * Trennen der Datenbankverbindung
@@ -72,26 +67,27 @@ public class Datenbank {
 				connection.close();
 			}
 		} catch (SQLException e) {
-			System.out.println("Fehler beim SchlieÃen der Datenbankverbindung.");
+			AlertController.error("Fehler", "Keine Verbindung zur Datenbank möglich");
 		}
 	}
-	
+
 	/**
-	 * Holt alle Rechner aus der Auftragsverteilung
+	 * Rechneransicht - Holt alle Rechner aus der Auftragsverteilung in
+	 * Abhaengigkeit vom eingeloggten User
 	 * 
-	 * @return List<Auftragsverteilung> tabelleninhalt
+	 * @param user
+	 * @return
 	 * @throws SQLException
 	 */
-	public List<Auftragsverteilung> getRechnerAusAuftragsverteilungListe(/* Mitarbeiter user */) throws SQLException {
+	public List<Auftragsverteilung> getRechnerAusAuftragsverteilungListe(Mitarbeiter user) throws SQLException {
 
 		List<Auftragsverteilung> tabelleninhalt = new ArrayList<>();
 		Statement stmt = connection.createStatement();
 		String query = "SELECT Auftragsverteilung.Bearbeitungsdatum, Auftragsverteilung.Rechner_seriennummer, Status.Bezeichnung "
 				+ "FROM Auftragsverteilung, Status, Rechner "
 				+ "WHERE Auftragsverteilung.Rechner_seriennummer = Rechner.idSeriennummer "
-				+ "AND Rechner.Status_idStatus = Status.idStatus";
-		// + "AND Auftragsverteilung.Mitarbeiter_idPersonalnummer =
-		// '"+user.benutzername+"'";
+				+ "AND Rechner.Status_idStatus = Status.idStatus "
+				+ "AND Auftragsverteilung.Mitarbeiter_idPersonalnummer = '" + user.getPersonalnr() + "'";
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
 			tabelleninhalt.add(new Auftragsverteilung(rs.getDate("Auftragsverteilung.Bearbeitungsdatum").toLocalDate(),
@@ -102,21 +98,21 @@ public class Datenbank {
 	}
 
 	/**
-	 * Holt alle Rechner aus der Auftragsverteilung fuer die Wochenansicht
+	 * Rechneransicht - Holt alle Rechner aus der Auftragsverteilung fuer die
+	 * Wochenansicht in Abhaengigkeit vom eingeloggten User
 	 * 
 	 * @param startdatum
 	 * @param enddatum
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<Auftragsverteilung> getRechnerAusAuftragsverteilungWoche(String startdatum,
-			String enddatum ) throws SQLException {
+	public List<Auftragsverteilung> getRechnerAusAuftragsverteilungWoche(String startdatum, String enddatum,
+			Mitarbeiter user) throws SQLException {
 
 		List<Auftragsverteilung> tabelleninhalt = new ArrayList<>();
 		Statement stmt = connection.createStatement();
 		String query = "SELECT * FROM Auftragsverteilung WHERE Bearbeitungsdatum BETWEEN '" + startdatum + "' AND '"
-				+ enddatum + "'";
-		// + "WHERE Mitarbeiter_idPersonalnummer = '"+user.benutzername+"'";
+				+ enddatum + "' AND Mitarbeiter_idPersonalnummer = '" + user.getPersonalnr() + "'";
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
 			tabelleninhalt.add(new Auftragsverteilung(rs.getInt("Rechner_seriennummer"),
@@ -159,12 +155,13 @@ public class Datenbank {
 		}
 		return bearbeitungsdatum;
 	}
-/**
- * Erstellt Liste fuer alle Auftraege
- * 
- * @return List<Auftrag> auftraege
- * @throws SQLException
- */
+
+	/**
+	 * Holt alle Auftraege
+	 * 
+	 * @return List<Auftrag> auftraege
+	 * @throws SQLException
+	 */
 	public List<Auftrag> getAuftragFuerListe() throws SQLException {
 		List<Auftrag> auftraege = new ArrayList<>();
 		Statement stmt = connection.createStatement();
@@ -190,6 +187,7 @@ public class Datenbank {
 
 		return auftraege;
 	}
+
 	/**
 	 * Holt alle Rechenr eines Auftrags
 	 * 
@@ -209,14 +207,16 @@ public class Datenbank {
 		}
 		return rechner;
 	}
-/**
- * Holt Daten f�r die Wochenansicht
- *
- * @param startdatum
- * @param enddatum
- * @return List<Monteur> auftraegeMonteur
- * @throws SQLException
- */
+
+	/**
+	 * Wochenansicht - Holt Rechner und zugehörigen Bearbeiter aus der
+	 * Auftragsverteilung
+	 *
+	 * @param startdatum
+	 * @param enddatum
+	 * @return List<Monteur> auftraegeMonteur
+	 * @throws SQLException
+	 */
 	public List<Monteur> getRechnerMitarbeiterWoche(String startdatum, String enddatum) throws SQLException {
 		List<Monteur> auftraegeMonteur = new ArrayList<>();
 		Statement stmtM = connection.createStatement();
@@ -234,7 +234,7 @@ public class Datenbank {
 			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			while (rs.next()) {
-				Deque<Rechner> pipeline = new LinkedList<>();
+				List<Rechner> pipeline = new ArrayList<>();
 				pipeline.add(new Rechner(rs.getInt("Auftragsverteilung.Rechner_seriennummer"),
 						rs.getDate("Auftragsverteilung.Bearbeitungsdatum").toLocalDate()));
 				Monteur monteur = new Monteur(rs.getString("Mitarbeiter.Name"), rs.getString("Mitarbeiter.Vorname"),
@@ -244,9 +244,10 @@ public class Datenbank {
 		}
 		return auftraegeMonteur;
 	}
-	
+
 	/**
-	 * erstellt Liste mit Rechnerauftr�ge
+	 * Wochenansicht Auftraege - holt alle Rechnerauftraege
+	 * 
 	 * @param startdatum
 	 * @param enddatum
 	 * @return List<Auftragsverteilung> auftraege
@@ -256,61 +257,29 @@ public class Datenbank {
 	public List<Auftragsverteilung> getRechnerAuftragswoche(String startdatum, String enddatum) throws SQLException {
 		List<Auftragsverteilung> auftraege = new ArrayList<>();
 		Statement stmt = connection.createStatement();
+		
 		String query = "SELECT Auftragsverteilung.Bearbeitungsdatum, Auftragsverteilung.Rechner_seriennummer, Mitarbeiter.Name, "
 				+ "Mitarbeiter.Vorname FROM Auftragsverteilung, Mitarbeiter "
 				+ "WHERE Auftragsverteilung.Mitarbeiter_idPersonalnummer = Mitarbeiter.idPersonalnummer "
 				+ "AND Bearbeitungsdatum BETWEEN '" + startdatum + "' AND '" + enddatum + "'";
-
+	
 		ResultSet rs = stmt.executeQuery(query);
 
 		while (rs.next()) {
 			Monteur monteur = new Monteur(rs.getString("Mitarbeiter.Name"), rs.getString("Mitarbeiter.Vorname"));
-			auftraege.add(new Auftragsverteilung(rs.getDate("Auftragsverteilung.Bearbeitungsdatum").toLocalDate(),
-					rs.getInt("Auftragsverteilung.Rechner_seriennummer"), monteur));
+			auftraege.add(new Auftragsverteilung(rs.getInt("Auftragsverteilung.Rechner_seriennummer"), rs.getDate("Auftragsverteilung.Bearbeitungsdatum").toLocalDate()));
 		}
 		return auftraege;
-	}
-	
-	/**
-	 *Holt Namen von Kunden 
-	 *
-	 * @throws SQLException
-	 */
-
-	public void listKunde() throws SQLException {
-		Statement stmt = connection.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT Name FROM Kunde");
-		while (rs.next()) {
-			System.out.println(rs.getString("Name"));
-		}
+		
 	}
 
 	/**
-	 * Abfrage der usernamen
+	 * Holt alle fuer einen Auftrag noetigen Infos
 	 * 
-	 * @return ArrayList<String> list
+	 * @param pAuftragsnr
+	 * @return Auftrag a1
 	 * @throws SQLException
 	 */
-	public ArrayList<String> Usernameabfrage() throws SQLException {
-		Statement stmt = connection.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT idPersonalnummer FROM Mitarbeiter");
-		ResultSetMetaData rsmd = (ResultSetMetaData) rs.getMetaData();
-		int columnCount = rsmd.getColumnCount(); //
-		ArrayList<String> list = new ArrayList<>(columnCount);
-		while (rs.next()) {
-			int i = 1;
-			while (i <= columnCount) {
-				list.add(rs.getString(i++));
-			}
-		}
-		return list;
-	}
-/** speichert alle fuer einen Auftrag noetigen Infos ab
- * 
- * @param pAuftragsnr
- * @return Auftrag a1
- * @throws SQLException
- */
 	public Auftrag getAuftragsinfo(int pAuftragsnr) throws SQLException {
 
 		Auftrag a1 = null;
@@ -319,8 +288,7 @@ public class Datenbank {
 		String queryRechner = "SELECT Rechner.idSeriennummer, Status.Bezeichnung " + "FROM Rechner, Status "
 				+ "WHERE Rechner.Auftrag_idAuftragsnummer = '" + pAuftragsnr + "' "
 				+ "AND Rechner.Status_idStatus = Status.idStatus";
-		ResultSet rsRechner = stmt.executeQuery(queryRechner); 
-		System.out.println(queryRechner);
+		ResultSet rsRechner = stmt.executeQuery(queryRechner);
 		while (rsRechner.next()) {
 			String rechnerStatus = rsRechner.getString("Status.Bezeichnung");
 			int rechnerSNr = rsRechner.getInt("Rechner.idSeriennummer");
@@ -331,8 +299,8 @@ public class Datenbank {
 				+ "FROM Status, Auftrag, Kundengruppe, Kunde " + "WHERE Auftrag.idAuftragsnummer = '" + pAuftragsnr
 				+ "' AND Auftrag.Status_idStatus = Status.idStatus "
 				+ "AND Auftrag.Kunde_idKunde = Kunde.idKundennummer AND Kunde.Kundengruppe_idKundengruppe = Kundengruppe.idKundengruppe ";
-		ResultSet rsInfo = stmt.executeQuery(queryInfo); // FUNKTIONIERT
-		System.out.println(queryInfo);
+		Statement stmt2 = connection.createStatement();
+		ResultSet rsInfo = stmt2.executeQuery(queryInfo);
 		while (rsInfo.next()) {
 			int auftragsnr = rsInfo.getInt("Auftrag.idAuftragsnummer");
 			String pStatus = rsInfo.getString("Status.Bezeichnung");
@@ -353,14 +321,14 @@ public class Datenbank {
 
 			a1 = new Auftrag(auftragsnr, pStatus, pLieferdatum, pBestelldatum, pKundentyp, pKundenNr, pKundenEmail,
 					pFirmenname, pPrivatname, rechner);
-			System.out.println(a1.toString());
 		}
 
 		return a1;
 	}
 
 	/**
-	 * holt info fuer FA_Rechner nach Seriennummer
+	 * Holt Info fuer FA_Rechner nach Seriennummer
+	 * 
 	 * @return FA_Rechner fr
 	 * @throws SQLException
 	 */
@@ -411,21 +379,15 @@ public class Datenbank {
 			} else {
 				pPrivatname = rsInfo.getString("Kunde.Name");
 			}
-			// Geschaeftskunde gk;
-			// Privatkunde pk;
-
-			System.out.println(rechnerEinzelteile);
 			fr = new FA_Rechner(seriennr, pAuftragsNr, pStatus, pBearbeitungsdatum, pLieferdatum, pFirmenname,
 					pPrivatname, pKundenId, pEMail, rechnerEinzelteile);
-
-			System.out.println(fr.toString());
-
 		}
 		return fr;
 	}
 
 	/**
-	 * holt info fuer SA_Rechner nach Seriennummer
+	 * Holt Info fuer SA_Rechner nach Seriennummer
+	 * 
 	 * @return SA_Rechner sr
 	 * @throws SQLException
 	 */
@@ -447,8 +409,6 @@ public class Datenbank {
 				+ "AND Rechner.Status_idStatus = Status.idStatus "
 				+ "AND Rechner.Auftrag_idAuftragsnummer = Auftrag.idAuftragsnummer "
 				+ "AND Auftrag.Kunde_idKunde = Kunde.idKundennummer ";
-
-		System.out.println(queryInfo);
 
 		ResultSet rsInfo = stmt.executeQuery(queryInfo);
 
@@ -481,14 +441,13 @@ public class Datenbank {
 					pPrivatname, pKundenId, pEMail, pKundenverschuldet, pHardwareverschuldet, pSoftwareverschuldet,
 					pProzessor_kaputt, pGrafikkarte_kaputt, pFestplatte_kaputt, pDvd_Laufwerk_kaputt);
 
-			System.out.println(sr.toString());
-
 		}
 		return sr;
 	}
 
 	/**
-	 * holt den Rechner mit der kleinsten ID
+	 * Holt den Rechner mit der kleinsten ID
+	 * 
 	 * @param pAuftragsnummer
 	 * @return lowestID
 	 * @throws SQLException
@@ -505,13 +464,12 @@ public class Datenbank {
 		}
 		Collections.sort(statusIDs);
 		int lowestId = statusIDs.get(0);
-		System.out.println(lowestId);
 		return lowestId;
 
 	}
 
 	/**
-	 * Update des Auftragsstatus auf niedrigste Statusid aller zugeh�rigen Rechner
+	 * Update des Auftragsstatus auf niedrigste Statusid aller zugehoerigen Rechner
 	 * 
 	 * @param pAuftragsnummer
 	 * @param lowestId
@@ -527,6 +485,7 @@ public class Datenbank {
 
 	/**
 	 * Booleanvariablen der Problemdoku werden aktualisiert
+	 * 
 	 * @return boolean
 	 * @throws SQLException
 	 */
@@ -555,23 +514,18 @@ public class Datenbank {
 		}
 		Statement stmt = connection.createStatement();
 		String query = "UPDATE Rechner SET Rechner.kundenverschuldet= '" + tinyKunde + "', "
-				+ "Rechner.hardwareverschuldet ='" + tinyHardware + "', Rechner.softwareverschuldet ='"
-				+ tinySoftware + "', Rechner.prozessorKaputt = '" + tinyProzessor + "', "
-				+ "Rechner.grafikkarteKaputt = '" + tinyGrafikkarte + "', " + "Rechner.festplatteKaputt = '"
-				+ tinyFestplatte + "', Rechner.laufwerkKaputt = '" + tinyLaufwerk + "' "
-				+ "WHERE Rechner.idSeriennummer = '" + sr.getSeriennr() + "'";
-
-//				+ "WHERE Auftragsverteilung.Rechner_seriennummer = '" + sr.getSeriennr() + "' "
-//				+ "AND Rechner.idSeriennummer = Auftragsverteilung.Rechner_seriennummer";
-
-		System.out.println(query);
+				+ "Rechner.hardwareverschuldet ='" + tinyHardware + "', Rechner.softwareverschuldet ='" + tinySoftware
+				+ "', Rechner.prozessorKaputt = '" + tinyProzessor + "', " + "Rechner.grafikkarteKaputt = '"
+				+ tinyGrafikkarte + "', " + "Rechner.festplatteKaputt = '" + tinyFestplatte
+				+ "', Rechner.laufwerkKaputt = '" + tinyLaufwerk + "' " + "WHERE Rechner.idSeriennummer = '"
+				+ sr.getSeriennr() + "'";
 
 		int updatedRows = stmt.executeUpdate(query);
 		return updatedRows == 1;
 	}
 
 	/**
-	 * Bearbeitungsstatus von FA_R/SA_R wird in db aktualisiert
+	 * Aktualisierung Bearbeitungsstatus von FA_Rechner/SA_Rechner
 	 * 
 	 * @throws SQLException
 	 */
@@ -591,11 +545,8 @@ public class Datenbank {
 		return updatedRows == 1;
 	}
 
-
-	
 	/**
-	 * Die Methode gibt den Lagerbestand eines Einzelteils aus und veraendert den
-	 * Status des Rechners, wenn
+	 * Die Methode gibt den Lagerbestand eines Einzelteils aus
 	 * 
 	 * @param eingabe
 	 * @param pSeriennummer
@@ -607,19 +558,15 @@ public class Datenbank {
 		String query = "SELECT Lagerbestand FROM Teile WHERE Bezeichnung LIKE '%" + eingabe + "%'";
 		ResultSet rs = stmt.executeQuery(query);
 		int lagerbestand = 0;
-System.out.println(query);
 		while (rs.next()) {
 			if (!rs.wasNull()) {
 				lagerbestand = rs.getInt("Lagerbestand");
-				System.out.println(lagerbestand);
 			} else {
 				lagerbestand = 9999;
 			}
 		}
 		return lagerbestand;
 	}
-
-
 
 	/**
 	 * Die Methode befuellt eine ArrayList mit allen Monteuren
@@ -635,13 +582,12 @@ System.out.println(query);
 				+ "AND Mitarbeiter.MitarbeiterVertragsart_idMitarbeiterVertragsart=MitarbeiterVertragsart.idMitarbeiterVertragsart "
 				+ "OR Mitarbeiter.MitarbeiterVertragsart_idMitarbeiterVertragsart=302 "
 				+ "AND Mitarbeiter.MitarbeiterVertragsart_idMitarbeiterVertragsart=MitarbeiterVertragsart.idMitarbeiterVertragsart";
-//		System.out.println(query);
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
-			monteure.add(new Monteur(rs.getInt("Mitarbeiter.idPersonalnummer"), rs.getString("Mitarbeiter.Name"), rs.getString("Mitarbeiter.Vorname"),
-					rs.getInt("Mitarbeiter.Krankheitstage"), rs.getBoolean("Mitarbeiter.anwesend"), rs.getInt("MitarbeiterVertragsart.Wochenstunden")));
+			monteure.add(new Monteur(rs.getInt("Mitarbeiter.idPersonalnummer"), rs.getString("Mitarbeiter.Name"),
+					rs.getString("Mitarbeiter.Vorname"), rs.getInt("Mitarbeiter.Krankheitstage"),
+					rs.getBoolean("Mitarbeiter.anwesend"), rs.getInt("MitarbeiterVertragsart.Wochenstunden")));
 		}
-//		System.out.println(monteure.toString());
 		return monteure;
 	}
 
@@ -674,31 +620,38 @@ System.out.println(query);
 	 * @param bearbeitungsdatum
 	 * @param seriennummer
 	 * @param personalnummer
-	 * @return 
+	 * @return
 	 * @throws SQLException
 	 */
-	public void rechnerVerteilung(/*int idAuftragsverteilung,*/ LocalDate bearbeitungsdatum, int seriennummer,
-			int personalnummer) throws SQLException {
+	public void rechnerVerteilung(LocalDate bearbeitungsdatum, int seriennummer, int personalnummer)
+			throws SQLException {
 		connection.setAutoCommit(false);
 		Statement stmt = connection.createStatement();
-		String query = "INSERT INTO Auftragsverteilung VALUES(" + idAuftragsverteilung + ", '"
+		String query = "INSERT INTO Auftragsverteilung (Bearbeitungsdatum, Rechner_seriennummer, Mitarbeiter_idPersonalnummer) VALUES ('"
 				+ bearbeitungsdatum + "', '" + seriennummer + "', '" + personalnummer + "')";
 		stmt.executeUpdate(query);
+		//
+		//
+		// stmt.executeUpdate(
+		// "UPDATE Rechner SET Status_idStatus = '3' WHERE idSeriennummer = '" +
+		// seriennummer + "'");
+
 	}
-	
+
 	/**
-	 * Stellt fest ob User, mit eingebenen Daten existiert
-	 * username = idPersonalnummer, passwort = name
+	 * Stellt fest ob User, mit eingebenen Daten existiert username =
+	 * idPersonalnummer, passwort = name
+	 * 
 	 * @param username
 	 * @param password
 	 * @return
 	 * @throws SQLException
 	 */
-	public Mitarbeiter authenticateUserNEU(String username, String password) throws SQLException {
+	public Mitarbeiter authenticateUser(String username, String password) throws SQLException {
 		Statement stmt = connection.createStatement();
 		int usernameZahl = Integer.parseInt(username);
 		Mitarbeiter userVergleich = null;
-		String query = "SELECT Name, idPersonalnummer FROM Mitarbeiter WHERE Name = '" + password
+		String query = "SELECT Name, idPersonalnummer, Vorname FROM Mitarbeiter WHERE Name = '" + password
 				+ "' AND idPersonalnummer = '" + usernameZahl + "'";
 		ResultSet rs = stmt.executeQuery(query);
 
@@ -712,20 +665,85 @@ System.out.println(query);
 		}
 		return userVergleich;
 	}
-/**
- * Holt die Rolle(AL oder Monteur) des eben eingeloggten Users
- * @param user
- * @return
- * @throws SQLException
- */
+
+	/**
+	 * Holt die Rolle(AL oder Monteur) des eingeloggten Users
+	 * 
+	 * @param user
+	 * @return
+	 * @throws SQLException
+	 */
 	public int getMitarbeiterRolle(Mitarbeiter user) throws SQLException {
 		Statement stmt = connection.createStatement();
 		ResultSet rs = stmt.executeQuery("SELECT MitarbeiterVertragsart_idMitarbeiterVertragsart " + "FROM Mitarbeiter "
-				+ "WHERE Mitarbeiter.idPersonalnummer='" + user.getPerosnalnr() + "'");
+				+ "WHERE Mitarbeiter.idPersonalnummer='" + user.getPersonalnr() + "'");
 		int rolle = 0;
 		while (rs.next()) {
 			rolle = rs.getInt("MitarbeiterVertragsart_idMitarbeiterVertragsart");
 		}
 		return rolle;
 	}
+
+	// --------- NEU TEST
+
+	public void setzeRechnerInAuftragsverteilung() throws SQLException {
+		int anzahl = 0;
+		Statement stmt = connection.createStatement();
+		String queryRechner = "SELECT idSeriennummer FROM Rechner WHERE Rechner.Status_idStatus = 1";
+		ResultSet rs = stmt.executeQuery(queryRechner);
+
+		while (rs.next()) {
+			int reSeriennr = rs.getInt("idSeriennummer");
+
+			String query1 = "SELECT COUNT(Rechner_seriennummer) AS gesamt FROM Auftragsverteilung WHERE Rechner_seriennummer = '"
+					+ reSeriennr + "'";
+			Statement stmt1 = connection.createStatement();
+			ResultSet rs1 = stmt1.executeQuery(query1);
+			while (rs1.next()) {
+				anzahl = rs1.getInt("gesamt");
+			}
+
+			if (anzahl == 0) {
+				String query2 = "INSERT INTO Auftragsverteilung (Rechner_seriennummer) VALUES ('" + reSeriennr + "')";
+				Statement stmt2 = connection.createStatement();
+				stmt2.executeUpdate(query2);
+			}
+
+		}
+	}
+
+	public List<Rechner> holeRechnerAusAuftragsverteilungOhneBearbeitung() throws SQLException {
+		List<Rechner> rechner = new ArrayList<>();
+		Statement stmt = connection.createStatement();
+		String query = "SELECT Rechner_seriennummer FROM Auftragsverteilung WHERE Mitarbeiter_idPersonalnummer is NULL AND Bearbeitungsdatum is NULL";
+		ResultSet rs = stmt.executeQuery(query);
+		while (rs.next()) {
+			rechner.add(new Rechner(rs.getInt("Rechner_seriennummer")));
+		}
+		return rechner;
+	}
+
+	public int holeGesamtArbeitsaufwandAusAuftragsverteilung(int monteurID, LocalDate datum) throws SQLException {
+		int gesamtsumme = 0;
+		Statement stmt = connection.createStatement();
+		String query = "SELECT SUM(Auftragsart.Arbeitsaufwand) as gesamtsumme FROM Auftragsart, Auftragsverteilung, Rechner "
+				+ "WHERE Rechner.idSeriennummer = Auftragsverteilung.Rechner_seriennummer "
+				+ "AND Auftragsart.idAuftragsart = Rechner.Auftragsart_idAuftragsart "
+				+ "AND Auftragsverteilung.Bearbeitungsdatum = '" + datum + "' "
+				+ "AND Auftragsverteilung.Mitarbeiter_idPersonalnummer = '" + monteurID + "'";
+		ResultSet rs = stmt.executeQuery(query);
+		while (rs.next()) {
+			gesamtsumme = rs.getInt("gesamtsumme");
+		}
+		return gesamtsumme;
+	}
+
+	public void updateRechnerAuftragsverteilung(int monteurID, LocalDate datum, int seriennrAktuell)
+			throws SQLException {
+		Statement stmt = connection.createStatement();
+		String query = "UPDATE Auftragsverteilung SET Mitarbeiter_idPersonalnummer = '" + monteurID
+				+ "', Bearbeitungsdatum = '" + datum + "' " + "WHERE Rechner_seriennummer = '" + seriennrAktuell + "'";
+		stmt.executeUpdate(query);
+	}
+
 }

@@ -23,6 +23,7 @@ public class Mitarbeiter {
 		this.name = name;
 	}
 
+
 	public Mitarbeiter(int personalnr, String name, String mitarbeitervertragsart) {
 		super();
 		this.personalnr = personalnr;
@@ -58,10 +59,6 @@ public class Mitarbeiter {
 
 	public void setKrankheitstage(int pKrankheitstage) {
 		krankheitstage = pKrankheitstage;
-	}
-
-	public int getPerosnalnr() {
-		return personalnr;
 	}
 
 	public String getName() {

@@ -64,7 +64,7 @@
                            <top>
                               <HBox prefHeight="47.0" prefWidth="751.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <ComboBox fx:id="comboBox_AL_filter" onAction="#filter" prefWidth="150.0" promptText="Filter">
+                                    <ComboBox fx:id="comboBox_AL_filter" prefWidth="150.0" promptText="Filter">
                                        <opaqueInsets>
                                           <Insets bottom="10.0" left="10.0" right="5.0" top="10.0" />
                                        </opaqueInsets>
@@ -117,7 +117,7 @@
                         <Insets bottom="3.0" top="2.0" />
                      </HBox.margin>
                   </Button>
-                  <Label prefHeight="31.0" prefWidth="151.0" text="Label">
+                  <Label fx:id="lblName" prefHeight="31.0" prefWidth="151.0" text="Label">
                      <HBox.margin>
                         <Insets bottom="5.0" top="5.0" />
                      </HBox.margin>

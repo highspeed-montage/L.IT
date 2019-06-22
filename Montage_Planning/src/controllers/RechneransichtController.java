@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import application.Datenbank_Gabby;
+import application.Datenbank;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,8 +21,6 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -45,7 +43,7 @@ public class RechneransichtController implements Initializable {
 	@FXML
 	private Tab tabListe;
 	@FXML
-	private Label lblName;
+	private Label lbl_name;
 
 	// Listenansicht
 	@FXML
@@ -69,8 +67,8 @@ public class RechneransichtController implements Initializable {
 	@FXML
 	private TableView<Auftragsverteilung[]> tableRechnerWoche;
 
-	private Datenbank_Gabby db = new Datenbank_Gabby();
-
+	Datenbank db = new Datenbank();
+	
 	// ComboBox
 	private ObservableList<String> options = FXCollections.observableArrayList();
 	private List<Date> bearbeitungsdatum = new ArrayList<>();
@@ -82,8 +80,6 @@ public class RechneransichtController implements Initializable {
 
 	ObservableList<Auftragsverteilung[]> rechnerWochenansichtTabelle = FXCollections.observableArrayList();
 	ObservableList<Auftragsverteilung> rechnerListenansichtTabelle = FXCollections.observableArrayList();
-
-	Alert alert = new Alert(AlertType.INFORMATION);
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -98,6 +94,8 @@ public class RechneransichtController implements Initializable {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		lbl_name.setText(LoginController.user.getName());
 
 		// Wochen fuer die ComboBox ermitteln anhand der Bearbeitungsdaten aus der
 		// Datenbank
@@ -158,7 +156,7 @@ public class RechneransichtController implements Initializable {
 			// Datenbank
 			try {
 				Auftragsverteilung[][] row = new Auftragsverteilung[10][DayOfWeek.FRIDAY.getValue()];
-				for (Auftragsverteilung auftrag : db.getRechnerAusAuftragsverteilungWoche(startdatum, enddatum)) {
+				for (Auftragsverteilung auftrag : db.getRechnerAusAuftragsverteilungWoche(startdatum, enddatum, LoginController.user)) {
 					LocalDate date = auftrag.getBearbeitungsdatum();
 					int i = 0;
 					while (row[i][date.getDayOfWeek().getValue() - 1] != null) {
@@ -169,10 +167,7 @@ public class RechneransichtController implements Initializable {
 				rechnerWochenansichtTabelle.addAll(row);
 			} catch (SQLException e) {
 				e.printStackTrace();
-				alert.setTitle("Fehlermeldung");
-				alert.setHeaderText("Keine Datenbankverbindung");
-				alert.setContentText("Bitte überprüfen Sie Ihre Datenbankverbindung");
-				alert.showAndWait();
+				AlertController.error("Fehler", "Datenbankverbindung nicht möglich");
 			}
 		});
 
@@ -183,7 +178,7 @@ public class RechneransichtController implements Initializable {
 	 */
 	public void listenansichtFuellen() {
 		try {
-			rechnerListenansichtTabelle.addAll(db.getRechnerAusAuftragsverteilungListe(/* LoginController.user */));
+			rechnerListenansichtTabelle.addAll(db.getRechnerAusAuftragsverteilungListe(LoginController.user));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -198,6 +193,7 @@ public class RechneransichtController implements Initializable {
 
 	/**
 	 * Wochenansicht: Klick auf Rechner oeffnet Rechnerinfo
+	 * 
 	 * @param e
 	 */
 	public void clickRechnerWoche(MouseEvent e) {
@@ -212,7 +208,7 @@ public class RechneransichtController implements Initializable {
 					new FolgeFenster("/views/FA_Rechnerinfo.fxml");
 				} else if (idAuftragsart == 501) {
 					new FolgeFenster("/views/SA_Rechnerinfo.fxml");
-					
+
 				} else {
 					AlertController.error("Fehler", "Keine Info vorhanden");
 				}
@@ -224,6 +220,7 @@ public class RechneransichtController implements Initializable {
 
 	/**
 	 * Listenansicht: Klick auf Rechner oeffnet Rechnerinfo
+	 * 
 	 * @param e
 	 */
 	public void clickRechnerListe(MouseEvent e) {
@@ -246,9 +243,10 @@ public class RechneransichtController implements Initializable {
 
 		}
 	}
-	
+
 	/**
 	 * ComboBox: Kalenderwoche holen
+	 * 
 	 * @param date
 	 * @return
 	 */
@@ -260,6 +258,7 @@ public class RechneransichtController implements Initializable {
 
 	/**
 	 * ComboBox: Montag der Kalenderwoche holen
+	 * 
 	 * @param year
 	 * @param weekNumber
 	 * @return
@@ -274,6 +273,7 @@ public class RechneransichtController implements Initializable {
 
 	/**
 	 * ComboBox:Freitag der Kalenderwoche holen
+	 * 
 	 * @param year
 	 * @param weekNumber
 	 * @return
@@ -285,10 +285,12 @@ public class RechneransichtController implements Initializable {
 		cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
 		return cal.getTime();
 	}
-/**
- * loggt den User aus und �oeffnet das "Login"-Fenster
- * @param event
- */
+
+	/**
+	 * loggt den User aus und �oeffnet das "Login"-Fenster
+	 * 
+	 * @param event
+	 */
 	public void Logout(Event event) {
 		AlertController.confirmation();
 		try {

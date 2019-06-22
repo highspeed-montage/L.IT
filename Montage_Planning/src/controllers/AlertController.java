@@ -22,19 +22,19 @@ public class AlertController {
 		alert.showAndWait();
 	}
 
-/**
- * Alert-Fenster zur Darstellung eines Fehlers
- * 
- * @param title
- * @param info
- */
+	/**
+	 * Alert-Fenster zur Darstellung eines Fehlers
+	 * 
+	 * @param title
+	 * @param info
+	 */
 	public static void error(String title, String info) {
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle(title);
 		alert.setHeaderText(null);
 		alert.setContentText(info);
 	}
-	
+
 	/**
 	 * Alert-Fenster zur Abfrage ob man ausgeloggt werden moechte
 	 */
