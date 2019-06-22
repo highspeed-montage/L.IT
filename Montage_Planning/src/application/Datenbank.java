@@ -12,9 +12,7 @@ import java.util.Date;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
-
 import controllers.AlertController;
-
 //import com.mysql.cj.jdbc.result.ResultSetMetaData;
 //Ruth: Der obere Import funktioniert so bei mir nicht 
 import java.sql.ResultSetMetaData;
@@ -212,7 +210,7 @@ public class Datenbank {
 		return rechner;
 	}
 /**
- * Holt Daten für die Wochenansicht
+ * Holt Daten fï¿½r die Wochenansicht
  *
  * @param startdatum
  * @param enddatum
@@ -248,7 +246,7 @@ public class Datenbank {
 	}
 	
 	/**
-	 * erstellt Liste mit Rechneraufträge
+	 * erstellt Liste mit Rechnerauftrï¿½ge
 	 * @param startdatum
 	 * @param enddatum
 	 * @return List<Auftragsverteilung> auftraege
@@ -513,7 +511,7 @@ public class Datenbank {
 	}
 
 	/**
-	 * Update des Auftragsstatus auf niedrigste Statusid aller zugehörigen Rechner
+	 * Update des Auftragsstatus auf niedrigste Statusid aller zugehï¿½rigen Rechner
 	 * 
 	 * @param pAuftragsnummer
 	 * @param lowestId
@@ -631,19 +629,19 @@ System.out.println(query);
 	public ArrayList<Monteur> monteureBefuellen() throws SQLException {
 		ArrayList<Monteur> monteure = new ArrayList<>();
 		Statement stmt = connection.createStatement();
-		String query = "SELECT idPersonalnummer, Name, Vorname, Krankheitstage, anwesend, Wochenstunden "
+		String query = "SELECT Mitarbeiter.idPersonalnummer, Mitarbeiter.Name, Mitarbeiter.Vorname, Mitarbeiter.Krankheitstage, Mitarbeiter.anwesend, MitarbeiterVertragsart.Wochenstunden "
 				+ "FROM Mitarbeiter, MitarbeiterVertragsart "
 				+ "WHERE Mitarbeiter.MitarbeiterVertragsart_idMitarbeiterVertragsart=301 "
 				+ "AND Mitarbeiter.MitarbeiterVertragsart_idMitarbeiterVertragsart=MitarbeiterVertragsart.idMitarbeiterVertragsart "
 				+ "OR Mitarbeiter.MitarbeiterVertragsart_idMitarbeiterVertragsart=302 "
 				+ "AND Mitarbeiter.MitarbeiterVertragsart_idMitarbeiterVertragsart=MitarbeiterVertragsart.idMitarbeiterVertragsart";
-		System.out.println(query);
+//		System.out.println(query);
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
-			monteure.add(new Monteur(rs.getInt("idPersonalnummer"), rs.getString("Name"), rs.getString("Vorname"),
-					rs.getInt("Krankheitstage"), rs.getBoolean("anwesend"), rs.getInt("Wochenstunden")));
+			monteure.add(new Monteur(rs.getInt("Mitarbeiter.idPersonalnummer"), rs.getString("Mitarbeiter.Name"), rs.getString("Mitarbeiter.Vorname"),
+					rs.getInt("Mitarbeiter.Krankheitstage"), rs.getBoolean("Mitarbeiter.anwesend"), rs.getInt("MitarbeiterVertragsart.Wochenstunden")));
 		}
-		System.out.println(monteure.toString());
+//		System.out.println(monteure.toString());
 		return monteure;
 	}
 
@@ -660,14 +658,12 @@ System.out.println(query);
 				+ "WHERE Status.idStatus=Rechner.Status_idStatus AND Rechner.Auftrag_idAuftragsnummer=Auftrag.idAuftragsnummer "
 				+ "AND Auftragsart.idAuftragsart=Rechner.Auftragsart_idAuftragsart "
 				+ "AND Rechner.Status_idStatus='1'";
-		System.out.println(query);
 		ResultSet rs = stmt.executeQuery(query);
 
 		while (rs.next()) {
 			rechner.add(new Rechner(rs.getInt("Rechner.idSeriennummer"), rs.getInt("Auftrag.idAuftragsnummer"),
 					rs.getString("Status.Bezeichnung"), rs.getInt("Auftragsart.Arbeitsaufwand")));
 		}
-		System.out.println(rechner.toString());
 		return rechner;
 	}
 
@@ -681,7 +677,7 @@ System.out.println(query);
 	 * @return 
 	 * @throws SQLException
 	 */
-	public void rechnerVerteilung(int idAuftragsverteilung, LocalDate bearbeitungsdatum, int seriennummer,
+	public void rechnerVerteilung(/*int idAuftragsverteilung,*/ LocalDate bearbeitungsdatum, int seriennummer,
 			int personalnummer) throws SQLException {
 		connection.setAutoCommit(false);
 		Statement stmt = connection.createStatement();

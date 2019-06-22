@@ -1,26 +1,33 @@
 package models;
 
 import java.util.LinkedList;
-import java.util.Deque;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Monteur extends Mitarbeiter {
-	private boolean verfuegbar;
-	private Deque<Rechner> pipeline = new LinkedList<Rechner>();
+	private List<Rechner> pipeline = new ArrayList<Rechner>();
 	private int wochenstunden;
 	private int arbeitsaufwand;
+	
 
-	public Monteur(int pPersonalnr, String pName, String pVorname, int pKrankheitstage, boolean pAnwesend,
-			int pWochenstunden) {
+	public Monteur(int pPersonalnr, String pName, String pVorname, int pKrankheitstage, boolean pAnwesend, int wochenstunden) {
 		super(pPersonalnr, pName, pVorname, pKrankheitstage, pAnwesend);
-		wochenstunden = pWochenstunden;
+		this.wochenstunden = wochenstunden;
 	}
+
+
+	public Monteur(int personalnr, String name, String mitarbeitervertragsart) {
+		super(personalnr, name, mitarbeitervertragsart);
+		// TODO Auto-generated constructor stub
+	}
+
 
 	public Monteur(int personalnr, String name) {
 		super(personalnr, name);
 	}
 	
 
-	public Monteur(String name, String vorname, Deque<Rechner> pipeline) {
+	public Monteur(String name, String vorname, List<Rechner> pipeline) {
 		super(name, vorname);
 		this.pipeline = pipeline;
 	}
@@ -33,9 +40,9 @@ public class Monteur extends Mitarbeiter {
 		pipeline.add(pRechner);
 	}
 
-	public Rechner rechnerAuslesen() {
-		return pipeline.getFirst();
-	}
+//	public Rechner rechnerAuslesen() {
+//		return pipeline.;
+//	}
 
 	public int getWochenstunden() {
 		return wochenstunden;
@@ -53,20 +60,21 @@ public class Monteur extends Mitarbeiter {
 		arbeitsaufwand = arbeitsaufwand + pArbeitsaufwand;
 	}
 
-	public Deque<Rechner> getPipeline() {
+	public List<Rechner> getPipeline() {
 		return pipeline;
 	}
 
-	public void setPipeline(Deque<Rechner> pipeline) {
+	public void setPipeline(List<Rechner> pipeline) {
 		this.pipeline = pipeline;
 	}
 
+
 	@Override
 	public String toString() {
-		return super.toString() + pipeline;		
+		return "Monteur [pipeline=" + pipeline + ", wochenstunden=" + wochenstunden + ", arbeitsaufwand="
+				+ arbeitsaufwand + ", toString()=" + super.toString() + "]";
 	}
-
-
+	
 	
 
 
