@@ -1,12 +1,16 @@
 package models;
 
-public class Abteilungsleiter extends Mitarbeiter {
+import java.io.Serializable;
+
+public class Abteilungsleiter extends Mitarbeiter implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public Abteilungsleiter(int personalnr, String name) {
 		super(personalnr, name);
-		// TODO Auto-generated constructor stub
 	}
-
-	
 
 }

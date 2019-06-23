@@ -1,10 +1,15 @@
 package models;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
 
-public class SA_Rechner extends Rechner {
+public class SA_Rechner extends Rechner implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static final double ARBEITSAUFWAND_SA = 2;
 	// Boolean zu Problemfaellen (fuer rbtns der Doku)
 	private boolean kundenverschuldet;

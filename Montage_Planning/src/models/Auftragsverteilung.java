@@ -1,10 +1,15 @@
 package models;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
 
-public class Auftragsverteilung {
+public class Auftragsverteilung implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private LocalDate bearbeitungsdatum;
 	private Date lieferdatum;
 	private Integer seriennr;

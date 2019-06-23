@@ -1,6 +1,12 @@
 package models;
 
-public class Teile {
+import java.io.Serializable;
+
+public class Teile implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int teilenr;
 	private String kategorie;
 	private int lagerbestand;

@@ -1,9 +1,14 @@
 package models;
 
 import java.util.List;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Monteur extends Mitarbeiter {
+public class Monteur extends Mitarbeiter implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private List<Rechner> pipeline = new ArrayList<Rechner>();
 	private int wochenstunden;
 	private int arbeitsaufwand;
