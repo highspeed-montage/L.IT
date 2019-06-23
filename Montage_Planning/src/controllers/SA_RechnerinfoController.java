@@ -138,7 +138,6 @@ public class SA_RechnerinfoController implements Initializable {
 						sr.setHardwareverschuldet(true);
 						sr.setSoftwareverschuldet(false);
 						sr.setKundenverschuldet(false);
-						System.out.println(sr.toString());
 					}
 				});
 
@@ -148,7 +147,6 @@ public class SA_RechnerinfoController implements Initializable {
 						sr.setSoftwareverschuldet(true);
 						sr.setHardwareverschuldet(false);
 						sr.setKundenverschuldet(false);
-						System.out.println(sr.toString());
 						sr.setProzessor_kaputt(false);
 						sr.setDvd_Laufwerk_kaputt(false);
 						sr.setGrafikkarte_kaputt(false);
@@ -166,7 +164,6 @@ public class SA_RechnerinfoController implements Initializable {
 						sr.setKundenverschuldet(true);
 						sr.setHardwareverschuldet(false);
 						sr.setSoftwareverschuldet(false);
-						System.out.println(sr.toString());
 						sr.setProzessor_kaputt(false);
 						sr.setDvd_Laufwerk_kaputt(false);
 						sr.setGrafikkarte_kaputt(false);
@@ -189,7 +186,6 @@ public class SA_RechnerinfoController implements Initializable {
 			e1.printStackTrace();
 		}
 
-		System.out.println(sr.toString());
 
 		lbl_SAI_Seriennummer.setText(String.valueOf(RechneransichtController.seriennrAktuell));// RechneransichtController.seriennrAktuell
 
