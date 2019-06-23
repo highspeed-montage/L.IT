@@ -5,6 +5,10 @@ import java.util.Date;
 
 public class SA_Rechner extends Rechner {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static final double ARBEITSAUFWAND_SA = 2;
 	// Boolean zu Problemfaellen (fuer rbtns der Doku)
 	private boolean kundenverschuldet;

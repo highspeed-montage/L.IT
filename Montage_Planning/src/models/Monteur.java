@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Monteur extends Mitarbeiter {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private List<Rechner> pipeline = new ArrayList<Rechner>();
 	private int wochenstunden;
 	private int arbeitsaufwand;

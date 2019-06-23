@@ -188,7 +188,6 @@ public class RechneransichtController implements Initializable {
 		col_RL_status.setCellValueFactory(new PropertyValueFactory<>("status"));
 		col_RL_bearbeitungsdatum.setCellValueFactory(new PropertyValueFactory<>("bearbeitungsdatum"));
 		col_RL_lieferdatum.setCellValueFactory(new PropertyValueFactory<>("lieferdatum"));
-
 		tableRechnerListe.setItems(rechnerListenansichtTabelle);
 	}
 

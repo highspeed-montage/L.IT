@@ -83,7 +83,7 @@
                      <children>
                         <VBox prefHeight="264.0" prefWidth="426.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
                            <children>
-                              <HBox spacing="5.0">
+                              <HBox alignment="TOP_CENTER" spacing="5.0">
                                  <children>
                   						<ComboBox fx:id="comboBox_FAI_Status" layoutY="25.0" onAction="#setFAStatus" promptText="Bearbeitungstatus" />
                                     <Button fx:id="btn_FAI_SNrDrucken" mnemonicParsing="false" onAction="#createSeriennummerPDF" onMouseClicked="#createSeriennummerPDF" text="Seriennummer Drucken" />

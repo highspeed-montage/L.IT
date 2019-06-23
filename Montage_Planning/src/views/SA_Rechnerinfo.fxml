@@ -96,10 +96,10 @@
                                        <children>
                                           <VBox alignment="TOP_CENTER" spacing="5.0">
                                              <children>
-                                                <CheckBox fx:id="cBox_SAI_Prozessor" mnemonicParsing="false" onAction="#handleCBoxProzessor" text="Prozessor   " textAlignment="CENTER" />
-                                                <CheckBox fx:id="cBox_SAI_Grafikkarte" mnemonicParsing="false" onAction="#handleCBoxGrafikkarte" text="Grafikkarte" textAlignment="CENTER" />
-                                                <CheckBox fx:id="cBox_SAI__Festplatte" mnemonicParsing="false" onAction="#handleCBoxFestplatte" text="Festplatte " textAlignment="CENTER" />
-                                                <CheckBox fx:id="cBox_SAI_Laufwerk" mnemonicParsing="false" onAction="#handleCBoxLaufwerk" text="Laufwerk  " textAlignment="CENTER" />
+                                                <CheckBox fx:id="cBox_SAI_Prozessor" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#handleCBoxProzessor" text="Prozessor  " textAlignment="CENTER" />
+                                                <CheckBox fx:id="cBox_SAI_Grafikkarte" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#handleCBoxGrafikkarte" text="Grafikkarte" textAlignment="CENTER" />
+                                                <CheckBox fx:id="cBox_SAI__Festplatte" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#handleCBoxFestplatte" text="Festplatte  " textAlignment="CENTER" />
+                                                <CheckBox fx:id="cBox_SAI_Laufwerk" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#handleCBoxLaufwerk" text="Laufwerk    " textAlignment="CENTER" />
                                                 <HBox alignment="CENTER" prefHeight="25.0" prefWidth="449.0" spacing="5.0">
                                                    <children>
                                                       <TextField fx:id="txt_SAI_Einzelteilsuche" promptText="Einzelteilsuche" />
@@ -124,7 +124,6 @@
                                     <RadioButton fx:id="rbtn_SAI_Kunde" mnemonicParsing="false" text="Kunde" toggleGroup="$toggle_SAI_Dokumentation" />
                                     <HBox alignment="TOP_CENTER" spacing="5.0">
                                        <children>
-                                          <Button fx:id="btn_SAI_pdf" mnemonicParsing="false" prefWidth="100.0" text="PDF Generieren" textAlignment="CENTER" />
                                           <Button fx:id="btn_SAI_Speichern" mnemonicParsing="false" onAction="#handleSpeichernToDb" prefWidth="100.0" text="Speichern" />
                                        </children>
                                        <padding>

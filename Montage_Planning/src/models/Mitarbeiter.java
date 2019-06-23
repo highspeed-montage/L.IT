@@ -1,6 +1,12 @@
 package models;
 
-public class Mitarbeiter {
+import java.io.Serializable;
+
+public class Mitarbeiter implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int personalnr;
 	private String name;
 	private String vorname;

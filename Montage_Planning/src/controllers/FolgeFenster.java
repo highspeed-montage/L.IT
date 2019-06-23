@@ -21,9 +21,10 @@ public class FolgeFenster extends Stage {
 			Parent root1 = (Parent) fxmlLoader.load();
 			Stage stage = new Stage();
 			stage.setScene(new Scene(root1));
-//			if(dateipfad.equalsIgnoreCase("/views/Rechneransicht.fxml")|| dateipfad.equalsIgnoreCase("/views/Auftragsansicht.fxml")) {
-//				stage.setMaximized(true);
-//			}
+			if (dateipfad.equalsIgnoreCase("/views/Rechneransicht.fxml")
+					|| dateipfad.equalsIgnoreCase("/views/Auftragsansicht.fxml")) {
+				stage.setMaximized(true);
+			}
 			stage.show();
 		} catch (Exception e) {
 			e.printStackTrace();

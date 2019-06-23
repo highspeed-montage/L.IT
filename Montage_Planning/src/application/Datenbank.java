@@ -689,7 +689,7 @@ public class Datenbank {
 	public void setzeRechnerInAuftragsverteilung() throws SQLException {
 		int anzahl = 0;
 		Statement stmt = connection.createStatement();
-		String queryRechner = "SELECT idSeriennummer FROM Rechner WHERE Rechner.Status_idStatus = 1";
+		String queryRechner = "SELECT idSeriennummer FROM Rechner WHERE Rechner.Status_idStatus = 2";
 		ResultSet rs = stmt.executeQuery(queryRechner);
 
 		while (rs.next()) {
@@ -740,10 +740,13 @@ public class Datenbank {
 
 	public void updateRechnerAuftragsverteilung(int monteurID, LocalDate datum, int seriennrAktuell)
 			throws SQLException {
-		Statement stmt = connection.createStatement();
-		String query = "UPDATE Auftragsverteilung SET Mitarbeiter_idPersonalnummer = '" + monteurID
-				+ "', Bearbeitungsdatum = '" + datum + "' " + "WHERE Rechner_seriennummer = '" + seriennrAktuell + "'";
-		stmt.executeUpdate(query);
+		Statement stmt1 = connection.createStatement();
+		String queryAuftragsverteilung = "UPDATE Auftragsverteilung SET Mitarbeiter_idPersonalnummer = '" + monteurID
+				+ "', Bearbeitungsdatum = '" + datum + "' WHERE Rechner_seriennummer = '" + seriennrAktuell +"'";
+		stmt1.executeUpdate(queryAuftragsverteilung);
+		Statement stmt2 = connection.createStatement();
+		String queryRechnerStatus = "UPDATE Rechner SET Status_idStatus = 3 WHERE Status_idStatus = 2";
+		stmt2.executeUpdate(queryRechnerStatus);
 	}
 
 }

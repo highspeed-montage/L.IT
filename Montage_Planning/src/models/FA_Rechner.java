@@ -6,6 +6,10 @@ import java.util.List;
 
 public class FA_Rechner extends Rechner {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static final double ARBEITSAUFWAND = 4;
 
 	public FA_Rechner(int pSeriennr, int auftragsNr, String pStatus, LocalDate pBearbeitungsdatum, Date pLieferdatum,

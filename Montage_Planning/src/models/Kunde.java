@@ -1,6 +1,12 @@
 package models;
 
-public class Kunde {
+import java.io.Serializable;
+
+public class Kunde implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String eMail;
 
 	public Kunde(String pEMail) {
