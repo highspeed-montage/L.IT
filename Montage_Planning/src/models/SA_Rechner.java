@@ -1,10 +1,9 @@
 package models;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
 
-public class SA_Rechner extends Rechner implements Serializable {
+public class SA_Rechner extends Rechner {
 
 	/**
 	 * 

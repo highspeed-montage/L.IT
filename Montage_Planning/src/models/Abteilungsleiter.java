@@ -1,8 +1,6 @@
 package models;
 
-import java.io.Serializable;
-
-public class Abteilungsleiter extends Mitarbeiter implements Serializable {
+public class Abteilungsleiter extends Mitarbeiter {
 
 	/**
 	 * 
