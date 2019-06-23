@@ -74,7 +74,10 @@ public class LoginController implements Initializable {
 		try {
 			userVergleich = db.authenticateUser(username, password);
 			if (userVergleich == null) {
-				lblStatus.setText("Eingabe ist inkorrekt, bitte wiederholen Sie!");
+				AlertController.error("Fehler", "Eingabe inkorrekt");
+				txtUsername.clear();
+				txtPassword.clear();
+
 			} else {
 				user = new Mitarbeiter(Integer.parseInt(username), password);
 				lblStatus.setText("Anmelden erfolgreich");

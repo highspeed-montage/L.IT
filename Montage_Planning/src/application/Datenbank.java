@@ -654,6 +654,9 @@ public class Datenbank {
 		String query = "SELECT Name, idPersonalnummer, Vorname FROM Mitarbeiter WHERE Name = '" + password
 				+ "' AND idPersonalnummer = '" + usernameZahl + "'";
 		ResultSet rs = stmt.executeQuery(query);
+//		if(!rs.next()) {
+//			return null;
+//		}
 
 		int i = 0;
 		while (rs.next()) {
@@ -663,6 +666,7 @@ public class Datenbank {
 		if (i == 0) {
 			userVergleich = null;
 		}
+
 		return userVergleich;
 	}
 
