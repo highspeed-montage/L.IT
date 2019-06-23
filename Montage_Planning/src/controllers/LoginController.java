@@ -73,37 +73,39 @@ public class LoginController implements Initializable {
 
 		try {
 			userVergleich = db.authenticateUser(username, password);
+			if (userVergleich == null) {
+				lblStatus.setText("Eingabe ist inkorrekt, bitte wiederholen Sie!");
+			} else {
+				user = new Mitarbeiter(Integer.parseInt(username), password);
+				lblStatus.setText("Anmelden erfolgreich");
+				btnAnmelden.setText("Wird durchgefuehrt");
+
+				rolle = db.getMitarbeiterRolle(user);
+
+				if (rolle == 301 || rolle == 302)// Monteur
+				{
+					new FolgeFenster("/views/Rechneransicht.fxml");
+				}
+
+				if (rolle == 303)// Abteilungsleiter
+				{
+					new FolgeFenster("/views/Auftragsansicht.fxml");
+				} else {
+					String folgeTitle = "Fehler in der Datenstruktur";
+					String folgeInfo = "Es liegt ein Fehler vor bitte melden sie sich beim Support";
+					AlertController.error(folgeTitle, folgeInfo);
+				}
+			}
+			final Node source = (Node) event.getSource();
+			final Stage stage = (Stage) source.getScene().getWindow();
+			stage.close();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			lblStatus.setText("User nicht gefunden");
 		}
 
-		if (userVergleich == null) {
-			lblStatus.setText("Eingabe ist inkorrekt, bitte wiederholen Sie!");
-		} else {
-			user = new Mitarbeiter(Integer.parseInt(username), password);
-			lblStatus.setText("Anmelden erfolgreich");
-			btnAnmelden.setText("Wird durchgefuehrt");
 
-			rolle = db.getMitarbeiterRolle(user);
-
-			if (rolle == 301 || rolle == 302)// Monteur
-			{
-				new FolgeFenster("/views/Rechneransicht.fxml");
-			}
-
-			if (rolle == 303)// Abteilungsleiter
-			{
-				new FolgeFenster("/views/Auftragsansicht.fxml");
-			} else {
-				String folgeTitle = "Fehler in der Datenstruktur";
-				String folgeInfo = "Es liegt ein Fehler vor bitte melden sie sich beim Support";
-				AlertController.error(folgeTitle, folgeInfo);
-			}
-		}
-		final Node source = (Node) event.getSource();
-		final Stage stage = (Stage) source.getScene().getWindow();
-		stage.close();
 	}
 
 	/**
@@ -115,7 +117,7 @@ public class LoginController implements Initializable {
 
 	public void validate(String username, String password) {
 
-		if (username.isEmpty() || username == null) { // null und Empty werden unterschiedlich erkannt --> null!=empty
+		if (username.isEmpty() || username == null) {
 			String userTitle = "Username";
 			String userInfo = "Das Username-Feld darf nicht leer sein!";
 			AlertController.information(userTitle, userInfo);

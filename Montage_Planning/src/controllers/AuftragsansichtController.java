@@ -301,15 +301,17 @@ public class AuftragsansichtController implements Initializable {
 		AlertController.confirmation();
 		try {
 			new FolgeFenster("/views/Login.fxml");
+			db.closeConnection();
+			final Node source = (Node) event.getSource();
+			final Stage stage = (Stage) source.getScene().getWindow();
+			stage.close();
 		} catch (IOException e) {
 			String logoutTitle = "Fehler";
 			String logoutInfo = "Sie konnten nicht ausgeloggt werden.";
 			AlertController.error(logoutTitle, logoutInfo);
 			e.printStackTrace();
 		}
-		final Node source = (Node) event.getSource();
-		final Stage stage = (Stage) source.getScene().getWindow();
-		stage.close();
+
 	}
 
 }
