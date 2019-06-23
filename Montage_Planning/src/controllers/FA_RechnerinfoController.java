@@ -140,9 +140,9 @@ public class FA_RechnerinfoController implements Initializable {
 			String title = "PDF";
 			String info = "Seriennummer PDF generiert";
 			AlertController.information(title, info);
-			System.out.println("PDF gedruckt"); // Message Dialog "PDF ist gespeichert."
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
+			
 		} finally {
 			if (pWriter != null) {
 				pWriter.flush();

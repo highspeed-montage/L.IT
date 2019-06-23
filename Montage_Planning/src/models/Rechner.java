@@ -2,7 +2,6 @@ package models;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -73,7 +72,7 @@ public class Rechner {
 		this.eMail = pEMail;
 
 	}
-	//Konstruktor für DB Abfrage Auftragsinfo (Rechnerliste)
+	//Konstruktor fï¿½r DB Abfrage Auftragsinfo (Rechnerliste)
 	public Rechner(int pSeriennr, String pStatus) {
 		this.seriennr = pSeriennr;
 		this.status = pStatus;

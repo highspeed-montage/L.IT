@@ -141,21 +141,24 @@ public class AuftragsansichtController implements Initializable {
 			tableAuftragWoche.getColumns().add(column);
 		}
 
-		// String name = "Mitarbeiter";
-		// TableColumn<Auftragsverteilung[], String> columnMA = new TableColumn<>(name);
-		// columnMA.setCellValueFactory(cd -> {
-		// Auftragsverteilung auftrag = cd.getValue()[5];
-		// return new SimpleObjectProperty<>(auftrag == null ? null :
-		// auftrag.getMonteur().getName());
-		// });
-		//
-		// tableAuftragWoche.getColumns().add(columnMA);
+		String name = "Mitarbeiter";
+		TableColumn<Auftragsverteilung[], String> columnMA = new TableColumn<>(name);
+		columnMA.setCellValueFactory(cd -> {
+			Auftragsverteilung auftrag = cd.getValue()[5];
+			return new SimpleObjectProperty<>(auftrag == null ? null : auftrag.getMonteur().getName());
+		});
+
+		tableAuftragWoche.getColumns().add(columnMA);
 
 		tableAuftragWoche.setItems(auftragWochenansichtTabelle);
 
 		listenansichtFuellen();
 		wochenansichtFuellen();
 	}
+	
+	/*
+	 * Befüllung der Listenansicht
+	 */
 
 	public void listenansichtFuellen() {
 
@@ -174,6 +177,9 @@ public class AuftragsansichtController implements Initializable {
 
 	}
 
+	/*
+	 *Befüllung der Wochenansicht  
+	 */
 	public void wochenansichtFuellen() {
 
 		// ComboBox Listener
@@ -287,6 +293,10 @@ public class AuftragsansichtController implements Initializable {
 		}
 	}
 
+	/*
+	 * Logout Button 
+	 * 
+	 */
 	public void Logout(Event event) {
 		AlertController.confirmation();
 		try {

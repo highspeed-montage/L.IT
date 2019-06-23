@@ -181,6 +181,7 @@ public class RechneransichtController implements Initializable {
 			rechnerListenansichtTabelle.addAll(db.getRechnerAusAuftragsverteilungListe(LoginController.user));
 		} catch (SQLException e) {
 			e.printStackTrace();
+			AlertController.information("Fehler", "Datenbankverbindung nicht möglich");
 		}
 
 		col_RL_serienNr.setCellValueFactory(new PropertyValueFactory<>("seriennr"));

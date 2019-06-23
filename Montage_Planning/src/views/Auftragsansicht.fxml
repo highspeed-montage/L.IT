@@ -36,7 +36,7 @@
                               </HBox>
                            </top>
                            <center>
-                              <TableView fx:id="tableAuftragWoche" fixedCellSize="1.0" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                              <TableView fx:id="tableAuftragWoche" onMouseClicked="#clickRechnerListe" fixedCellSize="1.0" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
@@ -81,7 +81,7 @@
                               </HBox>
                            </top>
                            <center>
-                              <TableView fx:id="tableAuftragListe" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                              <TableView fx:id="tableAuftragListe" onMouseClicked="#clickRechnerListe" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                 <columns>
                                   <TableColumn fx:id="col_AL_Auftragsnummer" prefWidth="75.0" text="Auftragsnummer" />
                                   <TableColumn fx:id="col_AL_Status" prefWidth="75.0" text="Status" />

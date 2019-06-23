@@ -170,7 +170,7 @@ public class Datenbank {
 		int anzahlRechner = 0;
 
 		String query = "SELECT Auftrag.idAuftragsnummer, Auftrag.Lieferdatum, Status.Bezeichnung "
-				+ "FROM Auftrag, Status WHERE Auftrag.fk_Status_idStatus = Status.idStatus";
+				+ "FROM Auftrag, Status WHERE Auftrag.Status_idStatus = Status.idStatus";
 		ResultSet rs = stmt.executeQuery(query);
 
 		while (rs.next()) {
@@ -267,7 +267,7 @@ public class Datenbank {
 
 		while (rs.next()) {
 			Monteur monteur = new Monteur(rs.getString("Mitarbeiter.Name"), rs.getString("Mitarbeiter.Vorname"));
-			auftraege.add(new Auftragsverteilung(rs.getInt("Auftragsverteilung.Rechner_seriennummer"), rs.getDate("Auftragsverteilung.Bearbeitungsdatum").toLocalDate()));
+			auftraege.add(new Auftragsverteilung(rs.getDate("Auftragsverteilung.Bearbeitungsdatum").toLocalDate(), rs.getInt("Auftragsverteilung.Rechner_seriennummer"), monteur));
 		}
 		return auftraege;
 		
