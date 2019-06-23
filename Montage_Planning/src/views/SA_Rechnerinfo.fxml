@@ -78,9 +78,9 @@
                <content>
                   <AnchorPane>
                      <children>
-                        <VBox alignment="TOP_CENTER" prefHeight="419.0" prefWidth="435.0" spacing="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox alignment="TOP_CENTER" prefHeight="419.0" prefWidth="435.0" spacing="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
                            <children>
-                              <HBox alignment="TOP_CENTER" prefHeight="25.0" prefWidth="417.0">
+                              <HBox alignment="TOP_CENTER" prefWidth="417.0">
                                  <children>
                                     <ComboBox fx:id="comboBox_SAI_Bearbeitungsstatus" onAction="#setSAStatus" prefWidth="150.0" promptText="Bearbeitungsstatus" />
                                  </children>

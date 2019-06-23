@@ -76,14 +76,17 @@
                      </children>
                   </HBox>
                </children>
+               <padding>
+                  <Insets left="5.0" />
+               </padding>
             </VBox>
          </top>
          <center>
-            <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
               <content>
-                  <AnchorPane prefHeight="400.0" prefWidth="485.0">
+                  <AnchorPane>
                      <children>
-                        <TableView fx:id="tableView_AI_Rechner" prefHeight="400.0" prefWidth="484.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-69.0" AnchorPane.topAnchor="0.0">
+                        <TableView fx:id="tableView_AI_Rechner" prefHeight="241.0" prefWidth="548.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <columns>
                               <TableColumn fx:id="tableColumn_AI_SerienNr" prefWidth="75.0" text="SerienNr" />
                               <TableColumn fx:id="tableColumn_AI_Status" prefWidth="75.0" text="Status" />
@@ -93,6 +96,9 @@
                            </columnResizePolicy>
                         </TableView>
                      </children>
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding>
                   </AnchorPane>
               </content>
             </ScrollPane>
