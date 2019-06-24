@@ -110,6 +110,7 @@ public class SA_RechnerinfoController implements Initializable {
 							if (lagerbestand == 0) {
 								try { // Aktualisieung Rechner Status zu id = 7
 									db.setRechnerStatus(sr.getSeriennr(), "unvollstaendig");
+									AlertController.information("Lagerbestand", "Lagerbestand des Einzelteils ist 0");
 								} catch (SQLException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();

@@ -177,6 +177,8 @@ public class RechneransichtController implements Initializable {
 	 * Listenansicht: Tabelle befuellen
 	 */
 	public void listenansichtFuellen() {
+		
+		rechnerListenansichtTabelle.clear();
 		try {
 			rechnerListenansichtTabelle.addAll(db.getRechnerAusAuftragsverteilungListe(LoginController.user));
 		} catch (SQLException e) {

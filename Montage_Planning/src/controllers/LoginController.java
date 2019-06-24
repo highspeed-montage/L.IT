@@ -90,20 +90,23 @@ public class LoginController implements Initializable {
 			if (rolle == 301 || rolle == 302)// Monteur
 			{
 				new FolgeFenster("/views/Rechneransicht.fxml");
+				final Node source = (Node) event.getSource();
+				final Stage stage = (Stage) source.getScene().getWindow();
+				stage.close();
 			}
 
 			if (rolle == 303)// Abteilungsleiter
 			{
 				new FolgeFenster("/views/Auftragsansicht.fxml");
+				final Node source = (Node) event.getSource();
+				final Stage stage = (Stage) source.getScene().getWindow();
+				stage.close();
 			} else {
 				String folgeTitle = "Fehler in der Datenstruktur";
 				String folgeInfo = "Es liegt ein Fehler vor bitte melden sie sich beim Support";
 				AlertController.error(folgeTitle, folgeInfo);
 			}
 		}
-		final Node source = (Node) event.getSource();
-		final Stage stage = (Stage) source.getScene().getWindow();
-		stage.close();
 	}
 
 	/**

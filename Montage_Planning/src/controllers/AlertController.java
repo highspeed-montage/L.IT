@@ -1,8 +1,6 @@
 package controllers;
 
 import java.util.Optional;
-
-import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
@@ -42,11 +40,11 @@ public class AlertController {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Sind Sie sicher?");
 		alert.setHeaderText(null);
-		alert.setContentText("Wenn sie auf OK klicken wird das Programm beendet.");
+		alert.setContentText("Wenn sie auf OK klicken werden Sie ausgeloggt.");
 
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK) {
-			Platform.exit();
+			//Platform.exit();
 		} else {
 			alert.close();
 		}
