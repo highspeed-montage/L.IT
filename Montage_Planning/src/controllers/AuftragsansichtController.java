@@ -91,6 +91,11 @@ public class AuftragsansichtController implements Initializable {
 
 	final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE", Locale.GERMAN);
 
+	/**
+	 * Initialisierungsmethode
+	 * 
+	 */
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		try {
@@ -101,6 +106,7 @@ public class AuftragsansichtController implements Initializable {
 			AlertController.error("Fehler", "Keine Verbindung zur Datenbank möglich");
 		}
 
+		// Setzt den Usernamen in das Label
 		lblName.setText(LoginController.user.getName());
 
 		// Holt alle Bearbeitungsdaten aus der Datenbank zur dynamischen Befuellung der
@@ -156,10 +162,9 @@ public class AuftragsansichtController implements Initializable {
 		wochenansichtFuellen();
 	}
 	
-	/*
+	/**
 	 * Befüllung der Listenansicht
 	 */
-
 	public void listenansichtFuellen() {
 
 		try {
@@ -177,8 +182,8 @@ public class AuftragsansichtController implements Initializable {
 
 	}
 
-	/*
-	 *Befüllung der Wochenansicht  
+	/**
+	 * Befüllung der Wochenansicht
 	 */
 	public void wochenansichtFuellen() {
 
@@ -298,7 +303,9 @@ public class AuftragsansichtController implements Initializable {
 	 * 
 	 */
 	public void Logout(Event event) {
+		
 		AlertController.confirmation();
+		db.closeConnection();
 		try {
 			new FolgeFenster("/views/Login.fxml");
 		} catch (IOException e) {

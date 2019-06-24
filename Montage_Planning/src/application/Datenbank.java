@@ -22,14 +22,9 @@ import models.Teile;
 
 public class Datenbank {
 
-	// private static final String DB_CONNECTION =
-	// "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
-	// private static final String DB_USER = "aj9s-montage";
-	// private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
-
-	private static final String DB_CONNECTION = "jdbc:mysql://localhost:8889/aj9s-montage_neu?serverTimezone=UTC";
-	private static final String DB_USER = "root";
-	private static final String DB_PASSWORD = "root";
+	private static final String DB_CONNECTION = "jdbc:mysql://193.196.143.168:3306/aj9s-montage?serverTimezone=UTC";
+	private static final String DB_USER = "aj9s-montage";
+	private static final String DB_PASSWORD = "TPrKrlU9QsMv6Oh7";
 
 	private Connection connection;
 
@@ -257,20 +252,21 @@ public class Datenbank {
 	public List<Auftragsverteilung> getRechnerAuftragswoche(String startdatum, String enddatum) throws SQLException {
 		List<Auftragsverteilung> auftraege = new ArrayList<>();
 		Statement stmt = connection.createStatement();
-		
+
 		String query = "SELECT Auftragsverteilung.Bearbeitungsdatum, Auftragsverteilung.Rechner_seriennummer, Mitarbeiter.Name, "
 				+ "Mitarbeiter.Vorname FROM Auftragsverteilung, Mitarbeiter "
 				+ "WHERE Auftragsverteilung.Mitarbeiter_idPersonalnummer = Mitarbeiter.idPersonalnummer "
 				+ "AND Bearbeitungsdatum BETWEEN '" + startdatum + "' AND '" + enddatum + "'";
-	
+
 		ResultSet rs = stmt.executeQuery(query);
 
 		while (rs.next()) {
 			Monteur monteur = new Monteur(rs.getString("Mitarbeiter.Name"), rs.getString("Mitarbeiter.Vorname"));
-			auftraege.add(new Auftragsverteilung(rs.getDate("Auftragsverteilung.Bearbeitungsdatum").toLocalDate(), rs.getInt("Auftragsverteilung.Rechner_seriennummer"), monteur));
+			auftraege.add(new Auftragsverteilung(rs.getDate("Auftragsverteilung.Bearbeitungsdatum").toLocalDate(),
+					rs.getInt("Auftragsverteilung.Rechner_seriennummer"), monteur));
 		}
 		return auftraege;
-		
+
 	}
 
 	/**
@@ -614,31 +610,6 @@ public class Datenbank {
 	}
 
 	/**
-	 * Die Methode uebertraegt die Rechnerverteilung in die Datenbank
-	 * 
-	 * @param idAuftragsverteilung
-	 * @param bearbeitungsdatum
-	 * @param seriennummer
-	 * @param personalnummer
-	 * @return
-	 * @throws SQLException
-	 */
-	public void rechnerVerteilung(LocalDate bearbeitungsdatum, int seriennummer, int personalnummer)
-			throws SQLException {
-		connection.setAutoCommit(false);
-		Statement stmt = connection.createStatement();
-		String query = "INSERT INTO Auftragsverteilung (Bearbeitungsdatum, Rechner_seriennummer, Mitarbeiter_idPersonalnummer) VALUES ('"
-				+ bearbeitungsdatum + "', '" + seriennummer + "', '" + personalnummer + "')";
-		stmt.executeUpdate(query);
-		//
-		//
-		// stmt.executeUpdate(
-		// "UPDATE Rechner SET Status_idStatus = '3' WHERE idSeriennummer = '" +
-		// seriennummer + "'");
-
-	}
-
-	/**
 	 * Stellt fest ob User, mit eingebenen Daten existiert username =
 	 * idPersonalnummer, passwort = name
 	 * 
@@ -684,7 +655,11 @@ public class Datenbank {
 		return rolle;
 	}
 
-	// --------- NEU TEST
+	/**
+	 * Setze alle Rechner deren Auftrag vollstaendig ist in die Auftragsverteilung
+	 * 
+	 * @throws SQLException
+	 */
 
 	public void setzeRechnerInAuftragsverteilung() throws SQLException {
 		int anzahl = 0;
@@ -712,6 +687,14 @@ public class Datenbank {
 		}
 	}
 
+	/**
+	 * Holt alle Rechner aus der Auftragsverteilung, die noch keinem Mitarbeiter
+	 * zugewiesen wurden
+	 * 
+	 * @return
+	 * @throws SQLException
+	 */
+
 	public List<Rechner> holeRechnerAusAuftragsverteilungOhneBearbeitung() throws SQLException {
 		List<Rechner> rechner = new ArrayList<>();
 		Statement stmt = connection.createStatement();
@@ -722,6 +705,15 @@ public class Datenbank {
 		}
 		return rechner;
 	}
+
+	/**
+	 * Holt den gesamten Arbeitsaufwand aller Rechner aus der Auftragsverteilung
+	 * 
+	 * @param monteurID
+	 * @param datum
+	 * @return
+	 * @throws SQLException
+	 */
 
 	public int holeGesamtArbeitsaufwandAusAuftragsverteilung(int monteurID, LocalDate datum) throws SQLException {
 		int gesamtsumme = 0;
@@ -738,11 +730,21 @@ public class Datenbank {
 		return gesamtsumme;
 	}
 
+	/**
+	 * Statusänderung von "Aufrag vollstaendig" zu "disponiert" sobald der Rechner
+	 * in der Auftragsverteilung einem Monteur zugewiesen wurde
+	 * 
+	 * @param monteurID
+	 * @param datum
+	 * @param seriennrAktuell
+	 * @throws SQLException
+	 */
+
 	public void updateRechnerAuftragsverteilung(int monteurID, LocalDate datum, int seriennrAktuell)
 			throws SQLException {
 		Statement stmt1 = connection.createStatement();
 		String queryAuftragsverteilung = "UPDATE Auftragsverteilung SET Mitarbeiter_idPersonalnummer = '" + monteurID
-				+ "', Bearbeitungsdatum = '" + datum + "' WHERE Rechner_seriennummer = '" + seriennrAktuell +"'";
+				+ "', Bearbeitungsdatum = '" + datum + "' WHERE Rechner_seriennummer = '" + seriennrAktuell + "'";
 		stmt1.executeUpdate(queryAuftragsverteilung);
 		Statement stmt2 = connection.createStatement();
 		String queryRechnerStatus = "UPDATE Rechner SET Status_idStatus = 3 WHERE Status_idStatus = 2";
