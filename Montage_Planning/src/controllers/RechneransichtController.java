@@ -67,7 +67,7 @@ public class RechneransichtController implements Initializable {
 	@FXML
 	private TableView<Auftragsverteilung[]> tableRechnerWoche;
 
-	Datenbank db = new Datenbank();
+	static Datenbank db = new Datenbank();
 	
 	// ComboBox
 	private ObservableList<String> options = FXCollections.observableArrayList();
@@ -79,7 +79,7 @@ public class RechneransichtController implements Initializable {
 	public static int seriennrAktuell;
 
 	ObservableList<Auftragsverteilung[]> rechnerWochenansichtTabelle = FXCollections.observableArrayList();
-	ObservableList<Auftragsverteilung> rechnerListenansichtTabelle = FXCollections.observableArrayList();
+	static ObservableList<Auftragsverteilung> rechnerListenansichtTabelle = FXCollections.observableArrayList();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -177,6 +177,8 @@ public class RechneransichtController implements Initializable {
 	 * Listenansicht: Tabelle befuellen
 	 */
 	public void listenansichtFuellen() {
+		
+		rechnerListenansichtTabelle.clear();
 		try {
 			rechnerListenansichtTabelle.addAll(db.getRechnerAusAuftragsverteilungListe(LoginController.user));
 		} catch (SQLException e) {

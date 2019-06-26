@@ -110,6 +110,7 @@ public class SA_RechnerinfoController implements Initializable {
 							if (lagerbestand == 0) {
 								try { // Aktualisieung Rechner Status zu id = 7
 									db.setRechnerStatus(sr.getSeriennr(), "unvollstaendig");
+									AlertController.information("Lagerbestand", "Lagerbestand des Einzelteils ist 0");
 								} catch (SQLException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
@@ -119,18 +120,18 @@ public class SA_RechnerinfoController implements Initializable {
 							} else if (lagerbestand == 9999) {
 								String title = "Unbekannte Eingabe";
 								String info = "Kein Einzelteil mit dieser Bezeichnung";
-								AlertController.error(title, info);							}
+								AlertController.error(title, info);
+							}
 						}
 					} else {
 						String title = "Einzelteilsuche";
-						String info = "RadioButton \"Hardware\" muss ausgew�hlt sein";
+						String info = "RadioButton \"Hardware\" muss ausgewaehlt sein";
 						AlertController.information(title, info);
 					}
 				}
 
 			}
 		});
-
 
 		rbtn_SAI_Hardware.selectedProperty()
 				.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
@@ -176,16 +177,16 @@ public class SA_RechnerinfoController implements Initializable {
 				});
 
 	}
-/**
- * Rechnerinfo wird gefuellt mit Informationen
- */
+
+	/**
+	 * Rechnerinfo wird gefuellt mit Informationen
+	 */
 	private void SA_RechnerInfo_fuellen() {
 		try {
 			sr = db.getSARechnerInfo(RechneransichtController.seriennrAktuell);// RechneransichtController.seriennrAktuell
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-
 
 		lbl_SAI_Seriennummer.setText(String.valueOf(RechneransichtController.seriennrAktuell));// RechneransichtController.seriennrAktuell
 
@@ -225,8 +226,8 @@ public class SA_RechnerinfoController implements Initializable {
 	}
 
 	/**
-	 *  ComboBox Aktualisiert dementsprechend den
-	 * Rechnerstatus
+	 * ComboBox Aktualisiert dementsprechend den Rechnerstatus
+	 * 
 	 * @param event
 	 */
 	@FXML
@@ -236,11 +237,11 @@ public class SA_RechnerinfoController implements Initializable {
 		try {
 			db.setRechnerStatus(sr.getSeriennr(), selectedSatus);
 			lbl_SAI_status.setText(selectedSatus);
-			//Update Auftragsstatus:
+			// Update Auftragsstatus:
 			int lowestId = db.getLowestRechnerIDAuftrag(sr.getAuftragsNr());
 			db.setAuftragStatus(sr.getAuftragsNr(), lowestId);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			AlertController.information("Fehler", "Datenbankverbindung nicht moeglich");
 			e.printStackTrace();
 		}
 	}
